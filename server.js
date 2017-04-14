@@ -1,0 +1,11 @@
+let
+    deleteComment=require('./server/deleteComment'),
+    getBlogFooter=require('./server/getBlogFooter'),
+    getDefinitionByPagemodule=require('./server/getDefinitionByPagemodule')
+module.exports=althea=>{
+    althea.addQueryFunction('deleteComment',deleteComment)
+    althea.addQueryFunction('getBlogFooter',getBlogFooter)
+    althea.addQueryFunction(
+        'getDefinitionByPagemodule',getDefinitionByPagemodule
+    )
+}
