@@ -1,11 +1,27 @@
 let
     deleteComment=require('./server/deleteComment'),
     getBlogFooter=require('./server/getBlogFooter'),
-    getDefinitionByPagemodule=require('./server/getDefinitionByPagemodule')
+    getDefinitionByPagemodule=require('./server/getDefinitionByPagemodule'),
+    getPagemodules=require('./server/getPagemodules'),
+    getPagemodules0=require('./server/getPagemodules0'),
+    getSuggestedPages=require('./server/getSuggestedPages'),
+    getSuggestedTags=require('./server/getSuggestedTags'),
+    getTags=require('./server/getTags'),
+    getTagsWithCount=require('./server/getTagsWithCount'),
+    newComment=require('./server/newComment'),
+    removePage=require('./server/removePage')
 module.exports=althea=>{
     althea.addQueryFunction('deleteComment',deleteComment)
     althea.addQueryFunction('getBlogFooter',getBlogFooter)
     althea.addQueryFunction(
         'getDefinitionByPagemodule',getDefinitionByPagemodule
     )
+    althea.addQueryFunction('getPagemodules',getPagemodules)
+    althea.addQueryFunction('getPagemodules0',getPagemodules0)
+    althea.addQueryFunction('getSuggestedPages',getSuggestedPages)
+    althea.addQueryFunction('getSuggestedTags',getSuggestedTags)
+    althea.addQueryFunction('getTags',getTags)
+    althea.addQueryFunction('getTagsWithCount',getTagsWithCount)
+    althea.addQueryFunction('newComment',newComment)
+    althea.addQueryFunction('removePage',removePage)
 }
