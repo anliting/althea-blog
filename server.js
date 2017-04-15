@@ -9,7 +9,13 @@ let
     getTags=require('./server/getTags'),
     getTagsWithCount=require('./server/getTagsWithCount'),
     newComment=require('./server/newComment'),
-    removePage=require('./server/removePage')
+    removePage=require('./server/removePage'),
+    editpage=require('./server/editpage'),
+    getComment=require('./server/getComment'),
+    getPage=require('./server/getPage'),
+    getPagemoduleInfo=require('./server/getPagemoduleInfo'),
+    getPagesByTags=require('./server/getPagesByTags'),
+    getPageversion=require('./server/getPageversion')
 module.exports=althea=>{
     althea.addQueryFunction('deleteComment',deleteComment)
     althea.addQueryFunction('getBlogFooter',getBlogFooter)
@@ -24,4 +30,10 @@ module.exports=althea=>{
     althea.addQueryFunction('getTagsWithCount',getTagsWithCount)
     althea.addQueryFunction('newComment',newComment)
     althea.addQueryFunction('removePage',removePage)
+    althea.addQueryFunction('editpage',editpage)
+    althea.addQueryFunction('getComment',getComment)
+    althea.addQueryFunction('getPage',getPage)
+    althea.addQueryFunction('getPagemoduleInfo',getPagemoduleInfo)
+    althea.addQueryFunction('getPagesByTags',getPagesByTags)
+    althea.addQueryFunction('getPageversion',getPageversion)
 }
