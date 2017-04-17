@@ -16,7 +16,7 @@ let
     getPagemoduleInfo=require('./server/getPagemoduleInfo'),
     getPagesByTags=require('./server/getPagesByTags'),
     getPageversion=require('./server/getPageversion')
-module.exports=althea=>{
+module.exports=function(althea){
     althea.addQueryFunction('deleteComment',deleteComment)
     althea.addQueryFunction('getBlogFooter',getBlogFooter)
     althea.addQueryFunction(
