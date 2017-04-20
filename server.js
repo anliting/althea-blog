@@ -1,6 +1,7 @@
 let
-    deleteComment=require('./server/deleteComment'),
-    getBlogFooter=require('./server/getBlogFooter'),
+    updateDatabase= require('./server/updateDatabase'),
+    deleteComment=  require('./server/deleteComment'),
+    getBlogFooter=  require('./server/getBlogFooter'),
     getDefinitionByPagemodule=require('./server/getDefinitionByPagemodule'),
     getPagemodules=require('./server/getPagemodules'),
     getPagemodules0=require('./server/getPagemodules0'),
@@ -16,7 +17,7 @@ let
     getPagemoduleInfo=require('./server/getPagemoduleInfo'),
     getPagesByTags=require('./server/getPagesByTags'),
     getPageversion=require('./server/getPageversion')
-module.exports=function(althea){
+module.exports=async althea=>{
     althea.addQueryFunction('deleteComment',deleteComment)
     althea.addQueryFunction('getBlogFooter',getBlogFooter)
     althea.addQueryFunction(
@@ -36,4 +37,5 @@ module.exports=function(althea){
     althea.addQueryFunction('getPagemoduleInfo',getPagemoduleInfo)
     althea.addQueryFunction('getPagesByTags',getPagesByTags)
     althea.addQueryFunction('getPageversion',getPageversion)
+    await updateDatabase(althea)
 }
