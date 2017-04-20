@@ -1,8 +1,8 @@
-module.exports=(args,env)=>{
+module.exports=(db,args,env)=>{
     if(!(
         Number.isFinite(args.id)&&
         env.currentUser.isadmin
     ))
         return
-    return env.althea.database.deleteComment(args.id)
+    return db.deleteComment(args.id)
 }

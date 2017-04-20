@@ -1,9 +1,9 @@
-module.exports=(args,env)=>{
+module.exports=(db,args,env)=>{
     let cu=env.currentUser
     if(!(
         Number.isFinite(args.page)&&
         cu.isadmin
     ))
         return
-    return env.althea.database.removePage(args.page)
+    return db.removePage(args.page)
 }

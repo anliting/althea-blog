@@ -1,3 +1,3 @@
-module.exports=function(opt,env){
+module.exports=function(db,opt,env){
     return env.environmentvariables.blogfooter
 }

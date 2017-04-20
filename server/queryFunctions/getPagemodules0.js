@@ -1,7 +1,7 @@
-module.exports=(opt,env)=>{
+module.exports=(db,opt,env)=>{
     if(!(
         env.currentUser.isadmin
     ))
         return
-    return env.althea.database.getPagemodules0()
+    return db.getPagemodules0()
 }

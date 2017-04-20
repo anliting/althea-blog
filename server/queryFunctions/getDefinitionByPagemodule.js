@@ -1,4 +1,4 @@
-module.exports=(args,env)=>{
+module.exports=(db,args,env)=>{
     let cu=env.currentUser
     if(!(
         typeof args.id=='number'&&
@@ -6,5 +6,5 @@ module.exports=(args,env)=>{
         cu.isadmin
     ))
         return
-    return env.althea.database.getDefinitionByPagemodule(args.id)
+    return db.getDefinitionByPagemodule(args.id)
 }

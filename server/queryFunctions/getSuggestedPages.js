@@ -1,4 +1,4 @@
-module.exports=(args,env)=>{
+module.exports=(db,args,env)=>{
     if(!(
         typeof args.page=='number'&&
         typeof args.pageversion=='number'&&
@@ -6,7 +6,7 @@ module.exports=(args,env)=>{
         typeof args.tags_selected=='object'
     ))
         return
-    return env.althea.database.selectPages(
+    return db.selectPages(
         env.currentUser,
         args.tags_selected,
         args.pages_loaded,

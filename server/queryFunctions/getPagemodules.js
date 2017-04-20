@@ -1,7 +1,7 @@
-module.exports=async(args,env)=>{
+module.exports=async(db,args,env)=>{
     let data=await Promise.all([
-        env.althea.database.selectPagemodules(),
-        env.althea.database.selectPagemoduleDefinitions(),
+        db.selectPagemodules(),
+        db.selectPagemoduleDefinitions(),
     ])
     return f(data[0],data[1])
 }

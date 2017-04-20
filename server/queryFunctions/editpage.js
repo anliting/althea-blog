@@ -1,4 +1,4 @@
-module.exports=async(args,env)=>{
+module.exports=async(db,args,env)=>{
     let type=env.althea.lib.anliting.type
     let cu=env.currentUser
     if(!(
@@ -12,7 +12,7 @@ module.exports=async(args,env)=>{
     ))
         return
     if(args.id_page==0){
-        let page=await env.althea.database.newPage(
+        let page=await db.newPage(
             args.ispublic,
             cu.id,
             args.id_pagemodule,
@@ -23,7 +23,7 @@ module.exports=async(args,env)=>{
         )
         return page.id
     }else{
-        await env.althea.database.newPageversionToPage(
+        await db.newPageversionToPage(
             args.ispublic,
             cu.id,
             args.id_pagemodule,

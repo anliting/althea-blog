@@ -1,9 +1,9 @@
-module.exports=(args,env)=>{
+module.exports=(db,args,env)=>{
     let type=env.althea.lib.anliting.type
     let cu=env.currentUser
     if(!(
         type.isArray(type.isStringValue)(args.tags)
     ))
         return
-    return env.althea.database.getPagesByTags(cu,args.tags)
+    return db.getPagesByTags(cu,args.tags)
 }

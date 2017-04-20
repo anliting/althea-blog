@@ -1,11 +1,11 @@
-module.exports=async(args,env)=>{
+module.exports=async(db,args,env)=>{
     let type=env.althea.lib.anliting.type
     if(!(
         typeof args.id=='number'&&
         type.isArray(type.isStringValue)(args.columns)
     ))
         return
-    let page=await env.althea.database.getPage(args.id)
+    let page=await db.getPage(args.id)
     if(!(
         page&&
         !page.data.isremoved&&

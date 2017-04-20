@@ -1,6 +1,6 @@
-module.exports=(args,env)=>{
+module.exports=(db,args,env)=>{
     let cu=env.currentUser
     if(!cu.isadmin)
         return
-    return env.althea.database.getTagsWithCount()
+    return db.getTagsWithCount()
 }

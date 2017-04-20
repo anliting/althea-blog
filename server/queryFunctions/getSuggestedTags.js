@@ -1,9 +1,9 @@
-module.exports=(args,env)=>{
+module.exports=(db,args,env)=>{
     if(!(
         args.tags instanceof Array
     ))
         return
-    return getTags(env.althea.database,env.currentUser,args.tags)
+    return getTags(db,env.currentUser,args.tags)
 }
 async function getTags(db,cu,tags){
     let rows=await db.selectTags(cu,tags)
