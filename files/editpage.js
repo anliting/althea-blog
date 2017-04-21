@@ -5,16 +5,17 @@ let editpageReady=Promise.all([
     module.scriptByPath('https://gitcdn.link/cdn/mathjax/MathJax/d4ab1b35c96dd964eaa9e1ed2c86e39fffbdacf6/MathJax.js?config=TeX-AMS-MML_HTMLorMML'),
     module.scriptByPath('https://gitcdn.link/cdn/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js'),
 ])
-module.importByPath('lib/general.static.js',{mode:1}).then(general=>{
-    general(module)
-    let site=module.repository.althea.site
+;(async()=>{
+    ;(await module.importByPath('lib/general.static.js',{mode:1}))(module)
+    ;(await module.shareImport('lib/repository.js'))(module)
+    let site=module.repository.blog.site
     environment=module.arguments.editpageEnv
     site.then(site=>
         site.on('userChange',()=>
             location='/'
         )
     )
-    module.shareImport('Editpage.js').then(async Editpage=>{
+    module.shareImport('lib/Editpage.js').then(async Editpage=>{
         document.head.appendChild(Editpage.style)
         await editpageReady
         new Editpage(site)
@@ -23,4 +24,4 @@ module.importByPath('lib/general.static.js',{mode:1}).then(general=>{
         let navigationbar=new Navigationbar(site)
         document.body.appendChild(navigationbar.view)
     })
-})
+})()

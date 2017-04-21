@@ -1,6 +1,6 @@
 (async()=>{
     let
-        Page=       await module.repository.althea.Page,
+        Page=       await module.repository.blog.Page,
         BlogPage=   Page.BlogPage
     return update_to_content
     async function update_to_content(process,pages){

@@ -71,7 +71,7 @@ function calcContent(env){
 <datalist id=tags></datalist>
 ${env.althea.loadModule(
     env.envVars,
-    'plugins/althea-blog/editpage.js',
+    'plugins/althea-blog/editpage.static.js',
     {
         editpageEnv:{
             id_page:env.id_page,

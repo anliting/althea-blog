@@ -4,7 +4,7 @@
         Pagemodule,
     ]=await Promise.all([
         module.repository.althea.dom,
-        module.repository.althea.Pagemodule,
+        module.repository.blog.Pagemodule,
     ])
     function update(editpage,data){
         data.pagemodules.map(async e=>{

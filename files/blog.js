@@ -1,7 +1,8 @@
 (async()=>{
-    (await module.importByPath('lib/general.static.js',{mode:1}))(module)
+    ;(await module.importByPath('lib/general.static.js',{mode:1}))(module)
+    ;(await module.shareImport('lib/repository.js'))(module)
     let
-        site=module.repository.althea.site,
+        site=module.repository.blog.site,
         blog=loadBlog(site,module.arguments.status)
         main=createMainThread(site,blog)
     if(
@@ -16,7 +17,7 @@
     ])
 })()
 async function loadBlog(site,status){
-    let Blog=await module.shareImport('Blog.static.js')
+    let Blog=await module.repository.blog.Blog
     return new Blog(site,status)
 }
 function createMainThread(site,blog){

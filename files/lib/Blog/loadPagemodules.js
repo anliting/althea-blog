@@ -1,13 +1,13 @@
 async function loadPagemodules(blog){
-    let vals=await Promise.all([
-        module.repository.althea.Pagemodule,
+    let[
+        Pagemodule,
+        pagemodules,
+    ]=await Promise.all([
+        module.repository.blog.Pagemodule,
         blog._site.then(site=>
             site.send('getPagemodules')
         ),
     ])
-    let
-        Pagemodule=     vals[0],
-        pagemodules=    vals[1]
     pagemodules.map(p=>
         blog.pagemodules.push(new Pagemodule(
             p.id,

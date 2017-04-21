@@ -1,1 +1,2 @@
-node $linker files/Blog.js files/Blog > files/Blog.static.js
+node $linker files/blog.js files/lib > files/blog.static.js
+node $linker files/editpage.js files/lib > files/editpage.static.js
