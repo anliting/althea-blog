@@ -1,0 +1,1 @@
+node $linker files/Blog.js files/Blog > files/Blog.static.js
