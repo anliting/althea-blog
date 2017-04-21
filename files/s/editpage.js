@@ -7,7 +7,7 @@ let editpageReady=Promise.all([
 ])
 ;(async()=>{
     ;(await module.importByPath('lib/general.static.js',{mode:1}))(module)
-    ;(await module.shareImport('lib/repository.js'))(module)
+    ;(await module.shareImport('../l/repository.js'))(module)
     let site=module.repository.blog.site
     environment=module.arguments.editpageEnv
     site.then(site=>
@@ -15,7 +15,7 @@ let editpageReady=Promise.all([
             location='/'
         )
     )
-    module.shareImport('lib/Editpage.js').then(async Editpage=>{
+    module.shareImport('../l/Editpage.js').then(async Editpage=>{
         document.head.appendChild(Editpage.style)
         await editpageReady
         new Editpage(site)

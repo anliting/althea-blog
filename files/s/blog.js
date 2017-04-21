@@ -1,6 +1,6 @@
 (async()=>{
     ;(await module.importByPath('lib/general.static.js',{mode:1}))(module)
-    ;(await module.shareImport('lib/repository.js'))(module)
+    ;(await module.shareImport('../l/repository.js'))(module)
     let
         site=module.repository.blog.site,
         blog=loadBlog(site,module.arguments.status)

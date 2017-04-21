@@ -39,7 +39,7 @@ ${env.environmentvariables.og?og(env,title,url_request):''}
 <body>
 ${env.althea.loadModule(
     env.envVars,
-    'plugins/althea-blog/blog.static.js',
+    'plugins/althea-blog/s/blog.static.js',
     {
         status:{
             pageId:         env.id_page,
