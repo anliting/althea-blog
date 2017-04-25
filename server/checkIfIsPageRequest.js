@@ -1,4 +1,4 @@
-module.exports=async(env,path)=>{
+module.exports=async(db,env,path)=>{
     let type=env.althea.lib.anliting.type
     /*
         1: no
@@ -13,12 +13,12 @@ module.exports=async(env,path)=>{
         dataOfPageByPagename,
         promises=[]
     promises.push(
-        env.database.getCurrentUserByRequest(env.request).then(user=>{
+        db.getCurrentUserByRequest(env.request).then(user=>{
             currentUser=user
         })
     )
     promises.push(
-        selectPageByPagename(env.database,path[1]).then(rows=>{
+        selectPageByPagename(db,path[1]).then(rows=>{
             if(rows.length)
                 dataOfPageByPagename=rows[0]
         })
@@ -26,7 +26,7 @@ module.exports=async(env,path)=>{
     if(type.stringIsInteger(path[1])){
         id_pathname=parseInt(path[1],10)
         promises.push(
-            selectPage(env.database,id_pathname).then(rows=>{
+            selectPage(db,id_pathname).then(rows=>{
                 if(rows.length)
                     dataOfPageById=rows[0]
             })

@@ -1,19 +1,21 @@
 let
-    updateDatabase=     require('./server/updateDatabase'),
-    queryFunctions=     require('./server/queryFunctions'),
-    loadBlogProperties= require('./server/loadBlogProperties'),
-    blog=               require('./server/blog'),
+    updateDatabase=         require('./server/updateDatabase'),
+    queryFunctions=         require('./server/queryFunctions'),
+    loadBlogProperties=     require('./server/loadBlogProperties'),
+    blog=                   require('./server/blog'),
     editpage=               require('./server/editpage'),
     pageversions=           require('./server/pageversions'),
     checkIfIsPageRequest=   require('./server/checkIfIsPageRequest')
 module.exports=async althea=>{
-    loadBlogProperties(althea.database)
+    await updateDatabase(althea)
+    let db=Object.create(althea.database)
+    loadBlogProperties(db)
     Object.entries(queryFunctions).map(([k,v])=>{
         althea.addQueryFunction(k,(opt,env)=>
-            v(althea.database,opt,env)
+            v(db,opt,env)
         )
     })
-    althea.addPagemodule('/',blog)
+    althea.addPagemodule('/',r=>blog(db,r))
     althea.addPagemodule('/newpage',editpage)
     althea.addPagemodule('/pageversions',pageversions)
     althea.addPagemodule(e=>{
@@ -22,10 +24,10 @@ module.exports=async althea=>{
         if(res)
             e.tags_selected=path.slice(2)
         return res
-    },blog)
+    },r=>blog(db,r))
     althea.addPagemodule(async r=>{
         let path=r.analyze.request.parsedUrl.pathname.split('/')
-        let res=await checkIfIsPageRequest(r,path)
+        let res=await checkIfIsPageRequest(db,r,path)
         switch(res.status){
             case 0:
                 throw res.err
@@ -45,9 +47,8 @@ module.exports=async althea=>{
         if(r.analyze.blog.status)
             return r.analyze.blog.status
         else if(r.analyze.blog.type=='blogHome')
-            return await blog(r)
+            return await blog(db,r)
         else if(r.analyze.blog.type=='editpage')
             return await editpage(r)
     })
-    await updateDatabase(althea)
 }
