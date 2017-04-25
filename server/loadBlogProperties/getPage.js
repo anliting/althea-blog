@@ -6,7 +6,7 @@ module.exports=async function(id){
     ]=await Promise.all([
         this.query0(`
             select *
-            from page
+            from blog_page
             where ?
         `,{id}).then(rows=>{
             if(rows.length===0)
@@ -16,7 +16,7 @@ module.exports=async function(id){
         this.query0(`
             select
                 pagename
-            from pagename
+            from blog_pagename
             where ?
         `,{id_page:id}).then(rows=>
             rows.map(row=>

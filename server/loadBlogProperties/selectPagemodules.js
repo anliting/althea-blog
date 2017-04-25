@@ -1,7 +1,7 @@
 module.exports=selectPagemodules
 function selectPagemodules(){
-    return this.query(`
+    return this.query0(`
         select id,priority,name
-        from pagemodule
-    `).then(a=>a[0])
+        from blog_pagemodule
+    `)
 }

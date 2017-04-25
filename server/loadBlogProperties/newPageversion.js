@@ -32,7 +32,7 @@ function insertPageversion(
     content
 ){
     return db.query(`
-        insert into pageversion set ?
+        insert into blog_pageversion set ?
     `,{
         ispublic,
         id_page,
@@ -44,7 +44,7 @@ function insertPageversion(
 }
 function insertTag(db,id_pageversion,tagname){
     return db.query(`
-        insert into tag set ?
+        insert into blog_tag set ?
     `,{
         id_pageversion,
         tagname,

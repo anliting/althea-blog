@@ -1,27 +1,26 @@
 let
     Pageversion=require('./Pageversion')
-module.exports=function(id){
-    return Promise.all([
-        this.query(`
+module.exports=async function(id){
+    let[
+        res,
+        tags
+    ]=await Promise.all([
+        this.query0(`
             select *
-            from pageversion
+            from blog_pageversion
             where ?
-        `,{id}).then(a=>a[0][0]),
-        this.query(`
+        `,{id}).then(a=>a[0]),
+        this.query0(`
             select tagname
-            from tag
+            from blog_tag
             where ?
-        `,{id_pageversion:id}).then(a=>a[0]).then(rows=>
+        `,{id_pageversion:id}).then(rows=>
             rows.map(row=>row.tagname)
         ),
-    ]).then(vals=>{
-        let
-            res=vals[0],
-            tags=vals[1]
-        if(!res)
-            return
-        let pageversion=new Pageversion(res)
-        pageversion.data.tags=tags
-        return pageversion
-    })
+    ])
+    if(!res)
+        return
+    let pageversion=new Pageversion(res)
+    pageversion.data.tags=tags
+    return pageversion
 }

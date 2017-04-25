@@ -6,7 +6,7 @@ module.exports=async function(id){
             id_page,
             id_user_owner,
             content
-        from comment
+        from blog_comment
         where ?
     `,{id}).then(a=>a[0])
     if(row==undefined)

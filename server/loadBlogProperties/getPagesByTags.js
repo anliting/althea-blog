@@ -3,13 +3,14 @@ let
 module.exports=getPagesByTags
 function getPagesByTags(cu,tags){
     return this.query(`
-        select id from page
+        select id
+        from blog_page
         where
             !isremoved &&
             ${!cu.isadmin?'ispublic':'1'} &&
             id_lastversion in (
                 select id
-                from pageversion
+                from blog_pageversion
                 where
                     !isremoved &&
                     ${!cu.isadmin?'ispublic':'1'} &&
@@ -23,10 +24,10 @@ function taggedPageversions(tags){
     return`
         select t0.id_pageversion
         from
-            tag as t0 ${tags.length==1?'':`
+            blog_tag as t0 ${tags.length==1?'':`
                 join (${
                     tags.slice(1).map((s,i)=>
-                        `tag as t${i+1}`
+                        `blog_tag as t${i+1}`
                     ).join(',')
                 }) on ${
                     tags.slice(1).map((s,i)=>

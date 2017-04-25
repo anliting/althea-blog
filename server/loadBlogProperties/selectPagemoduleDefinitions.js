@@ -1,7 +1,7 @@
 module.exports=selectPagemoduleDefinitions
 function selectPagemoduleDefinitions(){
-    return this.query(`
+    return this.query0(`
         select *
-        from definition
-    `).then(a=>a[0])
+        from blog_definition
+    `)
 }

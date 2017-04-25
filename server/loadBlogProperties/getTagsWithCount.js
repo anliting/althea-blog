@@ -3,17 +3,17 @@ module.exports=function(){
         select
             tagname,
             count(*) as count
-        from tag
+        from blog_tag
         where id_pageversion in (
-            select pageversion.id
+            select blog_pageversion.id
             from
-                    page
+                    blog_page
                 join
-                    pageversion
+                    blog_pageversion
                 on
-                    page.id_lastversion=pageversion.id
+                    blog_page.id_lastversion=blog_pageversion.id
             where
-                !pageversion.isremoved
+                !blog_pageversion.isremoved
             /* for materialization */
             order by rand()
         )

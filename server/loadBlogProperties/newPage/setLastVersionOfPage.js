@@ -1,7 +1,7 @@
 module.exports=setLastVersionOfPage
 function setLastVersionOfPage(db,id_lastversion,id){
     return db.query(`
-        update page
+        update blog_page
         set ?
         where ?
     `,[

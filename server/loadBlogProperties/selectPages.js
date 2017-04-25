@@ -15,17 +15,17 @@ function selectPages(currentUser,tags_selected,pages_loaded,pageId){
             preferredPagename,
             id_lastversion,
             id_user_author
-        from page
+        from blog_page
         where
             ${whereQuery_pages_permitted(currentUser)}&&
             id in (
                 select id_page
-                from pageversion
+                from blog_pageversion
                 where
                     ${whereQuery_pageversions_permitted(currentUser)}&&
                     id in (
                         select id_lastversion
-                        from page
+                        from blog_page
                     ) ${
                         tags_selected.length?
                             `&& id in (

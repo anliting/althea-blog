@@ -51,14 +51,14 @@ module.exports=async(env,path)=>{
 function selectPage(db,id){
     return db.query0(`
         select id,ispublic,id_user_author
-        from page where ?
+        from blog_page where ?
     `,{id})
 }
 function selectPageByPagename(db,pagename){
     return db.query0(`
         select id,ispublic,id_user_author
-        from page where id in (
-            select id_page from pagename where ?
+        from blog_page where id in (
+            select id_page from blog_pagename where ?
         )
     `,{pagename})
 }

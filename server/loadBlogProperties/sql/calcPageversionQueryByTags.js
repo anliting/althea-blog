@@ -12,7 +12,7 @@ Generates a query that select pageversions by selected tags.
             output+='join '
         output+='('+
             'select distinct `id_pageversion` as `id'+i+'`'+
-            'from `tag`'+
+            'from `blog_tag`'+
             'where `tagname`='+mysql.escape(t)+
         ') as t'+i+' '
         if(0<=i-1)

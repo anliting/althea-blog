@@ -5,11 +5,11 @@ function Page(db,data){
     this.data=data
 }
 Page.prototype.getComments=function(){
-    return this.db.query(`
+    return this.db.query0(`
         select id
-        from comment
+        from blog_comment
         where ?
     `,{
         id_page:this.id
-    }).then(a=>a[0]).then(rows=>rows.map(row=>row.id))
+    }).then(rows=>rows.map(row=>row.id))
 }

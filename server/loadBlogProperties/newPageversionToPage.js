@@ -27,7 +27,7 @@ module.exports=function(
 }
 function updatePage(db,id_lastversion,ispublic,id){
     return db.query(`
-        update page set ? where ?
+        update blog_page set ? where ?
     `,[
         {
             id_lastversion,

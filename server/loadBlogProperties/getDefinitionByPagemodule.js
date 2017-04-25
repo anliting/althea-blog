@@ -4,7 +4,7 @@ module.exports=async function(id){
             level,
             name,
             content
-        from definition
+        from blog_definition
         where ?
     `,{id_pagemodule:id})
     return rows.map(row=>({

@@ -26,12 +26,12 @@ module.exports=async function(
     return{id}
 }
 function insertPage(db,ispublic,id_user_author){
-    return db.query(`
-        insert into page
+    return db.query0(`
+        insert into blog_page
         set ?
     `,{
         isremoved:0,
         ispublic,
         id_user_author,
-    }).then(a=>a[0].insertId)
+    }).then(a=>a.insertId)
 }

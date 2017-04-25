@@ -1,8 +1,8 @@
 module.exports=function(){
-    return this.query(`
+    return this.query0(`
         select id
-        from pagemodule
-    `).then(a=>a[0]).then(rows=>
+        from blog_pagemodule
+    `).then(rows=>
         rows.map(row=>
             row.id
         )

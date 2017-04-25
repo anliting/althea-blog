@@ -1,9 +1,9 @@
 module.exports=function(id){
-    return this.query(`
+    return this.query0(`
         select
             priority,
             name
-        from pagemodule
+        from blog_pagemodule
         where ?
-    `,{id}).then(a=>a[0])
+    `,{id})
 }

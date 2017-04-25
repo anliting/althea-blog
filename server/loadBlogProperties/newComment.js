@@ -9,7 +9,7 @@ async function assertPageExists(cn,id){
     let res=await new Promise((rs,rj)=>{
         cn.query(`
             select count(*)
-            from page
+            from blog_page
             where ?
             lock in share mode
         `,{id},(err,rows)=>err?rj(err):rs(rows[0]['count(*)']))
@@ -23,7 +23,7 @@ async function assertPageExists(cn,id){
 function insertComment(cn,id_user_owner,id_page,content){
     return new Promise((rs,rj)=>{
         cn.query(`
-            insert into comment
+            insert into blog_comment
             set ?
         `,{
             id_page,
