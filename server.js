@@ -29,8 +29,6 @@ module.exports=async althea=>{
         let path=r.analyze.request.parsedUrl.pathname.split('/')
         let res=await checkIfIsPageRequest(db,r,path)
         switch(res.status){
-            case 0:
-                throw res.err
             case 1:
                 return
             case 2:
