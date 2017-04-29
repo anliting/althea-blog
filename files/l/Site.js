@@ -2,17 +2,16 @@
     let RawSite=await module.repository.althea.Site
     function Site(){
         RawSite.call(this)
+        this._pagemodules={}
+        this._pageversions={}
     }
     Object.setPrototypeOf(Site.prototype,RawSite.prototype)
     Site.prototype.getComment=async function(id){
         return new(await module.repository.blog.Comment)(this,id)
     }
     Site.prototype.getPage=async function(id){
-        return new(await module.repository.blog.Page)(this,id)
         // cache is disabled because of the comment feature
-        return this._pages[id]||(this._pages[id]=
-            new(await module.repository.blog.Page)(this,id)
-        )
+        return new(await module.repository.blog.Page)(this,id)
     }
     Site.prototype.getPagemodule=async function(id){
         return this._pagemodules[id]||(this._pagemodules[id]=
