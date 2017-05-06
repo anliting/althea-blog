@@ -1,5 +1,5 @@
 let
-    updateDatabase=         require('./server/updateDatabase'),
+    edges=                  require('./server/edges'),
     queryFunctions=         require('./server/queryFunctions'),
     loadBlogProperties=     require('./server/loadBlogProperties'),
     blog=                   require('./server/blog'),
@@ -7,7 +7,7 @@ let
     pageversions=           require('./server/pageversions'),
     checkIfIsPageRequest=   require('./server/checkIfIsPageRequest')
 module.exports=async althea=>{
-    await updateDatabase(althea)
+    await althea.updateDatabase(edges)
     let db=Object.create(althea.database)
     loadBlogProperties(db)
     Object.entries(queryFunctions).map(([k,v])=>{
