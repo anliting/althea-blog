@@ -4,7 +4,7 @@ module.exports=async(db,args,env)=>{
         typeof args.content=='string'
     ))
         return
-    db.newComment(
+    await db.newComment(
         env.currentUser,
         args.page,
         args.content
