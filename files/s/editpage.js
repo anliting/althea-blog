@@ -20,8 +20,8 @@ let editpageReady=Promise.all([
         await editpageReady
         new Editpage(site)
     })
-    module.repository.althea.Navigationbar.then(Navigationbar=>{
+    /*module.repository.althea.Navigationbar.then(Navigationbar=>{
         let navigationbar=new Navigationbar(site)
         document.body.appendChild(navigationbar.view)
-    })
+    })*/
 })()

@@ -7,7 +7,6 @@ function calcContent(env){
 <meta name=viewport content='width=device-width,initial-scale=1'>
 <div id=div_main>
     <table id=table_content>
-        <tr><td style=height:32px>
         <tr><td>
             <select id=select_id_pagemodule>
             </select>

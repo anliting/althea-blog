@@ -20,8 +20,8 @@ Object.entries({"../l/Blog/Page.js":"(async()=>{\n    let dom=await module.repos
         await editpageReady
         new Editpage(site)
     })
-    module.repository.althea.Navigationbar.then(Navigationbar=>{
+    /*module.repository.althea.Navigationbar.then(Navigationbar=>{
         let navigationbar=new Navigationbar(site)
         document.body.appendChild(navigationbar.view)
-    })
+    })*/
 })()
