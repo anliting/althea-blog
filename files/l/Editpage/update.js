@@ -26,15 +26,17 @@
         ).checked='checked'*/
         document.getElementById('select_privacy').value=
             editpage.id&&data.lastversion_page.ispublic?2:1
+        data.pagemodules.sort((a,b)=>
+            a.priority-b.priority
+        )
         data.pagemodules.map(e=>{
             let option=dom('option',e.name)
             option.value=e.id
             if(editpage.id&&e.id==data.lastversion_page.id_pagemodule)
                 option.selected='selected'
-            document.getElementById('select_id_pagemodule').
-                appendChild(
-                    option
-                )
+            document.getElementById('select_id_pagemodule').appendChild(
+                option
+            )
         })
         editpage.id&&data.lastversion_page.tags.map(e=>{
             editpage.setOfTags.addTag(e)

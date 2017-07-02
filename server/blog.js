@@ -14,11 +14,10 @@ module.exports=(db,env)=>{
 async function get(db,env){
     let pv
     // Get page and pageversion if it is specified.
-    if(env.id_page){
+    if(env.id_page)
         pv=await db.getLastversionOfPage(
             await db.getPage(env.id_page)
         )
-    }
     env.headers['content-type']='text/html;charset=utf-8'
     return{
         status:200,

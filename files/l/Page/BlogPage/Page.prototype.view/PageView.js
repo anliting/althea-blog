@@ -58,20 +58,19 @@
     }
     function div_blog_content(pageView,page){
         let
-            div=dom('div')
-        div.id='blog_content_'+page.id
+            div=dom('div',{
+                id:'blog_content_'+page.id,
+                innerHTML:page.blog.pagemodules[
+                    page.id_pagemodule-1
+                ].compile(page.content),
+            })
         div.style.display=pageView.hide?'none':'block'
-        div.innerHTML=
-            page.blog.pagemodules[1].compile(page.content)
-        {
-            let scripts=div.getElementsByTagName('script')
-            for(let i=0;i<scripts.length;i++)
-                eval(scripts[i].innerHTML)
-        }
+        for(let s of div.getElementsByTagName('script'))
+            eval(s.innerHTML)
         page.blog.emit('pageContentLoad',div)
-        page.blog.on('pageContentLoadListenerAdd',listener=>{
+        page.blog.on('pageContentLoadListenerAdd',listener=>
             listener(div)
-        })
+        )
         return div
     }
     function div_facebooklike(page){

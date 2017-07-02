@@ -12,12 +12,13 @@
         module.shareImport('BlogPage/Page.prototype.view.js'),
         module.shareImport('BlogPage/Page.prototype.createPrivacyTable.js'),
     ])
-    function BlogPage(blog,id,ispublic,title){
+    function BlogPage(blog,id,ispublic,title,id_pagemodule){
         EventEmmiter.call(this)
         this.blog=blog
         this.id=id
         this.ispublic=ispublic
         this.title=title
+        this.id_pagemodule=id_pagemodule
         setup.call(this)
     }
     Object.setPrototypeOf(BlogPage.prototype,EventEmmiter.prototype)

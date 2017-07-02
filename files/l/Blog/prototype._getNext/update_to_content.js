@@ -20,6 +20,7 @@
                     'public',
                     'title',
                     'content',
+                    'id_pagemodule',
                 ])),
             ]).then(vals=>({
                 page:vals[0],
@@ -29,16 +30,17 @@
                 this,
                 res.page.id,
                 res.pageVersion.public,
-                res.pageVersion.title
+                res.pageVersion.title,
+                res.pageVersion.id_pagemodule
             )
             this.pages[page.id]=page
-            page.preferredPagename=    res.page.preferredPagename
-            page.page_derived_from=    res.page.page_derived_from
-            page.page_derived_to=      res.page.page_derived_to
-            page.content=              res.pageVersion.content
-            page.authorId=             res.page.author
-            page.timestamp_insert=     res.page.timestamp_insert
-            page.datetime_lastmodified=res.page.timestamp_lastmodified
+            page.preferredPagename=     res.page.preferredPagename
+            page.page_derived_from=     res.page.page_derived_from
+            page.page_derived_to=       res.page.page_derived_to
+            page.content=               res.pageVersion.content
+            page.authorId=              res.page.author
+            page.timestamp_insert=      res.page.timestamp_insert
+            page.datetime_lastmodified= res.page.timestamp_lastmodified
             let pv=await res.pageVersion.load('tags')
             page.tags=pv.tags.sort((a,b)=>a.localeCompare(b))
             return page
