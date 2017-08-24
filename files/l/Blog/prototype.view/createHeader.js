@@ -13,7 +13,7 @@
         module.shareImport('createHeader/createNavigationBar.js'),
     ])
     function createHeader(blog,view){
-        let div=dom('div',
+        let div=dom.div(
             createTitle(),
             createTagline(),
             createNavigationBar(view),
@@ -24,7 +24,7 @@
         div.className='header'
         return div
         function createTitle(){
-            let div=dom('div')
+            let div=dom.div()
             div.className='title'
             ;(async()=>{
                 let site=await blog._site
@@ -38,8 +38,7 @@
             })()
             return div
             function createA(clientUrlRoot,bannerTitle){
-                let a=dom('a')
-                a.href=''
+                let a=dom.a({href:''})
                 a.onclick=e=>{
                     if(
                         e.which!=1||
@@ -56,7 +55,7 @@
             }
         }
         function createTagline(){
-            let div=dom('div')
+            let div=dom.div()
             div.className='tagline'
             blog._site.then(s=>s.load).then(site=>{
                 div.innerHTML=site.blogTagline
@@ -64,7 +63,7 @@
             return div
         }
         function createSearchForTags(view){
-            let div=dom('div',
+            let div=dom.div(
                 createSelectedTagsDiv(),
                 view.input=createInput(blog,view),
                 view.datalist_input_searchForTag
@@ -72,7 +71,7 @@
             div.className='searchForTags'
             return div
             function createSelectedTagsDiv(){
-                let div=dom('div')
+                let div=dom.div()
                 div.className='selectedTags'
                 setupSelectedTagsDiv(blog,div)
                 blog.on('statusChange',()=>{
@@ -83,7 +82,7 @@
             }
         }
         function createTags(view){
-            let div=dom('div')
+            let div=dom.div()
             div.className='tags'
             blog.on('statusChange',()=>{
                 div.innerHTML=''
@@ -94,7 +93,7 @@
             return div
         }
         function createIndex(){
-            let div=dom('div')
+            let div=dom.div()
             div.className='index'
             checkSetupIndex(blog,div)
             blog.on('statusChange',()=>{

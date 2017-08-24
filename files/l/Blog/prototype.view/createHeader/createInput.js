@@ -1,7 +1,7 @@
 (async()=>{
     let dom=await module.repository.althea.dom
     function createInput(blog,view){
-        let input=dom('input')
+        let input=dom.input()
         input.setAttribute('list',view.datalist_input_searchForTag.id)
         input.addEventListener('keydown',e=>{
             if(e.keyCode!=13)

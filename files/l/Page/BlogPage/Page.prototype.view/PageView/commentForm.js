@@ -1,9 +1,9 @@
 (async()=>{
     let dom=await module.repository.althea.dom
     return page=>{
-        let form=dom('form',
+        let form=dom.form(
             page.textarea_comment__form_comment,
-            dom('br'),
+            dom.br(),
             page.input_submit__form_comment
         )
         form.className='form_newcomment'

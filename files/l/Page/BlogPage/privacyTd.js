@@ -8,10 +8,9 @@
     ])
     return privacyTd
     function privacyTd(page){
-        return dom('td',span_privacy())
+        return dom.td(span_privacy())
         function span_privacy(){
-            let span=dom('span')
-            span.style.fontStyle='italic'
+            let span=dom.span(span=>{span.style.fontStyle='italic'})
             let a=[
                 (async()=>{
                     let site=await page.blog._site
@@ -32,7 +31,7 @@
             )
             return span
             function dateSpan(){
-                let span=dom('span',
+                let span=dom.span(
                     dateToString(new Date(page.timestamp_insert))
                 )
                 span.title=`Last modified: ${
@@ -41,7 +40,7 @@
                 return span
             }
             function privateSpan(){
-                return dom('span','private')
+                return dom.span('private')
             }
             function dateToString(d){
                 return`${d.getFullYear()}-${1+d.getMonth()}-${

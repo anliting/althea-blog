@@ -19,7 +19,7 @@
     Object.setPrototypeOf(PageView.prototype,EventEmmiter.prototype)
     function createDiv(pageView,page){
         let
-            div=dom('div'),
+            div=dom.div(),
             isfirst
         pageView.hide=!page.ispublic&&!page.blog.status.pageId
         div.className='post'
@@ -58,7 +58,7 @@
     }
     function div_blog_content(pageView,page){
         let
-            div=dom('div',{
+            div=dom.div({
                 id:'blog_content_'+page.id,
                 innerHTML:page.blog.pagemodules[
                     page.id_pagemodule-1
@@ -74,7 +74,7 @@
         return div
     }
     function div_facebooklike(page){
-        let div=dom('div',{className:'fb-like'})
+        let div=dom.div({className:'fb-like'})
         div.setAttribute(
             'data-href','https://anliting.com/'+page.id
         )

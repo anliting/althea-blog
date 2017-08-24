@@ -14,8 +14,7 @@
     Object.setPrototypeOf(Page.prototype,AltheaObject.prototype)
     Page.prototype._loader='getPage'
     Object.defineProperty(Page.prototype,'a',{get(){
-        let a=dom('a')
-        a.href=this.id
+        let a=dom.a({href:this.id})
         this.lastversion.then(async pv=>{
             await pv.load('title')
             a.textContent=pv.title||'Untitled'

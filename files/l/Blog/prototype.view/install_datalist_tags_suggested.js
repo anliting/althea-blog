@@ -8,7 +8,7 @@
     ])
     return install_datalist_tags_suggested
     function install_datalist_tags_suggested(blogView){
-        blogView.datalist_input_searchForTag=dom('datalist')
+        blogView.datalist_input_searchForTag=dom.datalist()
         // known best solution
         blogView.datalist_input_searchForTag.id=randomId(16)
     }

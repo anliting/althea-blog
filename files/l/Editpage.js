@@ -56,10 +56,10 @@ let modules=Promise.all([
             createUploadImageTr(imageUploader)
         )
         function createUploadImageTr(imageUploader){
-            return dom('tr',createUploadImageTd(imageUploader))
+            return dom.tr(createUploadImageTd(imageUploader))
         }
         function createUploadImageTd(imageUploader){
-            return dom('td',fileButton.n)
+            return dom.td(fileButton.n)
         }
         // end set up image uploader
         initialize(this)

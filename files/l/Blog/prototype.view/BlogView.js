@@ -11,8 +11,7 @@
         module.shareImport('prototype.keydown.js'),
     ])
     function createContents(blog){
-        let div=dom('div')
-        div.className='contents'
+        let div=dom.div({className:'contents'})
         blog.on('pageLoad',page=>{
             div.appendChild(page.view.domElement)
         })
@@ -22,7 +21,7 @@
         return div
     }
     function createFooter(view){
-        let div=dom('div')
+        let div=dom.div()
         div.className='footer'
         view.blog._site.then(async site=>{
             let res=await site.send('getBlogFooter')
@@ -32,11 +31,11 @@
     }
     function BlogView(blog){
         this.blog=blog
-        this.div=dom('div')
+        this.div=dom.div()
         this.div.className='blog'
         install_datalist_tags_suggested(this)
         {
-            let s=dom('style')
+            let s=dom.style()
             let u=()=>
                 this.blog._styles.map(n=>
                     s.appendChild(n)

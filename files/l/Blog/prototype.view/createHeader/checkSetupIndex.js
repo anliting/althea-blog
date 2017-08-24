@@ -27,11 +27,11 @@
         }
         a.sort((a,b)=>a.title.localeCompare(b.title))
         chunks(a,12).map(a=>{
-            let ul=dom('ul')
+            let ul=dom.ul()
             ul.style.float='left'
             for(let p of a){
                 let
-                    li=dom('li'),
+                    li=dom.li(),
                     a=p.page.a
                 if(!p.public)
                     a.style.color='black'
@@ -55,9 +55,7 @@
         })
         div.appendChild(createClearBothDiv())
         function createClearBothDiv(){
-            let div=dom('div')
-            div.style.clear='both'
-            return div
+            return dom.div(n=>{n.style.clear='both'})
         }
         async function getPagesByTags(){
             return(await blog._site).send({

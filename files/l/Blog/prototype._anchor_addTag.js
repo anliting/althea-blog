@@ -11,9 +11,10 @@
             tagsToSelect=(this.status.tagNames||[]).slice()
         tagsToSelect.push(tag.name)
         let
-            a=dom('a',tag.name)
-        a.className='addTag'
-        a.href=path.getHrefByTags(tagsToSelect)
+            a=dom.a(tag.name,{
+                className:'addTag',
+                href:path.getHrefByTags(tagsToSelect),
+            })
         a.onclick=e=>{
             if(
                 e.which!=1||

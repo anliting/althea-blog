@@ -12,7 +12,7 @@ module.repository.event=module.shareImport('createNavigationBar/event.js')
     function createNavigationBar(view){
         let
             blog=view.blog,
-            div=dom('div',{className:'navigationBar'},menuA())
+            div=dom.div({className:'navigationBar'},menuA())
         blog._site.then(site=>{
             perUser(site,async u=>{
                 await u.load(['isAnonymous','username','isadmin'])
@@ -25,9 +25,7 @@ module.repository.event=module.shareImport('createNavigationBar/event.js')
         })
         return div
         function aboutA(){
-            let a=dom('a','About')
-            a.href='about'
-            return a
+            return dom.a('About',{href:'about'})
         }
         function perUser(site,func){
             site.currentUser.then(func)
@@ -36,8 +34,7 @@ module.repository.event=module.shareImport('createNavigationBar/event.js')
             })
         }
         function loginA(){
-            let a=dom('a','Login')
-            a.href='javascript:'
+            let a=dom.a('Login',{href:'javascript:'})
             a.onclick=async e=>{
                 e.preventDefault()
                 e.stopPropagation()
@@ -46,7 +43,7 @@ module.repository.event=module.shareImport('createNavigationBar/event.js')
             return a
         }
         function menuA(){
-            let a=dom('a','Menu')
+            let a=dom.a('Menu')
             a.href='javascript:'
             a.onclick=e=>{
                 e.preventDefault()
@@ -61,7 +58,7 @@ module.repository.event=module.shareImport('createNavigationBar/event.js')
             return a
         }
         function menuDiv(){
-            let div=dom('div',innerDiv())
+            let div=dom.div(innerDiv())
             div.style.position='relative'
             div.style.height='0'
             div.style.width='100%'
@@ -70,7 +67,7 @@ module.repository.event=module.shareImport('createNavigationBar/event.js')
             div.tabIndex=0
             return div
             function innerDiv(){
-                let div=dom('div',aboutA())
+                let div=dom.div(aboutA())
                 div.style.margin='0 auto'
                 div.style.backgroundColor='white'
                 div.style.border='1px solid lightgray'

@@ -4,7 +4,7 @@
         module.repository.althea.html,
     ])
     return(page,comment)=>{
-        let div=dom('div')
+        let div=dom.div()
         div.className='comments'
         ;(async()=>{
             comment=await comment
@@ -42,7 +42,7 @@
         })()
         return div
         function deleteA(id){
-            let a=dom('a','delete',{href:'javascript:'})
+            let a=dom.a('delete',{href:'javascript:'})
             a.onclick=async e=>{
                 e.preventDefault()
                 e.stopPropagation()

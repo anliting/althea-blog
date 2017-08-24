@@ -34,17 +34,17 @@
                 v=v.parentNode
             if(s[s.length-1]<r){
                 s.push(r)
-                v.appendChild(dom('ul'))
+                v.appendChild(dom.ul())
                 v=v.lastChild
             }
             v.appendChild(li(p))
             v=v.lastChild
         }
         function li(p){
-            return dom('li',a_href(p))
+            return dom.li(a_href(p))
         }
         function a_href(p){
-            return dom('a',{
+            return dom.a({
                 innerHTML:p.innerHTML,
                 href:location.href+'#'+p.id,
             })

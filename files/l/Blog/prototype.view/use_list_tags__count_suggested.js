@@ -6,8 +6,7 @@
         )
         blogView.datalist_input_searchForTag.innerHTML=''
         list.map(e=>{
-            let o=dom('option')
-            o.value=e.name
+            let o=dom.option({value:e.name})
             blogView.datalist_input_searchForTag.appendChild(o)
         })
         let tagsToSelect=(blogView.blog.status.tagNames||[]).slice()
@@ -20,12 +19,10 @@
         })
         div.appendChild(div_clearboth())
         function ul(){
-            let ul=dom('ul')
-            ul.style.float='left'
-            return ul
+            return dom.ul(ul=>{ul.style.float='left'})
         }
         function li(t){
-            return dom('li',a(t))
+            return dom.li(a(t))
         }
         function a(t){
             tagsToSelect.push(t.name)
@@ -37,9 +34,7 @@
             return a
         }
         function div_clearboth(){
-            let div=dom('div')
-            div.style.clear='both'
-            return div
+            return dom.div(div=>{div.style.clear='both'})
         }
     }
     return use_list_tags__count_suggested

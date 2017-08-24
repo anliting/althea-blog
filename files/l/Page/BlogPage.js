@@ -32,11 +32,11 @@
     }
     BlogPage.prototype.h1_title=function(){
         let page=this
-        let h1_title=dom('h1',a_h1_title())
+        let h1_title=dom.h1(a_h1_title())
         h1_title.style.textAlign='center'
         return h1_title
         function a_h1_title(){
-            let a=dom('a',page.title)
+            let a=dom.a(page.title)
             a.className='title'
             a.href=page.getHref()
             a.onclick=e=>{
@@ -53,7 +53,7 @@
         }
     }
     BlogPage.prototype.createAuthorDiv=function(){
-        let div=dom('div')
+        let div=dom.div()
         div.style.textAlign='center'
         div.style.display='none'
         div.style.fontSize='1.5em'
@@ -67,7 +67,7 @@
     }
     BlogPage.prototype.createDateDiv=function(){
         let
-            div=dom('div'),
+            div=dom.div(),
             date=new Date(this.datetime_lastmodified)
         div.style.textAlign='center'
         div.style.display='none'

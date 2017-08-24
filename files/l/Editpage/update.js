@@ -30,7 +30,7 @@
             a.priority-b.priority
         )
         data.pagemodules.map(e=>{
-            let option=dom('option',e.name)
+            let option=dom.option(e.name)
             option.value=e.id
             if(editpage.id&&e.id==data.lastversion_page.id_pagemodule)
                 option.selected='selected'
@@ -45,8 +45,7 @@
             editpage.setOfNames.addTag(e)
         })
         data.tags.map(e=>{
-            let option=dom('option')
-            option.value=e
+            let option=dom.option({value:e})
             document.getElementById('tags').appendChild(
                 option
             )

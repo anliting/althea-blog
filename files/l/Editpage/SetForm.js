@@ -20,8 +20,8 @@
         setForm.span_tags.appendChild(tag.body)
         function Tag(name){
             let
-                span_name=dom('span'),
-                span=dom('span',
+                span_name=dom.span(),
+                span=dom.span(
                     span_name,
                     ' ',
                     a()
@@ -31,7 +31,7 @@
             this.body=span
             this.name=name
             function a(){
-                let a=dom('a')
+                let a=dom.a()
                 a.onclick=()=>{
                     let id=setForm.tagIdInTagsByName[name]
                     setForm.tags[id]=setForm.tags[setForm.tags.length-1]
