@@ -47,7 +47,6 @@ ${env.althea.loadModule(
             tagNames:       env.tags_selected,
         }
     },
-    false,
     {sharedWorker:true}
 )}
 `

@@ -4,7 +4,6 @@ let
     loadBlogProperties=     require('./server/loadBlogProperties'),
     blog=                   require('./server/blog'),
     editpage=               require('./server/editpage'),
-    pageversions=           require('./server/pageversions'),
     checkIfIsPageRequest=   require('./server/checkIfIsPageRequest')
 module.exports=async althea=>{
     await althea.updateDatabase(edges)
@@ -17,7 +16,6 @@ module.exports=async althea=>{
     })
     althea.addPagemodule('/',r=>blog(db,r))
     althea.addPagemodule('/newpage',editpage)
-    althea.addPagemodule('/pageversions',pageversions)
     althea.addPagemodule(e=>{
         let path=e.analyze.request.parsedUrl.pathname.split('/')
         let res=path[1]=='tags'&&2<path.length
