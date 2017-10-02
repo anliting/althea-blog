@@ -53,12 +53,12 @@ let modules=Promise.all([
             fileButton.n.disabled=false
         })
         document.getElementById('table_content').appendChild(
-            createUploadImageTr(imageUploader)
+            createUploadImageTr()
         )
-        function createUploadImageTr(imageUploader){
-            return dom.tr(createUploadImageTd(imageUploader))
+        function createUploadImageTr(){
+            return dom.tr(createUploadImageTd())
         }
-        function createUploadImageTd(imageUploader){
+        function createUploadImageTd(){
             return dom.td(fileButton.n)
         }
         // end set up image uploader
