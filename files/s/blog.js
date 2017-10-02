@@ -72,11 +72,14 @@ async function createBlogThread(site,blog){
 async function setupProgress(a){
     let Progress=await module.repository.althea.Progress
     let p=new Progress(a),v=p.view
-    document.head.appendChild(Progress.style)
+    let style=Object.assign(document.createElement('style'),{
+        textContent:Progress.style
+    })
+    document.head.appendChild(style)
     document.body.appendChild(v.node)
     await p.complete
     await new Promise(rs=>setTimeout(rs,2*p._animationDelay))
-    document.head.removeChild(Progress.style)
+    document.head.removeChild(style)
     document.body.removeChild(v.node)
     v.free
 }
