@@ -6,7 +6,7 @@ let editpageReady=Promise.all([
     module.scriptByPath('https://gitcdn.link/cdn/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js'),
 ])
 ;(async()=>{
-    ;(await module.importByPath('lib/general.static.js',{mode:1}))(module)
+    ;(await module.importByPath('lib/general.js',{mode:1}))(module)
     ;(await module.shareImport('../l/repository.js'))(module)
     let site=module.repository.blog.site
     environment=module.arguments.editpageEnv

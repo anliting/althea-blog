@@ -1,2 +1,0 @@
-node $linker files/s/blog.js files/l > files/s/blog.static.js
-node $linker files/s/editpage.js files/l > files/s/editpage.static.js

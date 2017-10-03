@@ -18,9 +18,13 @@ module.repository.event=module.shareImport('createNavigationBar/event.js')
                 await u.load(['isAnonymous','username','isadmin'])
                 let a=u.isAnonymous?loginA():userA(blog,div,u)
                 div.appendChild(a)
-                site.once('userChange',()=>{
-                    div.removeChild(a)
-                })
+                {
+                    let f=()=>{
+                        div.removeChild(a)
+                        site.off('userChange',f)
+                    }
+                    site.on('userChange',f)
+                }
             })
         })
         return div
