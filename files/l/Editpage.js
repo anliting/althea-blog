@@ -1,5 +1,5 @@
 let modules=Promise.all([
-    module.shareImport('Editpage/prototype.editors.js'),
+    module.module('Editpage/prototype.editors.js'),
     module.shareImport('Editpage/prototype.setup_form.js'),
     module.shareImport('Editpage/prototype.submit.js'),
     module.style('Editpage/editpage.css'),

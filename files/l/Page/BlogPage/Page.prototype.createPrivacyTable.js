@@ -1,3 +1,4 @@
+import site from '/lib/site.js'
 import dom from '/lib/tools/dom.js'
 import createHideShowA from './Page.prototype.createPrivacyTable/createHideShowA.js'
 import privacyTd from './Page.prototype.createPrivacyTable/privacyTd.js'
@@ -53,12 +54,10 @@ function createPrivacyTable(pageView){
             a.innerHTML='<i class=material-icons>remove</i>'
             return a
             function remove(){
-                module.repository.althea.site.then(site=>
-                    site.send({
-                        function:'removePage',
-                        page:page.id
-                    })
-                )
+                site.send({
+                    function:'removePage',
+                    page:page.id
+                })
             }
         }
     }
