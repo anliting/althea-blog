@@ -1,3 +1,4 @@
+import path from '../../path.js'
 import dom from '/lib/tools/dom.js'
 function createInput(blog,view){
     let input=dom.input()
@@ -15,11 +16,9 @@ function createInput(blog,view){
             []
         tagsToSelect.push(tagToAdd)
         if(e.shiftKey)
-            module.shareImport('../path.js').then(path=>{
-                open(path.getHrefByTags(
-                    tagsToSelect
-                ),'_blank').focus()
-            })
+            open(path.getHrefByTags(
+                tagsToSelect
+            ),'_blank').focus()
         else
             blog.status={tagNames:tagsToSelect}
     })

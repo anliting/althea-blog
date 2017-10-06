@@ -1,3 +1,4 @@
+export default`
 body{
     margin:0px;
 }
@@ -19,3 +20,4 @@ body{
 .a_removepage{
     float:left;
 }
+`

@@ -1,9 +1,8 @@
+import Pagemodule from '../Pagemodule.js'
 async function loadPagemodules(blog){
     let[
-        Pagemodule,
         pagemodules,
     ]=await Promise.all([
-        module.repository.blog.Pagemodule,
         blog._site.then(site=>
             site.send('getPagemodules')
         ),
@@ -18,4 +17,4 @@ async function loadPagemodules(blog){
     )
     return blog
 }
-loadPagemodules
+export default loadPagemodules
