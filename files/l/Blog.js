@@ -10,7 +10,7 @@ let loadPagemodules=module.shareImport('Blog/loadPagemodules.js')
     ]=await Promise.all([
         module.repository.althea.EventEmmiter,
         module.shareImport('Blog/Page.js'),
-        module.shareImport('Blog/prototype._getNext.js'),
+        module.module('Blog/prototype._getNext.js'),
         module.shareImport('Blog/prototype._anchor_addTag.js'),
         module.shareImport('Blog/prototype.view.js'),
         module.shareImport('Blog/path.js'),

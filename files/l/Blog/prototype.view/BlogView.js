@@ -7,7 +7,7 @@
     ]=await Promise.all([
         module.repository.althea.dom,
         module.shareImport('install_datalist_tags_suggested.js'),
-        module.shareImport('createHeader.js'),
+        module.module('createHeader.js'),
         module.shareImport('prototype.keydown.js'),
     ])
     function createContents(blog){

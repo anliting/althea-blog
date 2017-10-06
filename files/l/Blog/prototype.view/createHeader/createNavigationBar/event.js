@@ -1,4 +1,4 @@
-({
+export default{
     onceClickOrBlurButNotMouseDown(n,listener){
         let mousedown=false
         let l=e=>{
@@ -18,4 +18,4 @@
         n.addEventListener('blur',l)
         n.addEventListener('mousedown',onmousedown)
     }
-})
+}
