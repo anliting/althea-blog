@@ -31,7 +31,7 @@ function Blog(site,status){
     // end add event listeners
     this.load=this._site.then(site=>{
         let module=anlitingModule
-        site.loadPlugins('blog',s=>eval(s))
+        return site.loadPlugins('blog',s=>eval(s))
     })
     this._getNext()
     this._styles=[]
