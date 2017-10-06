@@ -8,9 +8,9 @@
     ]=await Promise.all([
         module.repository.althea.EventEmmiter,
         module.repository.althea.dom,
-        module.shareImport('BlogPage/setup.js'),
-        module.shareImport('BlogPage/Page.prototype.view.js'),
-        module.shareImport('BlogPage/Page.prototype.createPrivacyTable.js'),
+        module.module('BlogPage/setup.js'),
+        module.module('BlogPage/Page.prototype.view.js'),
+        module.module('BlogPage/Page.prototype.createPrivacyTable.js'),
     ])
     function BlogPage(blog,id,ispublic,title,id_pagemodule){
         EventEmmiter.call(this)

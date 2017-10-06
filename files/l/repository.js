@@ -5,11 +5,16 @@
             Blog:           'Blog.js',
             Comment:        'Comment.js',
             Page:           'Page.js',
+        },s=>module.shareImport(s))
+        m.repository.blog=lazyMap({
+            //Blog:           'Blog.js',
+            //Comment:        'Comment.js',
+            //Page:           'Page.js',
             Pagemodule:     'Pagemodule.js',
             Pagemodule0:    'Pagemodule0.js',
             Pageversion:    'Pageversion.js',
             site:           'site.js',
             Site:           'Site.js',
-        },s=>module.shareImport(s))
+        },s=>module.module(s),m.repository.blog)
     }
 })()

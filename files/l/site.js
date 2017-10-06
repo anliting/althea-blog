@@ -1,3 +1,2 @@
-(async()=>
-    new(await module.repository.blog.Site)
-)()
+import Site from './Site.js'
+export default new Site

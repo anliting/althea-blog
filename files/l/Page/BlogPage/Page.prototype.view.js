@@ -1,10 +1,4 @@
-;(async()=>{
-    let[
-        PageView
-    ]=await Promise.all([
-        module.shareImport('Page.prototype.view/PageView.js')
-    ])
-    return{get(){
-        return new PageView(this)
-    }}
-})()
+import PageView from './Page.prototype.view/PageView.js'
+export default{get(){
+    return new PageView(this)
+}}
