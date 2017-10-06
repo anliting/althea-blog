@@ -3,13 +3,11 @@
     return m=>{
         m.repository.blog=lazyMap({
             Blog:           'Blog.js',
-            Comment:        'Comment.js',
-            Page:           'Page.js',
         },s=>module.shareImport(s))
         m.repository.blog=lazyMap({
             //Blog:           'Blog.js',
-            //Comment:        'Comment.js',
-            //Page:           'Page.js',
+            Comment:        'Comment.js',
+            Page:           'Page.js',
             Pagemodule:     'Pagemodule.js',
             Pagemodule0:    'Pagemodule0.js',
             Pageversion:    'Pageversion.js',
