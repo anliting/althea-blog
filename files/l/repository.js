@@ -4,7 +4,7 @@
         m.repository.blog=lazyMap({
             Blog:           'Blog.static.js',
             Comment:        'Comment.js',
-            Page:           'Page.js',
+            Page:           'Page.static.js',
             Pagemodule:     'Pagemodule.js',
             Pagemodule0:    'Pagemodule0.js',
             Pageversion:    'Pageversion.js',

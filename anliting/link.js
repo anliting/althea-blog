@@ -7,6 +7,9 @@ let
         '/lib/site.js',
         '/lib/AltheaObject.js',
         '/lib/tools/order.js',
+        '/plugins/althea-blog/l/Page.js',
+        '/plugins/althea-blog/l/Page.static.js',
+        '/plugins/althea-blog/l/Pagemodule.js',
     ]
 async function link(input,file){
     let bundle=await rollup.rollup({
@@ -20,3 +23,4 @@ async function link(input,file){
     })
 }
 link(`files/l/Blog.js`,`files/l/Blog.static.js`)
+link(`files/l/Page.js`,`files/l/Page.static.js`)
