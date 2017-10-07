@@ -30,8 +30,9 @@ function Blog(site,status){
     this.on('pageContentLoad',Page.tableofcontents_all)
     // end add event listeners
     this.load=this._site.then(site=>{
-        let module=anlitingModule
-        return site.loadPlugins('blog',s=>eval(s))
+        return site.loadPlugins('blog',s=>
+            eval(`let module=anlitingModule;${s}`)
+        )
     })
     this._getNext()
     this._styles=[]

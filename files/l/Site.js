@@ -1,4 +1,4 @@
-import RawSite from '/lib/Site.js'
+import RawSite from '/lib/Site.static.js'
 import Pagemodule0 from './Pagemodule0.js'
 import Pageversion from './Pageversion.js'
 import Page from './Page.js'
