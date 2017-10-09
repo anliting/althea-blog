@@ -2,12 +2,13 @@
     let
         [
             {Progress,hacker,Snapshot},
-            {Blog,Site},
+            {Blog,site},
         ]=await Promise.all([
             module.moduleByPath('/lib/core.static.js'),
             module.moduleByPath('/plugins/althea-blog/l/core.static.js'),
-        ]),
-        site=Promise.resolve(new Site),
+        ])
+    site=Promise.resolve(site)
+    let
         blog=loadBlog(site,module.arguments.status,Blog),
         main=createMainThread(site,blog)
     if(

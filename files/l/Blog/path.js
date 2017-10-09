@@ -1,4 +1,4 @@
-import site from '/lib/site.js'
+import site from '../site.js'
 function calcPathByStatus(status){
     if('pageId' in status)
         return site.path.blog.page(status.pageId)

@@ -5,6 +5,7 @@ import Pagemodule from     './Pagemodule.js'
 import Pagemodule0 from    './Pagemodule0.js'
 import Pageversion from    './Pageversion.js'
 import Site from           './Site.js'
+import site from           './site.js'
 export default{
     Blog,
     Comment,
@@ -13,4 +14,5 @@ export default{
     Pagemodule0,
     Pageversion,
     Site,
+    site,
 }

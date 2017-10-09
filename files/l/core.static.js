@@ -1,6 +1,5 @@
 import EventEmmiter from 'https://gitcdn.link/cdn/anliting/simple.js/99b7ab1b872bc2da746dd648dd0c078b3bc6961e/src/simple/EventEmmiter.js';
 import altheaCore from '/lib/core.static.js';
-import site from '/lib/site.js';
 
 let {html}=altheaCore;
 function Pagemodule(id,priority,name,definitions){
@@ -53,8 +52,8 @@ async function loadPagemodules(blog){
     let[
         pagemodules,
     ]=await Promise.all([
-        blog._site.then(site$$1=>
-            site$$1.send('getPagemodules')
+        blog._site.then(site=>
+            site.send('getPagemodules')
         ),
     ]);
     pagemodules.map(p=>
@@ -187,8 +186,8 @@ var commentForm = page=>{
     form.onsubmit=async e=>{
         e.preventDefault();
         e.stopPropagation();
-        await page.blog._site.then(site$$1=>
-            site$$1.send({
+        await page.blog._site.then(site=>
+            site.send({
                 function:'newComment',
                 page:page.id,
                 content:page.textarea_comment__form_comment.value,
@@ -220,8 +219,8 @@ var commentDiv = (page,comment)=>{
                 return u
             })(),
             (async()=>{
-                let site$$1=await page.blog._site;
-                let u=await site$$1.getUser(comment.id_user_owner);
+                let site=await page.blog._site;
+                let u=await site.getUser(comment.id_user_owner);
                 await u.load('username');
                 return u
             })(),
@@ -243,8 +242,8 @@ var commentDiv = (page,comment)=>{
         a.onclick=async e=>{
             e.preventDefault();
             e.stopPropagation();
-            let site$$1=await page.blog._site;
-            await site$$1.send({
+            let site=await page.blog._site;
+            await site.send({
                 function:'deleteComment',
                 id
             });
@@ -283,14 +282,14 @@ function createDiv(pageView,page){
     div.appendChild(div_facebooklike(page));
     page.blog.isFacebookLoaded&&FB.XFBML.parse(div)
     ;(async()=>{
-        let site$$1=await page.blog._site;
-        let p=await site$$1.getPage(page.id);
+        let site=await page.blog._site;
+        let p=await site.getPage(page.id);
         await p.load('comments');
         let comments=p.comments;
         await Promise.all(
             comments.map(comment=>
                 div.appendChild(
-                    commentDiv(page,site$$1.getComment(comment))
+                    commentDiv(page,site.getComment(comment))
                 )
             )
         );
@@ -360,6 +359,60 @@ var view = {get(){
     return new PageView(this)
 }};
 
+let {AltheaObject: AltheaObject$1}=altheaCore;
+function Pagemodule0(){
+    AltheaObject$1.apply(this,arguments);
+}
+Object.setPrototypeOf(Pagemodule0.prototype,AltheaObject$1.prototype);
+Pagemodule0.prototype._loader='getPagemoduleInfo';
+Object.defineProperty(Pagemodule0.prototype,'definitions',{get(){
+    return this._site.send({
+        function:'getDefinitionByPagemodule',
+        id:this.id,
+    })
+}});
+
+let {AltheaObject: AltheaObject$2}=altheaCore;
+function Pageversion(){
+    AltheaObject$2.apply(this,arguments);
+}
+Object.setPrototypeOf(Pageversion.prototype,AltheaObject$2.prototype);
+Pageversion.prototype._loader='getPageversion';
+
+let {AltheaObject: AltheaObject$3}=altheaCore;
+function Comment(){
+    AltheaObject$3.apply(this,arguments);
+}
+Object.setPrototypeOf(Comment.prototype,AltheaObject$3.prototype);
+Comment.prototype._loader='getComment';
+
+let RawSite=altheaCore.Site;
+function Site(){
+    RawSite.call(this);
+    this._pagemodules={};
+    this._pageversions={};
+}
+Object.setPrototypeOf(Site.prototype,RawSite.prototype);
+Site.prototype.getComment=async function(id){
+    return new Comment(this,id)
+};
+Site.prototype.getPage=async function(id){
+    // cache is disabled because of the comment feature
+    return new Page$1(this,id)
+};
+Site.prototype.getPagemodule=async function(id){
+    return this._pagemodules[id]||(this._pagemodules[id]=
+        new Pagemodule0(this,id)
+    )
+};
+Site.prototype.getPageversion=async function(id){
+    return this._pageversions[id]||(this._pageversions[id]=
+        new Pageversion(this,id)
+    )
+};
+
+var site = new Site;
+
 let {dom: dom$8}=altheaCore;
 let str_show='<i class=material-icons>expand_more</i>';
 let str_hide='<i class=material-icons>expand_less</i>';
@@ -384,8 +437,8 @@ function privacyTd(page){
         let span=dom$9.span(span=>{span.style.fontStyle='italic';});
         let a=[
             (async()=>{
-                let site$$1=await page.blog._site;
-                let u=await site$$1.getUser(page.authorId);
+                let site=await page.blog._site;
+                let u=await site.getUser(page.authorId);
                 return span.appendChild(await u.a)
             })(),
             document.createTextNode(' '),
@@ -560,8 +613,8 @@ BlogPage$1.prototype.createAuthorDiv=function(){
     div.style.display='none';
     div.style.fontSize='1.5em'
     ;(async()=>{
-        let site$$1=await this.blog._site;
-        let u=await site$$1.getUser(this.authorId);
+        let site=await this.blog._site;
+        let u=await site.getUser(this.authorId);
         await u.load('nickname');
         dom$2(div,u.nickname);
     })();
@@ -603,9 +656,9 @@ Page$1.BlogPage=BlogPage$1;
 
 let BlogPage=   Page$1.BlogPage;
 async function update_to_content(process,pages){
-    let site$$1=await this._site;
+    let site=await this._site;
     pages=await Promise.all(pages.map(async p=>{
-        let page=await site$$1.getPage(p);
+        let page=await site.getPage(p);
         let res=await Promise.all([
             page.load([
                 'preferredPagename',
@@ -644,7 +697,7 @@ async function update_to_content(process,pages){
         page.tags=pv.tags.sort((a,b)=>a.localeCompare(b));
         return page
     }));
-    await site$$1.load;
+    await site.load;
     if(!process.continue)
         return
     pages.map(page=>{
@@ -654,9 +707,9 @@ async function update_to_content(process,pages){
         document.title=
             this.pages[process.status.pageId].title+
             ' - '+
-            site$$1.name;
+            site.name;
     }else{
-        document.title=site$$1.name;
+        document.title=site.name;
     }
 }
 
@@ -671,8 +724,8 @@ async function _getNext(){
     this.once('statusChange',()=>
         process.continue=0
     );
-    let data=await this._site.then(site$$1=>
-        site$$1.send({
+    let data=await this._site.then(site=>
+        site.send({
             function:       'getSuggestedPages',
             page:           process.status.pageId||0,
             pageversion:    process.status.pageversionId||0,
@@ -741,10 +794,10 @@ async function checkSetupIndex(blog,div){
                 blog._site,
                 getPagesByTags(),
             ]),
-            site$$1=vals[0],
+            site=vals[0],
             pages=vals[1];
         a=await Promise.all(pages.map(async id=>{
-            let page=await site$$1.getPage(id);
+            let page=await site.getPage(id);
             let pageversion=await(await page.lastversion).load([
                 'public',
                 'title'
@@ -946,17 +999,17 @@ function createNavigationBar(view){
     let
         blog=view.blog,
         div=dom$16.div({className:'navigationBar'},menuA());
-    blog._site.then(site$$1=>{
-        perUser(site$$1,async u=>{
+    blog._site.then(site=>{
+        perUser(site,async u=>{
             await u.load(['isAnonymous','username','isadmin']);
             let a=u.isAnonymous?loginA():userA(blog,div,u);
             div.appendChild(a);
             {
                 let f=()=>{
                     div.removeChild(a);
-                    site$$1.off('userChange',f);
+                    site.off('userChange',f);
                 };
-                site$$1.on('userChange',f);
+                site.on('userChange',f);
             }
         });
     });
@@ -964,10 +1017,10 @@ function createNavigationBar(view){
     function aboutA(){
         return dom$16.a('About',{href:'about'})
     }
-    function perUser(site$$1,func){
-        site$$1.currentUser.then(func);
-        site$$1.on('userChange',()=>{
-            site$$1.currentUser.then(func);
+    function perUser(site,func){
+        site.currentUser.then(func);
+        site.on('userChange',()=>{
+            site.currentUser.then(func);
         });
     }
     function loginA(){
@@ -1029,12 +1082,12 @@ function createHeader(blog,view){
         let div=dom$12.div();
         div.className='title'
         ;(async()=>{
-            let site$$1=await blog._site;
-            await site$$1.load;
+            let site=await blog._site;
+            await site.load;
             div.appendChild(
                 createA(
-                    site$$1.clientUrlRoot,
-                    site$$1.bannerTitle
+                    site.clientUrlRoot,
+                    site.bannerTitle
                 )
             );
         })();
@@ -1059,8 +1112,8 @@ function createHeader(blog,view){
     function createTagline(){
         let div=dom$12.div();
         div.className='tagline';
-        blog._site.then(s=>s.load).then(site$$1=>{
-            div.innerHTML=site$$1.blogTagline;
+        blog._site.then(s=>s.load).then(site=>{
+            div.innerHTML=site.blogTagline;
         });
         return div
     }
@@ -1148,11 +1201,11 @@ function keydown(e){
             ]).then(vals=>{
                 let
                     user=vals[0],
-                    site$$1=vals[1];
+                    site=vals[1];
                 if(user.isAnonymous)
-                    site$$1.showLoginForm;
+                    site.showLoginForm;
                 else
-                    site$$1.logout;
+                    site.logout;
             });
         }else if(e.keyCode==79){ // o
             let x=currentPage();
@@ -1308,8 +1361,8 @@ function createContents(blog){
 function createFooter(view){
     let div=dom$11.div();
     div.className='footer';
-    view.blog._site.then(async site$$1=>{
-        let res=await site$$1.send('getBlogFooter');
+    view.blog._site.then(async site=>{
+        let res=await site.send('getBlogFooter');
         div.innerHTML=res;
     });
     return div
@@ -1343,8 +1396,8 @@ BlogView.prototype.setupSuggestedTags=async function(){
         view=this,
         blog=this.blog;
     let vals=await Promise.all([
-        blog._site.then(site$$1=>
-            site$$1.send({
+        blog._site.then(site=>
+            site.send({
                 function:'getSuggestedTags',
                 tags:blog.status.tagNames||[]
             })
@@ -1366,16 +1419,16 @@ var view$1 = {get(){
     return view
 }};
 
-function Blog(site$$1,status){
+function Blog(site,status){
     EventEmmiter.call(this);
-    this._site=site$$1;
+    this._site=site;
     this._status=status;
     this.pages={};
     this.pagemodules=[];
     this.pages_loaded=[];
     // refresh on userChange
-    this._site.then(site$$1=>{
-        site$$1.on('userChange',()=>{
+    this._site.then(site=>{
+        site.on('userChange',()=>{
             this.status=this.status;
         });
     });
@@ -1390,8 +1443,8 @@ function Blog(site$$1,status){
     this.on('pageContentLoad',Page.star_all);
     this.on('pageContentLoad',Page.tableofcontents_all);
     // end add event listeners
-    this.load=this._site.then(site$$1=>{
-        return site$$1.loadPlugins('blog',s=>
+    this.load=this._site.then(site=>{
+        return site.loadPlugins('blog',s=>
             eval(`let module=anlitingModule;${s}`)
         )
     });
@@ -1425,58 +1478,6 @@ Object.defineProperty(Blog.prototype,'status',{get(){
 Object.defineProperty(Blog.prototype,'view',view$1);
 Blog.prototype.path=path;
 
-let {AltheaObject: AltheaObject$1}=altheaCore;
-function Comment(){
-    AltheaObject$1.apply(this,arguments);
-}
-Object.setPrototypeOf(Comment.prototype,AltheaObject$1.prototype);
-Comment.prototype._loader='getComment';
-
-let {AltheaObject: AltheaObject$2}=altheaCore;
-function Pagemodule0(){
-    AltheaObject$2.apply(this,arguments);
-}
-Object.setPrototypeOf(Pagemodule0.prototype,AltheaObject$2.prototype);
-Pagemodule0.prototype._loader='getPagemoduleInfo';
-Object.defineProperty(Pagemodule0.prototype,'definitions',{get(){
-    return this._site.send({
-        function:'getDefinitionByPagemodule',
-        id:this.id,
-    })
-}});
-
-let {AltheaObject: AltheaObject$3}=altheaCore;
-function Pageversion(){
-    AltheaObject$3.apply(this,arguments);
-}
-Object.setPrototypeOf(Pageversion.prototype,AltheaObject$3.prototype);
-Pageversion.prototype._loader='getPageversion';
-
-let RawSite=altheaCore.Site;
-function Site(){
-    RawSite.call(this);
-    this._pagemodules={};
-    this._pageversions={};
-}
-Object.setPrototypeOf(Site.prototype,RawSite.prototype);
-Site.prototype.getComment=async function(id){
-    return new Comment(this,id)
-};
-Site.prototype.getPage=async function(id){
-    // cache is disabled because of the comment feature
-    return new Page$1(this,id)
-};
-Site.prototype.getPagemodule=async function(id){
-    return this._pagemodules[id]||(this._pagemodules[id]=
-        new Pagemodule0(this,id)
-    )
-};
-Site.prototype.getPageversion=async function(id){
-    return this._pageversions[id]||(this._pageversions[id]=
-        new Pageversion(this,id)
-    )
-};
-
 var core = {
     Blog,
     Comment,
@@ -1485,6 +1486,7 @@ var core = {
     Pagemodule0,
     Pageversion,
     Site,
+    site,
 };
 
 export default core;
