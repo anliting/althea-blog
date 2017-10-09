@@ -57,7 +57,7 @@ function div_blog_content(pageView,page){
         })
     div.style.display=pageView.hide?'none':'block'
     for(let s of div.getElementsByTagName('script'))
-        eval(s.innerHTML)
+        eval(`let module=anlitingModule;${s.innerHTML}`)
     page.blog.emit('pageContentLoad',div)
     page.blog.on('pageContentLoadListenerAdd',listener=>
         listener(div)
