@@ -1,5 +1,6 @@
-import dom from '/lib/tools/dom.js'
 import path from './path.js'
+import altheaCore from '/lib/core.static.js'
+let{dom}=altheaCore
 function anchor_addTag(tag){
     let
         tagsToSelect=(this.status.tagNames||[]).slice()

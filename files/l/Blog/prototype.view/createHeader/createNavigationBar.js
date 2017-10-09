@@ -1,6 +1,7 @@
-import dom from '/lib/tools/dom.js'
 import event from './createNavigationBar/event.js'
 import userA from './createNavigationBar/userA.js'
+import altheaCore from '/lib/core.static.js'
+let{dom}=altheaCore
 function createNavigationBar(view){
     let
         blog=view.blog,

@@ -2,9 +2,9 @@
     let lazyMap=await module.repository.althea.lazyMap
     return m=>{
         m.repository.blog=lazyMap({
-            Blog:           'Blog.static.js',
+            Blog:           'Blog.js',
             Comment:        'Comment.js',
-            Page:           'Page.static.js',
+            Page:           'Page.js',
             Pagemodule:     'Pagemodule.js',
             Pagemodule0:    'Pagemodule0.js',
             Pageversion:    'Pageversion.js',

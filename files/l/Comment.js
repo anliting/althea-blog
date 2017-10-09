@@ -1,4 +1,5 @@
-import AltheaObject from '/lib/AltheaObject.js'
+import altheaCore from '/lib/core.static.js'
+let{AltheaObject}=altheaCore
 function Comment(){
     AltheaObject.apply(this,arguments)
 }

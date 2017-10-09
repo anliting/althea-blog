@@ -1,5 +1,5 @@
-import dom from '/lib/tools/dom.js'
-import html from '/lib/tools/html.js'
+import altheaCore from '/lib/core.static.js'
+let{dom,html}=altheaCore
 export default(page,comment)=>{
     let div=dom.div()
     div.className='comments'

@@ -1,9 +1,11 @@
-import dom from '/lib/tools/dom.js'
 import createHeader from './createHeader.js'
 import keydown from './prototype.keydown.js'
 import install_datalist_tags_suggested from './install_datalist_tags_suggested.js'
 import use_list_tags__count_suggested from './use_list_tags__count_suggested.js'
+import initialize_tags_suggested from './initialize_tags_suggested.js'
 import style from './style.js'
+import altheaCore from '/lib/core.static.js'
+let{dom}=altheaCore
 function createContents(blog){
     let div=dom.div({className:'contents'})
     blog.on('pageLoad',page=>{

@@ -1,4 +1,5 @@
-import dom from '/lib/tools/dom.js'
+import altheaCore from '/lib/core.static.js'
+let{dom}=altheaCore
 function setupSelectedTagsDiv(blog,div){
     if(!('tagNames' in blog.status))
         return

@@ -1,4 +1,4 @@
-import Pagemodule from '/plugins/althea-blog/l/Pagemodule.js'
+import Pagemodule from '../Pagemodule.js'
 async function loadPagemodules(blog){
     let[
         pagemodules,

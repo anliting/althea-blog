@@ -1,8 +1,53 @@
 import EventEmmiter from 'https://gitcdn.link/cdn/anliting/simple.js/99b7ab1b872bc2da746dd648dd0c078b3bc6961e/src/simple/EventEmmiter.js';
-import Pagemodule from '/plugins/althea-blog/l/Pagemodule.js';
-import dom from '/lib/tools/dom.js';
-import Page from '/plugins/althea-blog/l/Page.static.js';
+import altheaCore from '/lib/core.static.js';
 import site from '/lib/site.js';
+
+let {html}=altheaCore;
+function Pagemodule(id,priority,name,definitions){
+    this.id=id;
+    this.priority=priority;
+    this.name=name;
+    this.definitions=definitions;
+}
+Pagemodule.prototype.compile=function(s){
+    this.definitions.map(d=>{
+        // data bug patch
+        s=s||'';
+        s=s.split(d.name).join(d.content);
+    });
+    s=s.replace(/\[nothing\][\s\S]*?\[\/nothing\]/g,s=>{
+        return ''
+    }).replace(
+        /\[ignorePluralSpaceCharacters\][\s\S]*?\[\/ignorePluralSpaceCharacters\]/g,
+        s=>{
+            return s.substring(
+                '[ignorePluralSpaceCharacters]'.length,
+                s.length-'[/ignorePluralSpaceCharacters]'.length
+            ).replace(/ {2,}/g,'')
+        }
+    ).replace(
+        /\[ignoreNewlineCharacters\][\s\S]*?\[\/ignoreNewlineCharacters\]/g,
+        s=>{
+            return s.substring(
+                '[ignoreNewlineCharacters]'.length,
+                s.length-'[/ignoreNewlineCharacters]'.length
+            ).replace(/\n/g,'')
+        }
+    ).replace(/\[htmlentities\][\s\S]*?\[\/htmlentities\]/g,s=>{
+        return html.encodeText(s.substring(14,s.length-15))
+    }).replace(/\[sp2nbsp\][\s\S]*?\[\/sp2nbsp\]/g,s=>{
+        return sp2nbsp(s.substring(9,s.length-10))
+    }).replace(/\[nl2br\][\s\S]*?\[\/nl2br\]/g,s=>{
+        return nl2br(s.substring(7,s.length-8))
+    });
+    return s
+    function sp2nbsp(s){
+        return s.split(' ').join('&nbsp;')
+    }
+    function nl2br(s){
+        return s.split('\r\n').join('<br>')
+    }
+};
 
 async function loadPagemodules(blog){
     let[
@@ -23,6 +68,7 @@ async function loadPagemodules(blog){
     return blog
 }
 
+let {dom}=altheaCore;
 function html_stars(rating){
     let output='';
     for(let i=0;i<5;i++){
@@ -87,12 +133,475 @@ function tableofcontents_all(e){
         a[i].style.visibility='visible';
     }
 }
-var Page$1 = ({
+var Page = ({
     star_all,
     tableofcontents_all,
 });
 
-let BlogPage=   Page.BlogPage;
+let {dom: dom$3}=altheaCore;
+function setup(){
+    let
+        page=this,
+        a_comment,
+        textarea_comment__form_comment;
+    a_comment=dom$3.a();
+    a_comment.className='a_comment functionbutton';
+    a_comment.href='javascript:';
+    a_comment.innerHTML='<i class=material-icons>comment</i>';
+    a_comment.onclick=()=>{
+        $&&$('html,body').animate({
+            scrollTop:
+                $(textarea_comment__form_comment).offset().top+
+                    80-$(window).height()
+        },320);
+        textarea_comment__form_comment.focus();
+    };
+    textarea_comment__form_comment=dom$3.textarea();
+    textarea_comment__form_comment.className='textarea_comment';
+    textarea_comment__form_comment.name='content';
+    textarea_comment__form_comment.placeholder='Comment ...';
+    textarea_comment__form_comment.addEventListener('focus',()=>{
+        page.input_submit__form_comment.style.display='inline';
+    });
+    this.a_comment=a_comment;
+    this.textarea_comment__form_comment=textarea_comment__form_comment;
+    this.input_submit__form_comment=input_submit__form_comment();
+    function input_submit__form_comment(){
+        let input_submit__form_comment=dom$3.input();
+        input_submit__form_comment.className='input_comment_submit';
+        input_submit__form_comment.type='submit';
+        input_submit__form_comment.value='Submit';
+        input_submit__form_comment.style.display='none';
+        return input_submit__form_comment
+    }
+}
+
+let {dom: dom$5}=altheaCore;
+var commentForm = page=>{
+    let form=dom$5.form(
+        page.textarea_comment__form_comment,
+        dom$5.br(),
+        page.input_submit__form_comment
+    );
+    form.className='form_newcomment';
+    form.onsubmit=async e=>{
+        e.preventDefault();
+        e.stopPropagation();
+        await page.blog._site.then(site$$1=>
+            site$$1.send({
+                function:'newComment',
+                page:page.id,
+                content:page.textarea_comment__form_comment.value,
+            })
+        );
+        page.blog.status=page.blog.status;
+    };
+    return form
+};
+
+let {dom: dom$6,html: html$2}=altheaCore;
+var commentDiv = (page,comment)=>{
+    let div=dom$6.div();
+    div.className='comments'
+    ;(async()=>{
+        comment=await comment;
+        await comment.load([
+            'content',
+            'id_user_owner',
+            'timestamp_insert',
+        ]);
+        let[
+            cu,
+            u,
+        ]=await Promise.all([
+            (async()=>{
+                let u=await page.blog._currentUser;
+                await u.load('isadmin');
+                return u
+            })(),
+            (async()=>{
+                let site$$1=await page.blog._site;
+                let u=await site$$1.getUser(comment.id_user_owner);
+                await u.load('username');
+                return u
+            })(),
+        ]);
+        div.innerHTML=
+            `<table style=width:100%><tr><td>${
+                u.username
+            }</td><td style=text-align:right>${
+                comment.timestamp_insert
+            }</td></tr></table><div>${
+                html$2.encodeText(comment.content)
+            }</div>`;
+        if(cu.isadmin)
+            div.appendChild(deleteA(comment.id));
+    })();
+    return div
+    function deleteA(id){
+        let a=dom$6.a('delete',{href:'javascript:'});
+        a.onclick=async e=>{
+            e.preventDefault();
+            e.stopPropagation();
+            let site$$1=await page.blog._site;
+            await site$$1.send({
+                function:'deleteComment',
+                id
+            });
+            page.blog.status=page.blog.status;
+        };
+        return a
+    }
+};
+
+let {dom: dom$4,html: html$1}=altheaCore;
+function PageView(page){
+    EventEmmiter.call(this);
+    this.domElement=createDiv(this,page);
+}
+Object.setPrototypeOf(PageView.prototype,EventEmmiter.prototype);
+function createDiv(pageView,page){
+    let
+        div=dom$4.div();
+    pageView.hide=!page.ispublic&&!page.blog.status.pageId;
+    div.className='post';
+    page.div=div;
+    page.blog.pages_loaded.push(page.id);
+    // tags
+    let contentDiv=div_blog_content(pageView,page);
+    pageView.on('clickHideshow',()=>{
+        pageView.hide=!pageView.hide;
+        $&&$(contentDiv).toggle(320);
+    });
+    div.appendChild(page.h1_title());
+    div.appendChild(page.div_author=    page.createAuthorDiv());
+    div.appendChild(page.div_date=      page.createDateDiv());
+    div.appendChild(
+        page.table_privacy=page.createPrivacyTable(pageView)
+    );
+    div.appendChild(contentDiv);
+    div.appendChild(div_facebooklike(page));
+    page.blog.isFacebookLoaded&&FB.XFBML.parse(div)
+    ;(async()=>{
+        let site$$1=await page.blog._site;
+        let p=await site$$1.getPage(page.id);
+        await p.load('comments');
+        let comments=p.comments;
+        await Promise.all(
+            comments.map(comment=>
+                div.appendChild(
+                    commentDiv(page,site$$1.getComment(comment))
+                )
+            )
+        );
+        div.appendChild(commentForm(page));
+    })();
+    return div
+}
+function div_blog_content(pageView,page){
+    let
+        div=dom$4.div({
+            id:'blog_content_'+page.id,
+            innerHTML:page.blog.pagemodules[
+                page.id_pagemodule-1
+            ].compile(page.content),
+        });
+    div.style.display=pageView.hide?'none':'block';
+    for(let s of div.getElementsByTagName('script'))
+        eval(s.innerHTML);
+    page.blog.emit('pageContentLoad',div);
+    page.blog.on('pageContentLoadListenerAdd',listener=>
+        listener(div)
+    );
+    return div
+}
+function div_facebooklike(page){
+    let div=dom$4.div({className:'fb-like'});
+    div.setAttribute(
+        'data-href','https://anliting.com/'+page.id
+    );
+    div.setAttribute('data-layout','standard');
+    div.setAttribute('data-action','like');
+    div.setAttribute('data-show-faces','true');
+    div.setAttribute('data-share','true');
+    return div
+}
+
+/*
+    // derived from
+    let str_pages_derived_from='Derived from: '
+    isfirst=1
+    page.page_derived_from.map(q=>{
+        if(!isfirst)
+            str_pages_derived_from+=', '
+        str_pages_derived_from+='<a href='+q.id+'>'
+            +html.encodeText(q.title)
+            +'</a>'
+        isfirst=0
+    })
+    str_pages_derived_from+='<br>'
+    // end derived from
+    // derived to
+    let str_pages_derived_to='Derived to: '
+    isfirst=1
+    page.page_derived_to.map(q=>{
+        if(!isfirst)
+            str_pages_derived_to+=', '
+        str_pages_derived_to+='<a href="'+q.id+'">'
+            +html.encodeText(q.title)
+            +'</a>'
+        isfirst=0
+    })
+    str_pages_derived_to+='<br>'
+    // end derived to
+*/
+
+var view = {get(){
+    return new PageView(this)
+}};
+
+let {dom: dom$8}=altheaCore;
+let str_show='<i class=material-icons>expand_more</i>';
+let str_hide='<i class=material-icons>expand_less</i>';
+function createHideShowA(page,pageView){
+    let a_hideshow=dom$8.a({
+        className:'a_hideshow functionbutton',
+        href:'javascript:',
+        innerHTML:pageView.hide?str_show:str_hide,
+    });
+    a_hideshow.onclick=()=>{
+        pageView.emit('clickHideshow');
+        a_hideshow.innerHTML=
+            pageView.hide?str_show:str_hide;
+    };
+    return a_hideshow
+}
+
+let {dom: dom$9,order}=altheaCore;
+function privacyTd(page){
+    return dom$9.td(span_privacy())
+    function span_privacy(){
+        let span=dom$9.span(span=>{span.style.fontStyle='italic';});
+        let a=[
+            (async()=>{
+                let site$$1=await page.blog._site;
+                let u=await site$$1.getUser(page.authorId);
+                return span.appendChild(await u.a)
+            })(),
+            document.createTextNode(' '),
+            dateSpan(),
+        ];
+        if(!page.ispublic){
+            a.push(document.createTextNode(' '));
+            a.push(privateSpan());
+        }
+        order(
+            a,
+            span.insertBefore.bind(span),
+            span.appendChild.bind(span)
+        );
+        return span
+        function dateSpan(){
+            let span=dom$9.span(
+                dateToString(new Date(page.timestamp_insert))
+            );
+            span.title=`Last modified: ${
+                page.datetime_lastmodified
+            }`;
+            return span
+        }
+        function privateSpan(){
+            return dom$9.span('private')
+        }
+        function dateToString(d){
+            return`${d.getFullYear()}-${1+d.getMonth()}-${
+                d.getDate()
+            }`
+        }
+        /*` ${page.content.length}Bytes.`*/
+    }
+}
+
+let {dom: dom$7}=altheaCore;
+function createPrivacyTable(pageView){
+    let
+        page=this,
+        table_privacy;
+    table_privacy=dom$7.table(
+        tr_privacy(page),
+        tr_tags()
+    );
+    table_privacy.style.width='100%';
+    table_privacy.style.marginBottom='20px';
+    return table_privacy
+    function tr_privacy(page){
+        return dom$7.tr(
+            privacyTd(page),
+            td_functions()
+        )
+    }
+    function td_functions(){
+        let td=dom$7.td(
+            createHideShowA(page,pageView),
+            page.a_comment
+        );
+        td.className='td_pageButtons';
+        td.style.width='100px'
+        ;(async()=>{
+            let u=await page.blog._currentUser;
+            await u.load('isadmin');
+            if(u.isadmin){
+                td.appendChild(a_editpage());
+                td.appendChild(a_removepage());
+            }
+        })();
+        return td
+        function a_editpage(){
+            let a=dom$7.a();
+            a.className='a_editpage functionbutton';
+            a.href=page.id+'/edit';
+            a.innerHTML='<i class=material-icons>mode_edit</i>';
+            return a
+        }
+        function a_removepage(){
+            let a=dom$7.a();
+            a.className='functionbutton a_removepage';
+            a.href='javascript:';
+            a.onclick=()=>{
+                if(confirm('Remove?')){
+                    remove();
+                }
+            };
+            a.innerHTML='<i class=material-icons>remove</i>';
+            return a
+            function remove(){
+                site.send({
+                    function:'removePage',
+                    page:page.id
+                });
+            }
+        }
+    }
+    function tr_tags(){
+        return dom$7.tr(td())
+    }
+    function td(){
+        let
+            td=dom$7.td(),
+            isFirst;
+        if(page.tags.length){
+            page.tags.sort();
+            td.appendChild(
+                document.createTextNode('Tagged: ')
+            );
+            isFirst=true;
+            page.tags.map(e=>{
+                if(isFirst)
+                    isFirst=false;
+                else
+                    td.appendChild(
+                        document.createTextNode(', ')
+                    );
+                td.appendChild(
+                    page.blog._anchor_addTag({name:e})
+                );
+            });
+        }
+        return td
+/*+(p.page_derived_from.length!=0?str_pages_derived_from:'')
++(p.page_derived_to.length!=0?str_pages_derived_to:'')*/
+    }
+}
+
+let {dom: dom$2}=altheaCore;
+function BlogPage$1(blog,id,ispublic,title,id_pagemodule){
+    EventEmmiter.call(this);
+    this.blog=blog;
+    this.id=id;
+    this.ispublic=ispublic;
+    this.title=title;
+    this.id_pagemodule=id_pagemodule;
+    setup.call(this);
+}
+Object.setPrototypeOf(BlogPage$1.prototype,EventEmmiter.prototype);
+Object.defineProperty(BlogPage$1.prototype,'view',view);
+BlogPage$1.prototype.createPrivacyTable=createPrivacyTable;
+BlogPage$1.prototype.getHref=function(){
+    return this.preferredPagename?
+        this.preferredPagename
+    :
+        this.id
+};
+BlogPage$1.prototype.h1_title=function(){
+    let page=this;
+    let h1_title=dom$2.h1(a_h1_title());
+    h1_title.style.textAlign='center';
+    return h1_title
+    function a_h1_title(){
+        let a=dom$2.a(page.title);
+        a.className='title';
+        a.href=page.getHref();
+        a.onclick=e=>{
+            if(
+                e.which!==1||
+                e.ctrlKey||
+                e.shiftKey
+            )
+                return
+            e.preventDefault();
+            page.blog.status={pageId:page.id};
+        };
+        return a
+    }
+};
+BlogPage$1.prototype.createAuthorDiv=function(){
+    let div=dom$2.div();
+    div.style.textAlign='center';
+    div.style.display='none';
+    div.style.fontSize='1.5em'
+    ;(async()=>{
+        let site$$1=await this.blog._site;
+        let u=await site$$1.getUser(this.authorId);
+        await u.load('nickname');
+        dom$2(div,u.nickname);
+    })();
+    return div
+};
+BlogPage$1.prototype.createDateDiv=function(){
+    let
+        div=dom$2.div(),
+        date=new Date(this.datetime_lastmodified);
+    div.style.textAlign='center';
+    div.style.display='none';
+    div.style.fontSize='1.5em';
+    div.style.marginTop='0.67em';
+    div.style.marginBottom='2em';
+    div.textContent=
+        `${1900+date.getYear()}-${1+date.getMonth()}-${date.getDate()}`;
+    return div
+};
+
+let {dom: dom$1,AltheaObject}=altheaCore;
+function Page$1(){
+    AltheaObject.apply(this,arguments);
+}
+Object.setPrototypeOf(Page$1.prototype,AltheaObject.prototype);
+Page$1.prototype._loader='getPage';
+Object.defineProperty(Page$1.prototype,'a',{get(){
+    let a=dom$1.a({href:this.id});
+    this.lastversion.then(async pv=>{
+        await pv.load('title');
+        a.textContent=pv.title||'Untitled';
+    });
+    return a
+}});
+Object.defineProperty(Page$1.prototype,'lastversion',{async get(){
+    await this.load('lastversionId');
+    return this._site.getPageversion(this.lastversionId)
+}});
+Page$1.BlogPage=BlogPage$1;
+
+let BlogPage=   Page$1.BlogPage;
 async function update_to_content(process,pages){
     let site$$1=await this._site;
     pages=await Promise.all(pages.map(async p=>{
@@ -195,12 +704,13 @@ var path = {
     getHrefByTags,
 };
 
+let {dom: dom$10}=altheaCore;
 function anchor_addTag(tag){
     let
         tagsToSelect=(this.status.tagNames||[]).slice();
     tagsToSelect.push(tag.name);
     let
-        a=dom.a(tag.name,{
+        a=dom$10.a(tag.name,{
             className:'addTag',
             href:path.getHrefByTags(tagsToSelect),
         });
@@ -220,6 +730,7 @@ function anchor_addTag(tag){
     return a
 }
 
+let {dom: dom$13}=altheaCore;
 async function checkSetupIndex(blog,div){
     if(!blog.status.tagNames)
         return
@@ -247,11 +758,11 @@ async function checkSetupIndex(blog,div){
     }
     a.sort((a,b)=>a.title.localeCompare(b.title));
     chunks(a,12).map(a=>{
-        let ul=dom.ul();
+        let ul=dom$13.ul();
         ul.style.float='left';
         for(let p of a){
             let
-                li=dom.li(),
+                li=dom$13.li(),
                 a=p.page.a;
             if(!p.public)
                 a.style.color='black';
@@ -275,7 +786,7 @@ async function checkSetupIndex(blog,div){
     });
     div.appendChild(createClearBothDiv());
     function createClearBothDiv(){
-        return dom.div(n=>{n.style.clear='both';})
+        return dom$13.div(n=>{n.style.clear='both';})
     }
     async function getPagesByTags(){
         return(await blog._site).send({
@@ -291,8 +802,9 @@ async function checkSetupIndex(blog,div){
     }
 }
 
+let {dom: dom$14}=altheaCore;
 function createInput(blog,view){
-    let input=dom.input();
+    let input=dom$14.input();
     input.setAttribute('list',view.datalist_input_searchForTag.id);
     input.addEventListener('keydown',e=>{
         if(e.keyCode!=13)
@@ -322,13 +834,14 @@ function createInput(blog,view){
     return input
 }
 
+let {dom: dom$15}=altheaCore;
 function setupSelectedTagsDiv(blog,div){
     if(!('tagNames' in blog.status))
         return
     blog.status.tagNames.map((t,i)=>{
         div.appendChild(span());
         function span(){
-            let span=dom.span(
+            let span=dom$15.span(
                 t+' ',
                 a(),{
                     id:'span_tag_'+t,
@@ -339,7 +852,7 @@ function setupSelectedTagsDiv(blog,div){
             return span
         }
         function a(){
-            let anchor=dom.a('-');
+            let anchor=dom$15.a('-');
             let tagsToSelect=(blog.status.tagNames||[]).slice();
             tagsToSelect.splice(i,1);
             anchor.href='javascript:';
@@ -377,20 +890,21 @@ var event = {
     }
 };
 
+let {dom: dom$17}=altheaCore;
 function userA(blog,div,u){
-    let a=dom.a(u.username,{href:'javascript:'});
+    let a=dom$17.a(u.username,{href:'javascript:'});
     a.onclick=e=>{
         e.preventDefault();
         e.stopPropagation();
         let n=userDiv(blog,u);
         event.onceClickOrBlurButNotMouseDown(n,()=>div.removeChild(n));
-        dom(div,n);
+        dom$17(div,n);
         n.focus();
     };
     return a
 }
 function userDiv(blog,u){
-    let div=dom.div(innerDiv(blog,u),{tabIndex:0});
+    let div=dom$17.div(innerDiv(blog,u),{tabIndex:0});
     div.style.position='relative';
     div.style.outline='none';
     div.style.height='0';
@@ -399,17 +913,17 @@ function userDiv(blog,u){
     return div
 }
 function innerDiv(blog,u){
-    return dom.div(
+    return dom$17.div(
         logoutA(blog),
-        dom.br(),
-        dom.a('Profile',{href:`user/${u.username}`}),
+        dom$17.br(),
+        dom$17.a('Profile',{href:`user/${u.username}`}),
         u.isadmin&&[
-            dom.br(),
-            dom.a('Drive',{href:`home/${u.username}`}),
-            dom.br(),
-            dom.a('Settings',{href:'settings'}),
-            dom.br(),
-            dom.a('New Page',{href:'newpage'}),
+            dom$17.br(),
+            dom$17.a('Drive',{href:`home/${u.username}`}),
+            dom$17.br(),
+            dom$17.a('Settings',{href:'settings'}),
+            dom$17.br(),
+            dom$17.a('New Page',{href:'newpage'}),
         ],n=>{
             n.style.margin='0 auto';
             n.style.backgroundColor='white';
@@ -418,7 +932,7 @@ function innerDiv(blog,u){
     )
 }
 function logoutA(blog){
-    let a=dom.a('Logout');
+    let a=dom$17.a('Logout');
     a.href='javascript:';
     a.onclick=async e=>{
         e.preventDefault()
@@ -427,10 +941,11 @@ function logoutA(blog){
     return a
 }
 
+let {dom: dom$16}=altheaCore;
 function createNavigationBar(view){
     let
         blog=view.blog,
-        div=dom.div({className:'navigationBar'},menuA());
+        div=dom$16.div({className:'navigationBar'},menuA());
     blog._site.then(site$$1=>{
         perUser(site$$1,async u=>{
             await u.load(['isAnonymous','username','isadmin']);
@@ -447,7 +962,7 @@ function createNavigationBar(view){
     });
     return div
     function aboutA(){
-        return dom.a('About',{href:'about'})
+        return dom$16.a('About',{href:'about'})
     }
     function perUser(site$$1,func){
         site$$1.currentUser.then(func);
@@ -456,7 +971,7 @@ function createNavigationBar(view){
         });
     }
     function loginA(){
-        let a=dom.a('Login',{href:'javascript:'});
+        let a=dom$16.a('Login',{href:'javascript:'});
         a.onclick=async e=>{
             e.preventDefault();
             e.stopPropagation()
@@ -465,7 +980,7 @@ function createNavigationBar(view){
         return a
     }
     function menuA(){
-        let a=dom.a('Menu');
+        let a=dom$16.a('Menu');
         a.href='javascript:';
         a.onclick=e=>{
             e.preventDefault();
@@ -480,7 +995,7 @@ function createNavigationBar(view){
         return a
     }
     function menuDiv(){
-        let div=dom.div(innerDiv());
+        let div=dom$16.div(innerDiv());
         div.style.position='relative';
         div.style.height='0';
         div.style.width='100%';
@@ -489,7 +1004,7 @@ function createNavigationBar(view){
         div.tabIndex=0;
         return div
         function innerDiv(){
-            let div=dom.div(aboutA());
+            let div=dom$16.div(aboutA());
             div.style.margin='0 auto';
             div.style.backgroundColor='white';
             div.style.border='1px solid lightgray';
@@ -498,8 +1013,9 @@ function createNavigationBar(view){
     }
 }
 
+let {dom: dom$12}=altheaCore;
 function createHeader(blog,view){
-    let div=dom.div(
+    let div=dom$12.div(
         createTitle(),
         createTagline(),
         createNavigationBar(view),
@@ -510,7 +1026,7 @@ function createHeader(blog,view){
     div.className='header';
     return div
     function createTitle(){
-        let div=dom.div();
+        let div=dom$12.div();
         div.className='title'
         ;(async()=>{
             let site$$1=await blog._site;
@@ -524,7 +1040,7 @@ function createHeader(blog,view){
         })();
         return div
         function createA(clientUrlRoot,bannerTitle){
-            let a=dom.a({href:''});
+            let a=dom$12.a({href:''});
             a.onclick=e=>{
                 if(
                     e.which!=1||
@@ -541,7 +1057,7 @@ function createHeader(blog,view){
         }
     }
     function createTagline(){
-        let div=dom.div();
+        let div=dom$12.div();
         div.className='tagline';
         blog._site.then(s=>s.load).then(site$$1=>{
             div.innerHTML=site$$1.blogTagline;
@@ -549,7 +1065,7 @@ function createHeader(blog,view){
         return div
     }
     function createSearchForTags(view){
-        let div=dom.div(
+        let div=dom$12.div(
             createSelectedTagsDiv(),
             view.input=createInput(blog,view),
             view.datalist_input_searchForTag
@@ -557,7 +1073,7 @@ function createHeader(blog,view){
         div.className='searchForTags';
         return div
         function createSelectedTagsDiv(){
-            let div=dom.div();
+            let div=dom$12.div();
             div.className='selectedTags';
             setupSelectedTagsDiv(blog,div);
             blog.on('statusChange',()=>{
@@ -568,7 +1084,7 @@ function createHeader(blog,view){
         }
     }
     function createTags(view){
-        let div=dom.div();
+        let div=dom$12.div();
         div.className='tags';
         blog.on('statusChange',()=>{
             div.innerHTML='';
@@ -579,7 +1095,7 @@ function createHeader(blog,view){
         return div
     }
     function createIndex(){
-        let div=dom.div();
+        let div=dom$12.div();
         div.className='index';
         checkSetupIndex(blog,div);
         blog.on('statusChange',()=>{
@@ -703,19 +1219,21 @@ function randomId(length){
     return 'a'+res
 }
 
+let {dom: dom$18}=altheaCore;
 function install_datalist_tags_suggested(blogView){
-    blogView.datalist_input_searchForTag=dom.datalist();
+    blogView.datalist_input_searchForTag=dom$18.datalist();
     // known best solution
     blogView.datalist_input_searchForTag.id=randomId(16);
 }
 
+let {dom: dom$19}=altheaCore;
 function use_list_tags__count_suggested(blogView,list,div){
     list.sort((a,b)=>
         a.name.localeCompare(b.name)
     );
     blogView.datalist_input_searchForTag.innerHTML='';
     list.map(e=>{
-        let o=dom.option({value:e.name});
+        let o=dom$19.option({value:e.name});
         blogView.datalist_input_searchForTag.appendChild(o);
     });
     let tagsToSelect=(blogView.blog.status.tagNames||[]).slice();
@@ -728,10 +1246,10 @@ function use_list_tags__count_suggested(blogView,list,div){
     });
     div.appendChild(div_clearboth());
     function ul(){
-        return dom.ul(ul=>{ul.style.float='left';})
+        return dom$19.ul(ul=>{ul.style.float='left';})
     }
     function li(t){
-        return dom.li(a(t))
+        return dom$19.li(a(t))
     }
     function a(t){
         tagsToSelect.push(t.name);
@@ -743,8 +1261,13 @@ function use_list_tags__count_suggested(blogView,list,div){
         return a
     }
     function div_clearboth(){
-        return dom.div(div=>{div.style.clear='both';})
+        return dom$19.div(div=>{div.style.clear='both';})
     }
+}
+
+function initialize_tags_suggested(div_tags){
+    div_tags.style.display='none';
+    div_tags.innerHTML='';
 }
 
 var style = `
@@ -771,8 +1294,9 @@ body{
 }
 `;
 
+let {dom: dom$11}=altheaCore;
 function createContents(blog){
-    let div=dom.div({className:'contents'});
+    let div=dom$11.div({className:'contents'});
     blog.on('pageLoad',page=>{
         div.appendChild(page.view.domElement);
     });
@@ -782,7 +1306,7 @@ function createContents(blog){
     return div
 }
 function createFooter(view){
-    let div=dom.div();
+    let div=dom$11.div();
     div.className='footer';
     view.blog._site.then(async site$$1=>{
         let res=await site$$1.send('getBlogFooter');
@@ -792,11 +1316,11 @@ function createFooter(view){
 }
 function BlogView(blog){
     this.blog=blog;
-    this.div=dom.div();
+    this.div=dom$11.div();
     this.div.className='blog';
     install_datalist_tags_suggested(this);
     {
-        let s=dom.style();
+        let s=dom$11.style();
         let u=()=>
             this.blog._styles.map(n=>
                 s.appendChild(n)
@@ -837,7 +1361,7 @@ BlogView.prototype.setupSuggestedTags=async function(){
     view.tagsDiv.style.display='';
 };
 
-var view = {get(){
+var view$1 = {get(){
     let view=new BlogView(this);
     return view
 }};
@@ -863,8 +1387,8 @@ function Blog(site$$1,status){
         for(let i in this.pages)
             listener(this.pages[i]);
     });
-    this.on('pageContentLoad',Page$1.star_all);
-    this.on('pageContentLoad',Page$1.tableofcontents_all);
+    this.on('pageContentLoad',Page.star_all);
+    this.on('pageContentLoad',Page.tableofcontents_all);
     // end add event listeners
     this.load=this._site.then(site$$1=>{
         return site$$1.loadPlugins('blog',s=>
@@ -898,7 +1422,69 @@ Object.defineProperty(Blog.prototype,'status',{get(){
     this.emit('statusChange');
     this._getNext();
 }});
-Object.defineProperty(Blog.prototype,'view',view);
+Object.defineProperty(Blog.prototype,'view',view$1);
 Blog.prototype.path=path;
 
-export default Blog;
+let {AltheaObject: AltheaObject$1}=altheaCore;
+function Comment(){
+    AltheaObject$1.apply(this,arguments);
+}
+Object.setPrototypeOf(Comment.prototype,AltheaObject$1.prototype);
+Comment.prototype._loader='getComment';
+
+let {AltheaObject: AltheaObject$2}=altheaCore;
+function Pagemodule0(){
+    AltheaObject$2.apply(this,arguments);
+}
+Object.setPrototypeOf(Pagemodule0.prototype,AltheaObject$2.prototype);
+Pagemodule0.prototype._loader='getPagemoduleInfo';
+Object.defineProperty(Pagemodule0.prototype,'definitions',{get(){
+    return this._site.send({
+        function:'getDefinitionByPagemodule',
+        id:this.id,
+    })
+}});
+
+let {AltheaObject: AltheaObject$3}=altheaCore;
+function Pageversion(){
+    AltheaObject$3.apply(this,arguments);
+}
+Object.setPrototypeOf(Pageversion.prototype,AltheaObject$3.prototype);
+Pageversion.prototype._loader='getPageversion';
+
+let RawSite=altheaCore.Site;
+function Site(){
+    RawSite.call(this);
+    this._pagemodules={};
+    this._pageversions={};
+}
+Object.setPrototypeOf(Site.prototype,RawSite.prototype);
+Site.prototype.getComment=async function(id){
+    return new Comment(this,id)
+};
+Site.prototype.getPage=async function(id){
+    // cache is disabled because of the comment feature
+    return new Page$1(this,id)
+};
+Site.prototype.getPagemodule=async function(id){
+    return this._pagemodules[id]||(this._pagemodules[id]=
+        new Pagemodule0(this,id)
+    )
+};
+Site.prototype.getPageversion=async function(id){
+    return this._pageversions[id]||(this._pageversions[id]=
+        new Pageversion(this,id)
+    )
+};
+
+var core = {
+    Blog,
+    Comment,
+    Page: Page$1,
+    Pagemodule,
+    Pagemodule0,
+    Pageversion,
+    Site,
+};
+
+export default core;

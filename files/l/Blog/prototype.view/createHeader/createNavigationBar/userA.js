@@ -1,5 +1,6 @@
-import dom from '/lib/tools/dom.js'
 import event from './event.js'
+import altheaCore from '/lib/core.static.js'
+let{dom}=altheaCore
 function userA(blog,div,u){
     let a=dom.a(u.username,{href:'javascript:'})
     a.onclick=e=>{

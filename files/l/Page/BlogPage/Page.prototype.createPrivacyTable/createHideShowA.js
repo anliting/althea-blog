@@ -1,4 +1,5 @@
-import dom from '/lib/tools/dom.js'
+import altheaCore from '/lib/core.static.js'
+let{dom}=altheaCore
 let
     str_show='<i class=material-icons>expand_more</i>',
     str_hide='<i class=material-icons>expand_less</i>'

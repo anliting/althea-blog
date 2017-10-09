@@ -1,8 +1,9 @@
-import RawSite from '/lib/Site.static.js'
 import Pagemodule0 from './Pagemodule0.js'
 import Pageversion from './Pageversion.js'
-import Page from './Page.static.js'
+import Page from './Page.js'
 import Comment from './Comment.js'
+import altheaCore from '/lib/core.static.js'
+let RawSite=altheaCore.Site
 function Site(){
     RawSite.call(this)
     this._pagemodules={}

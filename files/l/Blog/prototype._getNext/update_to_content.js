@@ -1,4 +1,4 @@
-import Page from '/plugins/althea-blog/l/Page.static.js'
+import Page from '../../Page.js'
 let
     BlogPage=   Page.BlogPage
 async function update_to_content(process,pages){

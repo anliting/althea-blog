@@ -1,4 +1,5 @@
-import dom from '/lib/tools/dom.js'
+import altheaCore from '/lib/core.static.js'
+let{dom}=altheaCore
 function use_list_tags__count_suggested(blogView,list,div){
     list.sort((a,b)=>
         a.name.localeCompare(b.name)

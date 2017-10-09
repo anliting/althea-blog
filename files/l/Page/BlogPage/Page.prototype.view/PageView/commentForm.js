@@ -1,4 +1,5 @@
-import dom from '/lib/tools/dom.js'
+import altheaCore from '/lib/core.static.js'
+let{dom}=altheaCore
 export default page=>{
     let form=dom.form(
         page.textarea_comment__form_comment,

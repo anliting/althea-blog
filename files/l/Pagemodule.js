@@ -1,4 +1,5 @@
-import html from '/lib/tools/html.js'
+import altheaCore from '/lib/core.static.js'
+let{html}=altheaCore
 function Pagemodule(id,priority,name,definitions){
     this.id=id
     this.priority=priority

@@ -1,5 +1,5 @@
-import dom from '/lib/tools/dom.js'
-import order from '/lib/tools/order.js'
+import altheaCore from '/lib/core.static.js'
+let{dom,order}=altheaCore
 function privacyTd(page){
     return dom.td(span_privacy())
     function span_privacy(){

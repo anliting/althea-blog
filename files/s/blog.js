@@ -1,23 +1,27 @@
 (async()=>{
-    ;(await module.importByPath('lib/general.js',{mode:1}))(module)
-    ;(await module.shareImport('../l/repository.js'))(module)
     let
-        site=module.repository.blog.site,
-        blog=loadBlog(site,module.arguments.status)
+        [
+            {Progress,hacker,Snapshot},
+            {Blog,Site},
+        ]=await Promise.all([
+            module.moduleByPath('/lib/core.static.js'),
+            module.moduleByPath('/plugins/althea-blog/l/core.static.js'),
+        ]),
+        site=Promise.resolve(new Site),
+        blog=loadBlog(site,module.arguments.status,Blog),
         main=createMainThread(site,blog)
     if(
         localStorage.althea&&
         0<=String(localStorage.althea).split(' ').indexOf('h')
     )
-        setupApi(blog)
-    setupProgress([
+        setupApi(hacker,Snapshot,blog)
+    setupProgress(Progress,[
         site,
         blog,
         {p:main,s:4}
     ])
 })()
-async function loadBlog(site,status){
-    let Blog=await module.repository.blog.Blog
+async function loadBlog(site,status,Blog){
     return new Blog(site,status)
 }
 function createMainThread(site,blog){
@@ -68,8 +72,7 @@ async function createBlogThread(site,blog){
     )
     document.head.appendChild(await view.style)
 }
-async function setupProgress(a){
-    let Progress=await module.repository.althea.Progress
+async function setupProgress(Progress,a){
     let p=new Progress(a),v=p.view
     let style=Object.assign(document.createElement('style'),{
         textContent:Progress.style
@@ -82,12 +85,9 @@ async function setupProgress(a){
     document.body.removeChild(v.node)
     v.free
 }
-async function setupApi(blog){
-    module.repository.althea.hacker.then(async hacker=>
-        hacker.blog=await blog
-    )
+async function setupApi(hacker,Snapshot,blog){
+    hacker.blog=await blog
     let
-        Snapshot=await module.repository.althea.Snapshot,
         snapshot=new Snapshot(window)
     console.log('js/blog.js:',snapshot.new)
 }

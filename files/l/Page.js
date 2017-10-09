@@ -1,6 +1,6 @@
-import AltheaObject from '/lib/AltheaObject.js'
-import dom from '/lib/tools/dom.js'
 import BlogPage from './Page/BlogPage.js'
+import altheaCore from '/lib/core.static.js'
+let{dom,AltheaObject}=altheaCore
 function Page(){
     AltheaObject.apply(this,arguments)
 }

@@ -1,4 +1,5 @@
-import AltheaObject from '/lib/AltheaObject.js'
+import altheaCore from '/lib/core.static.js'
+let{AltheaObject}=altheaCore
 function Pageversion(){
     AltheaObject.apply(this,arguments)
 }

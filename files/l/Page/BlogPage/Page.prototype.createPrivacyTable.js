@@ -1,7 +1,8 @@
 import site from '/lib/site.js'
-import dom from '/lib/tools/dom.js'
 import createHideShowA from './Page.prototype.createPrivacyTable/createHideShowA.js'
 import privacyTd from './Page.prototype.createPrivacyTable/privacyTd.js'
+import altheaCore from '/lib/core.static.js'
+let{dom}=altheaCore
 function createPrivacyTable(pageView){
     let
         page=this,
