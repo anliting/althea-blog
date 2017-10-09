@@ -39,14 +39,17 @@ ${env.environmentvariables.og?og(env,title,url_request):''}
 <body>
 ${env.althea.loadModule(
     env.envVars,
-    'plugins/althea-blog/s/blog.js',
+    'plugins/althea-blog/s/blog.static.js',
     {
         status:{
             pageId:         env.id_page,
             tagNames:       env.tags_selected,
         }
     },
-    {sharedWorker:true}
+    {
+        esm:true,
+        sharedWorker:true,
+    }
 )}
 `
     return content

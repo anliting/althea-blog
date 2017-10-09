@@ -116,4 +116,4 @@ function setupAutoScroll(blog){
         isAutoScrollStarted=false
     }
 }
-setupAutoScroll
+export default setupAutoScroll

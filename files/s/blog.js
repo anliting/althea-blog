@@ -1,15 +1,14 @@
-(async()=>{
+import altheaCore from '/lib/core.static.js'
+import core from '/plugins/althea-blog/l/core.static.js'
+import moduleLoader from 'https://cdn.rawgit.com/anliting/module/3d316feea7b5a428cf73252750ba79b4a1f4179f/src/esm/moduleLoader.js'
+import setupAutoScroll from './blog/setupAutoScroll.js'
+let
+    {Progress,hacker,Snapshot}=altheaCore,
+    {Blog,site}=core
+;(async()=>{
     let
-        [
-            {Progress,hacker,Snapshot},
-            {Blog,site},
-        ]=await Promise.all([
-            module.moduleByPath('/lib/core.static.js'),
-            module.moduleByPath('/plugins/althea-blog/l/core.static.js'),
-        ])
-    site=Promise.resolve(site)
-    let
-        blog=loadBlog(site,module.arguments.status,Blog),
+        module=await moduleLoader(),
+        blog=loadBlog(site,arg.status,Blog),
         main=createMainThread(site,blog)
     if(
         localStorage.althea&&
@@ -23,7 +22,7 @@
     ])
 })()
 async function loadBlog(site,status,Blog){
-    return new Blog(site,status)
+    return new Blog(Promise.resolve(site),status)
 }
 function createMainThread(site,blog){
     return[
@@ -58,12 +57,10 @@ async function createThisThread(blog){
 }
 async function createBlogThread(site,blog){
     let
-        view=               blog.then(o=>o.view),
-        setupAutoScroll=    module.shareImport('blog/setupAutoScroll.js')
+        view=               blog.then(o=>o.view)
     blog=await blog
     site=await site
     view=await view
-    setupAutoScroll=await setupAutoScroll
     await blog.load
     setupGetNextOnScrollEvent(blog)
     setupAutoScroll(blog)
