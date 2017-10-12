@@ -1,5 +1,6 @@
 import Blog from           './Blog.js'
 import Comment from        './Comment.js'
+import Editpage from       './Editpage.js'
 import Page from           './Page.js'
 import Pagemodule from     './Pagemodule.js'
 import Pagemodule0 from    './Pagemodule0.js'
@@ -9,6 +10,7 @@ import site from           './site.js'
 export default{
     Blog,
     Comment,
+    Editpage,
     Page,
     Pagemodule,
     Pagemodule0,

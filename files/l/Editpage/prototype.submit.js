@@ -1,6 +1,6 @@
 function submit(){
     this.changeEditor(0)
-    return module.repository.althea.site.then(site=>
+    return this._site.then(site=>
         site.send({
             function:'editpage',
             id_page:this.id,
@@ -16,4 +16,4 @@ function submit(){
         id,
     }))
 }
-submit
+export default submit

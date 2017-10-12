@@ -11,4 +11,4 @@ function setup(editpage,isMobile){
     editpage.setUp=true
     return
 }
-setup
+export default setup

@@ -1,4 +1,4 @@
-(function(){
+export default function(){
     let
         editpage=this,
         showHtmlA=document.getElementById('showHtmlA'),
@@ -47,4 +47,4 @@
     input_newname.addEventListener('keypress',e=>{
         editpage.setOfNames.onkeypress(e)
     })
-})
+}

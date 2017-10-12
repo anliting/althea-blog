@@ -1,3 +1,7 @@
+import setup from './initialize/setup.js'
+import update from './initialize/update.js'
+import altheaCore from '/lib/core.static.js'
+let{browser}=altheaCore
 async function getData(editpage){
     let res={}
     if(editpage.id){
@@ -53,41 +57,30 @@ async function getData(editpage){
     }
     return res
 }
-;(async()=>{
-    let[
-        setup,
-        update,
-        browser,
-    ]=await Promise.all([
-        module.shareImport('setup.js'),
-        module.shareImport('update.js'),
-        module.repository.althea.browser,
+async function initialize(editpage){
+    editpage.isMobile=browser.isMobile
+    editpage.id=environment.id_page||0
+    document.title=!editpage.id?'New Page':'Edit Page'
+    setup(editpage,editpage.isMobile)
+    let res=await Promise.all([
+        getData(editpage),
+        editpage._site.then(site=>
+            site.send('getTags')
+        ),
+        editpage._site.then(async site=>{
+            let res=await site.send('getPagemodules0')
+            return Promise.all(res.map(async id=>{
+                let pagemodule=await site.getPagemodule(id)
+                return pagemodule.load([
+                    'priority',
+                    'name',
+                ])
+            }))
+        }),
     ])
-    async function initialize(editpage){
-        editpage.isMobile=browser.isMobile
-        editpage.id=environment.id_page||0
-        document.title=!editpage.id?'New Page':'Edit Page'
-        setup(editpage,editpage.isMobile)
-        let res=await Promise.all([
-            getData(editpage),
-            editpage._site.then(site=>
-                site.send('getTags')
-            ),
-            editpage._site.then(async site=>{
-                let res=await site.send('getPagemodules0')
-                return Promise.all(res.map(async id=>{
-                    let pagemodule=await site.getPagemodule(id)
-                    return pagemodule.load([
-                        'priority',
-                        'name',
-                    ])
-                }))
-            }),
-        ])
-        let data=res[0]
-        data.tags=res[1]
-        data.pagemodules=res[2]
-        update(editpage,data)
-    }
-    return initialize
-})()
+    let data=res[0]
+    data.tags=res[1]
+    data.pagemodules=res[2]
+    update(editpage,data)
+}
+export default initialize

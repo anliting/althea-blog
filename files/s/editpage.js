@@ -6,22 +6,13 @@ let editpageReady=Promise.all([
     module.scriptByPath('https://gitcdn.link/cdn/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js'),
 ])
 ;(async()=>{
-    ;(await module.importByPath('lib/general.js',{mode:1}))(module)
-    ;(await module.shareImport('../l/repository.js'))(module)
-    let site=module.repository.blog.site
+    let core=await module.moduleByPath('/plugins/althea-blog/l/core.static.js')
+    let{Editpage,site}=core
     environment=module.arguments.editpageEnv
-    site.then(site=>
-        site.on('userChange',()=>
-            location='/'
-        )
+    site.on('userChange',()=>
+        location='/'
     )
-    module.shareImport('../l/Editpage.js').then(async Editpage=>{
-        document.head.appendChild(Editpage.style)
-        await editpageReady
-        new Editpage(site)
-    })
-    /*module.repository.althea.Navigationbar.then(Navigationbar=>{
-        let navigationbar=new Navigationbar(site)
-        document.body.appendChild(navigationbar.view)
-    })*/
+    document.head.appendChild(Editpage.style)
+    await editpageReady
+    new Editpage(Promise.resolve(site))
 })()

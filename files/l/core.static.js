@@ -132,7 +132,7 @@ function tableofcontents_all(e){
         a[i].style.visibility='visible';
     }
 }
-var Page = ({
+var BlogPage = ({
     star_all,
     tableofcontents_all,
 });
@@ -398,7 +398,7 @@ Site.prototype.getComment=async function(id){
 };
 Site.prototype.getPage=async function(id){
     // cache is disabled because of the comment feature
-    return new Page$1(this,id)
+    return new Page(this,id)
 };
 Site.prototype.getPagemodule=async function(id){
     return this._pagemodules[id]||(this._pagemodules[id]=
@@ -567,7 +567,7 @@ function createPrivacyTable(pageView){
 }
 
 let {dom: dom$2}=altheaCore;
-function BlogPage$1(blog,id,ispublic,title,id_pagemodule){
+function BlogPage$2(blog,id,ispublic,title,id_pagemodule){
     EventEmmiter.call(this);
     this.blog=blog;
     this.id=id;
@@ -576,16 +576,16 @@ function BlogPage$1(blog,id,ispublic,title,id_pagemodule){
     this.id_pagemodule=id_pagemodule;
     setup.call(this);
 }
-Object.setPrototypeOf(BlogPage$1.prototype,EventEmmiter.prototype);
-Object.defineProperty(BlogPage$1.prototype,'view',view);
-BlogPage$1.prototype.createPrivacyTable=createPrivacyTable;
-BlogPage$1.prototype.getHref=function(){
+Object.setPrototypeOf(BlogPage$2.prototype,EventEmmiter.prototype);
+Object.defineProperty(BlogPage$2.prototype,'view',view);
+BlogPage$2.prototype.createPrivacyTable=createPrivacyTable;
+BlogPage$2.prototype.getHref=function(){
     return this.preferredPagename?
         this.preferredPagename
     :
         this.id
 };
-BlogPage$1.prototype.h1_title=function(){
+BlogPage$2.prototype.h1_title=function(){
     let page=this;
     let h1_title=dom$2.h1(a_h1_title());
     h1_title.style.textAlign='center';
@@ -607,7 +607,7 @@ BlogPage$1.prototype.h1_title=function(){
         return a
     }
 };
-BlogPage$1.prototype.createAuthorDiv=function(){
+BlogPage$2.prototype.createAuthorDiv=function(){
     let div=dom$2.div();
     div.style.textAlign='center';
     div.style.display='none';
@@ -620,7 +620,7 @@ BlogPage$1.prototype.createAuthorDiv=function(){
     })();
     return div
 };
-BlogPage$1.prototype.createDateDiv=function(){
+BlogPage$2.prototype.createDateDiv=function(){
     let
         div=dom$2.div(),
         date=new Date(this.datetime_lastmodified);
@@ -635,12 +635,12 @@ BlogPage$1.prototype.createDateDiv=function(){
 };
 
 let {dom: dom$1,AltheaObject}=altheaCore;
-function Page$1(){
+function Page(){
     AltheaObject.apply(this,arguments);
 }
-Object.setPrototypeOf(Page$1.prototype,AltheaObject.prototype);
-Page$1.prototype._loader='getPage';
-Object.defineProperty(Page$1.prototype,'a',{get(){
+Object.setPrototypeOf(Page.prototype,AltheaObject.prototype);
+Page.prototype._loader='getPage';
+Object.defineProperty(Page.prototype,'a',{get(){
     let a=dom$1.a({href:this.id});
     this.lastversion.then(async pv=>{
         await pv.load('title');
@@ -648,13 +648,13 @@ Object.defineProperty(Page$1.prototype,'a',{get(){
     });
     return a
 }});
-Object.defineProperty(Page$1.prototype,'lastversion',{async get(){
+Object.defineProperty(Page.prototype,'lastversion',{async get(){
     await this.load('lastversionId');
     return this._site.getPageversion(this.lastversionId)
 }});
-Page$1.BlogPage=BlogPage$1;
+Page.BlogPage=BlogPage$2;
 
-let BlogPage=   Page$1.BlogPage;
+let BlogPage$1=   Page.BlogPage;
 async function update_to_content(process,pages){
     let site=await this._site;
     pages=await Promise.all(pages.map(async p=>{
@@ -678,7 +678,7 @@ async function update_to_content(process,pages){
             page:vals[0],
             pageVersion:vals[1],
         }));
-        page=new BlogPage(
+        page=new BlogPage$1(
             this,
             res.page.id,
             res.pageVersion.public,
@@ -1440,8 +1440,8 @@ function Blog(site,status){
         for(let i in this.pages)
             listener(this.pages[i]);
     });
-    this.on('pageContentLoad',Page.star_all);
-    this.on('pageContentLoad',Page.tableofcontents_all);
+    this.on('pageContentLoad',BlogPage.star_all);
+    this.on('pageContentLoad',BlogPage.tableofcontents_all);
     // end add event listeners
     this.load=this._site.then(site=>{
         return site.loadPlugins('blog',s=>
@@ -1478,10 +1478,534 @@ Object.defineProperty(Blog.prototype,'status',{get(){
 Object.defineProperty(Blog.prototype,'view',view$1);
 Blog.prototype.path=path;
 
+let {dom: dom$21}=altheaCore;
+function SetForm(span_tags,input){
+    this.tags=[];
+    this.tagIdInTagsByName={};
+    this.span_tags=span_tags;
+    this.input=input;
+}
+SetForm.prototype.toArray=function(){
+    let res=[];
+    this.tags.map(t=>res.push(t.name));
+    return res
+};
+SetForm.prototype.addTag=function(name){
+    let
+        setForm=this,
+        tag=new Tag(name);
+    setForm.tags.push(tag);
+    setForm.tagIdInTagsByName[name]=setForm.tags.length-1;
+    setForm.span_tags.appendChild(tag.body);
+    function Tag(name){
+        let
+            span_name=dom$21.span(),
+            span=dom$21.span(
+                span_name,
+                ' ',
+                a()
+            );
+        span_name.innerHTML=name;
+        span.className='tag';
+        this.body=span;
+        this.name=name;
+        function a(){
+            let a=dom$21.a();
+            a.onclick=()=>{
+                let id=setForm.tagIdInTagsByName[name];
+                setForm.tags[id]=setForm.tags[setForm.tags.length-1];
+                setForm.tagIdInTagsByName[setForm.tags[id].name]=id;
+                delete setForm.tagIdInTagsByName[name];
+                setForm.tags.pop();
+                span.parentNode.removeChild(span);
+            };
+            a.href='javascript:';
+            a.style.verticalAlign='middle';
+            a.style.display='inline-block';
+            a.innerHTML=
+                '<i class=material-icons style=font-size:16pt>remove</i>';
+            return a
+        }
+    }
+};
+SetForm.prototype.onkeypress=function(e){
+    let name=this.input.value;
+    if(
+        e.key!='Enter'||
+        this.input.value==''||
+        this.tagIdInTagsByName[name]!==undefined
+    )
+        return
+    e.stopPropagation();
+    this.input.value='';
+    this.addTag(name);
+};
+
+function setup$2(editpage,isMobile){
+    let div_main=document.getElementById('div_main');
+    editpage.textarea_content=
+        document.getElementById('textarea_content');
+    onbeforeunload=()=>{
+        return''
+    };
+    div_main.classList.add(!isMobile?'nonMobile':'mobile');
+    editpage.setup_form();
+    editpage.emit('setUp');
+    editpage.setUp=true;
+    return
+}
+
+let {dom: dom$22}=altheaCore;
+function update(editpage,data){
+    data.pagemodules.map(async e=>{
+        let definitions=await e.definitions;
+        editpage.pagemodules.push(new Pagemodule(
+            e.id,
+            e.priority,
+            e.name,
+            definitions
+        ));
+    });
+    /*document.getElementById(
+        'input_ispublic_'+(
+            editpage.id&&data.lastversion_page.ispublic?
+                'true'
+            :
+                'false'
+        )
+    ).checked='checked'*/
+    document.getElementById('select_privacy').value=
+        editpage.id&&data.lastversion_page.ispublic?2:1;
+    data.pagemodules.sort((a,b)=>
+        a.priority-b.priority
+    );
+    data.pagemodules.map(e=>{
+        let option=dom$22.option(e.name);
+        option.value=e.id;
+        if(editpage.id&&e.id==data.lastversion_page.id_pagemodule)
+            option.selected='selected';
+        document.getElementById('select_id_pagemodule').appendChild(
+            option
+        );
+    });
+    editpage.id&&data.lastversion_page.tags.map(e=>{
+        editpage.setOfTags.addTag(e);
+    });
+    editpage.id&&data.page.pagenames.map(e=>{
+        editpage.setOfNames.addTag(e);
+    });
+    data.tags.map(e=>{
+        let option=dom$22.option({value:e});
+        document.getElementById('tags').appendChild(
+            option
+        );
+    });
+    if(editpage.id){
+        document.getElementById('input_title').value=
+            data.lastversion_page.title;
+        textarea_content.value=
+            data.lastversion_page.content;
+    }
+    document.getElementById('input_newtag').disabled=false;
+    document.getElementById('input_newname').disabled=false;
+    document.getElementById('input_title').disabled=false;
+    textarea_content.disabled=false;
+    if(editpage.id){
+        textarea_content.selectionStart=
+        textarea_content.selectionEnd=0;
+        textarea_content.focus();
+    }
+}
+
+let {browser}=altheaCore;
+async function getData(editpage){
+    let res={};
+    if(editpage.id){
+        let
+            site=await editpage._site,
+            page=await site.getPage(editpage.id),
+            pageversion=await page.lastversion;
+        await Promise.all([
+            page.load([
+                'public',
+                'lastversionId',
+                'preferredPagename',
+                'timestamp_insert',
+                'timestamp_lastmodified',
+                'author',
+                'pagenames',
+            ]),
+            pageversion.load([
+                'content',
+                'id_page',
+                'id_pagemodule',
+                'id_user_author',
+                'public',
+                'isremoved',
+                'tags',
+                'timestamp_insert',
+                'title',
+            ]),
+        ]);
+        res.page={
+            id:page.id,
+            id_user_author:page.author,
+            ispublic:page.public,
+            id_lastversion:page.lastversionId,
+            isremoved:false,
+            preferredPagename:page.preferredPagename,
+            timestamp_insert:page.timestamp_insert,
+            timestamp_lastmodified:page.timestamp_lastmodified,
+            pagenames:page.pagenames,
+        };
+        res.lastversion_page={
+            content:pageversion.content,
+            id:pageversion.id,
+            id_page:pageversion.id_page,
+            id_pagemodule:pageversion.id_pagemodule,
+            id_user_author:pageversion.id_user_author,
+            ispublic:pageversion.public,
+            isremoved:pageversion.isremoved,
+            tags:pageversion.tags,
+            timestamp_insert:pageversion.timestamp_insert,
+            title:pageversion.title,
+        };
+    }
+    return res
+}
+async function initialize(editpage){
+    editpage.isMobile=browser.isMobile;
+    editpage.id=environment.id_page||0;
+    document.title=!editpage.id?'New Page':'Edit Page';
+    setup$2(editpage,editpage.isMobile);
+    let res=await Promise.all([
+        getData(editpage),
+        editpage._site.then(site=>
+            site.send('getTags')
+        ),
+        editpage._site.then(async site=>{
+            let res=await site.send('getPagemodules0');
+            return Promise.all(res.map(async id=>{
+                let pagemodule=await site.getPagemodule(id);
+                return pagemodule.load([
+                    'priority',
+                    'name',
+                ])
+            }))
+        }),
+    ]);
+    let data=res[0];
+    data.tags=res[1];
+    data.pagemodules=res[2];
+    update(editpage,data);
+}
+
+var editors = [
+    {
+        come:function(){
+            document.getElementById(
+                'div_textarea_content'
+            ).style.display=
+                'block';
+        },
+        leave:function(){
+            document.getElementById(
+                'div_textarea_content'
+            ).style.display=
+                'none';
+        },
+    },{
+        come:function(){
+            document.getElementById('div_htmleditor').innerHTML=
+                this.textarea_content.value;
+            this.htmleditor=new HTMLEditor(
+                document.getElementById('div_htmleditor')
+            );
+            document.getElementById('div_htmleditor').style.display=
+                'block';
+        },leave:function(){
+            this.textarea_content.value=
+                this.htmleditor.html();
+            document.getElementById('div_htmleditor').style.display=
+                'none';
+        },
+    },{
+        come:function(){
+            let div_preview=document.getElementById('div_preview');
+            div_preview.innerHTML=
+                this.pagemodules[1].compile(
+                    this.textarea_content.value
+                );
+            syntaxHighlighter.highlight_all(div_preview,()=>{
+                syntaxHighlighter.border_all(div_preview);
+            });
+            BlogPage.star_all(div_preview);
+            BlogPage.tableofcontents_all(div_preview);
+            graphvisualize_all(div_preview);
+            MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
+            document.getElementById('div_preview').style.display=
+                'block';
+        },leave:function(){
+            document.getElementById('div_preview').style.display=
+                'none';
+        },
+    },
+];
+
+var setup_form = function(){
+    let
+        editpage=this,
+        showHtmlA=document.getElementById('showHtmlA'),
+        htmlEditorA=document.getElementById('htmlEditorA'),
+        previewA=document.getElementById('previewA'),
+        button_save=document.getElementById('button_save'),
+        button_submit=document.getElementById('button_submit'),
+        input_newtag=document.getElementById('input_newtag'),
+        input_newname=document.getElementById('input_newname');
+    addEventListener('keydown',e=>{
+        if(!(
+            e.ctrlKey&&e.shiftKey&&e.keyCode==83
+        ))
+            return
+        editpage.submit().then(page=>{
+            onbeforeunload=null;
+            location=page.id;
+        });
+    });
+    showHtmlA.addEventListener('click',e=>{
+        e.preventDefault();
+        editpage.show_html();
+    });
+    htmlEditorA.addEventListener('click',e=>{
+        e.preventDefault();
+        editpage.show_htmleditor();
+    });
+    previewA.addEventListener('click',e=>{
+        e.preventDefault();
+        editpage.show_preview();
+    });
+    button_save.addEventListener('click',()=>{
+        editpage.submit().then(page=>{
+            // to-do: let user know
+        });
+    });
+    button_submit.addEventListener('click',()=>{
+        editpage.submit().then(page=>{
+            onbeforeunload=null;
+            location=page.id;
+        });
+    });
+    input_newtag.addEventListener('keypress',e=>{
+        editpage.setOfTags.onkeypress(e);
+    });
+    input_newname.addEventListener('keypress',e=>{
+        editpage.setOfNames.onkeypress(e);
+    });
+};
+
+function submit(){
+    this.changeEditor(0);
+    return this._site.then(site=>
+        site.send({
+            function:'editpage',
+            id_page:this.id,
+            id_pagemodule:
+                +document.getElementById('select_id_pagemodule').value,
+            ispublic:document.getElementById('select_privacy').value==2,
+            tags:this.setOfTags.toArray(),
+            pagenames:this.setOfNames.toArray(),
+            title:document.getElementById('input_title').value,
+            content:this.textarea_content.value,
+        })
+    ).then(id=>({
+        id,
+    }))
+}
+
+var style$1 = `html{
+    height:100%;
+}
+body{
+    margin:0px;
+    min-height:360px;
+    height:100%;
+}
+#div_main{
+    margin:0px auto;
+    max-width:600px;
+    width:100%;
+    height:100%;
+}
+#table_content{
+    width:100%;
+    height:100%;
+}
+#table_content td{
+    padding:2px;
+}
+#button_save{
+    padding:4px;
+}
+#button_submit{
+    padding:4px;
+}
+#input_newtag{
+    margin:4px;
+    padding:4px;
+}
+#input_newname{
+    margin:4px;
+    padding:4px;
+}
+#input_title{
+    box-sizing:border-box;
+    width:100%;
+    padding:4px;
+}
+#td_content{
+    height:100%;
+}
+#div_textarea_content{
+    height:100%;
+}
+#textarea_content{
+    box-sizing:border-box;
+    width:100%;
+    height:100%;
+    padding:4px;
+}
+#div_htmleditor{
+    margin:0px;
+    border:1px solid lightgray;
+    padding:8px;
+    height:100%;
+    overflow-y:auto;
+    line-height:100%;
+}
+#div_preview{
+    margin:0px;
+    border:1px solid lightgray;
+    padding:8px;
+    height:100%;
+    overflow-y:auto;
+    line-height:100%;
+}
+span.tag{
+    border:solid 1px lightgray;
+    padding:4px;
+    margin-right:4px;
+    margin-bottom:4px;
+    font-family:sans-serif;
+}
+span.tag a{
+    text-decoration:none;
+}
+span.name{
+    border:solid 1px lightgray;
+    padding:4px;
+    margin-right:4px;
+    margin-bottom:4px;
+    font-family:sans-serif;
+}
+span.name a{
+    text-decoration:none;
+}
+/* 2015-09-20 */
+#span_graphvisualizer{
+    display:none;
+}
+.nonMobile #span_graphvisualizer{
+    display:unset;
+}
+/* 2015-09-20 Make some select larger. */
+#select_id_pagemodule{
+    padding:4px;
+}
+#select_privacy{
+    padding:4px;
+}
+/* 2015-09-02 Make something float. */
+span.tag{
+    float:left;
+}
+span.name{
+    float:left;
+}
+`;
+
+let {EventEmmiter: EventEmmiter$1,ImageUploader,dom: dom$20}=altheaCore;
+function Editpage(site){
+    EventEmmiter$1.call(this);
+    this._site=site;
+    this.pagemodules=[];
+    this.setOfTags=new SetForm(
+        document.getElementById('span_tags'),
+        document.getElementById('input_newtag')
+    );
+    this.setOfNames=new SetForm(
+        document.getElementById('span_names'),
+        document.getElementById('input_newname')
+    );
+    this.currentEditor=0;
+    this.load=this._site.then(site=>
+        site.loadPlugins('editpage',s=>
+            eval(`let module=anlitingModule;${s}`)
+        )
+    );
+    // start set up image uploader
+    let imageUploader=new ImageUploader(this._site);
+    let fileButton=dom$20.createFileButton('Image');
+    fileButton.on('file',async a=>{
+        fileButton.n.disabled=true;
+        let imageIds=await imageUploader.uploadImages(a);
+        imageIds.map(id=>
+            this.textarea_content.value+=
+                `<a href=img/${id}.jpg><img src=img/${
+                    id
+                }c800x600.jpg style=width:100%></a>\n`
+        );
+        fileButton.n.disabled=false;
+    });
+    document.getElementById('table_content').appendChild(
+        createUploadImageTr()
+    );
+    function createUploadImageTr(){
+        return dom$20.tr(createUploadImageTd())
+    }
+    function createUploadImageTd(){
+        return dom$20.td(fileButton.n)
+    }
+    // end set up image uploader
+    initialize(this);
+}
+Object.setPrototypeOf(Editpage.prototype,EventEmmiter$1.prototype);
+Object.defineProperty(Editpage.prototype,'currentUser',{get(){
+    return this._site.then(site=>site.currentUser)
+}});
+Editpage.prototype.setup_form=setup_form;
+Editpage.prototype.submit=submit;
+Editpage.prototype.show_html=function(){
+    this.changeEditor(0);
+};
+Editpage.prototype.show_htmleditor=function(){
+    this.changeEditor(1);
+};
+Editpage.prototype.show_preview=function(){
+    this.changeEditor(2);
+};
+Editpage.prototype.editors=editors;
+Editpage.prototype.changeEditor=function(id){
+    this.editors[this.currentEditor].leave.bind(this)();
+    this.currentEditor=id;
+    this.editors[this.currentEditor].come.bind(this)();
+};
+Editpage.style=dom$20.style(style$1);
+
 var core = {
     Blog,
     Comment,
-    Page: Page$1,
+    Editpage,
+    Page,
     Pagemodule,
     Pagemodule0,
     Pageversion,

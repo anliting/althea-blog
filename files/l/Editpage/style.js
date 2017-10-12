@@ -1,4 +1,4 @@
-html{
+export default`html{
     height:100%;
 }
 body{
@@ -107,3 +107,4 @@ span.tag{
 span.name{
     float:left;
 }
+`
