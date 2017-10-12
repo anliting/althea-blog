@@ -1,9 +1,8 @@
 import altheaCore from '/lib/core.static.js'
 import core from '/plugins/althea-blog/l/core.static.js'
-import moduleLoader from 'https://cdn.rawgit.com/anliting/module/3d316feea7b5a428cf73252750ba79b4a1f4179f/src/esm/moduleLoader.js'
 import setupAutoScroll from './blog/setupAutoScroll.js'
 let
-    {Progress,hacker,Snapshot}=altheaCore,
+    {Progress,Snapshot,hacker,moduleLoader}=altheaCore,
     {Blog,site}=core
 ;(async()=>{
     let
