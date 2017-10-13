@@ -307,7 +307,8 @@ function div_blog_content(pageView,page){
         });
     div.style.display=pageView.hide?'none':'block';
     for(let s of div.getElementsByTagName('script'))
-        eval(`let module=anlitingModule;${s.innerHTML}`);
+        if(s.type=='')
+            eval(`let module=anlitingModule;${s.innerHTML}`);
     page.blog.addPageDiv(div);
     return div
 }
