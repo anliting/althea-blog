@@ -138,7 +138,7 @@ let {Blog,site}=core;(async()=>{
     ]);
 })();
 async function loadBlog(site,status,Blog){
-    return new Blog(Promise.resolve(site),status)
+    return new Blog(site,status)
 }
 function createMainThread(site,blog){
     return[

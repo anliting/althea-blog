@@ -3,39 +3,32 @@ import loadPagemodules from './Blog/loadPagemodules.js'
 import Page from './Blog/Page.js'
 import _getNext from './Blog/prototype._getNext.js'
 import _anchor_addTag from './Blog/prototype._anchor_addTag.js'
-import view from './Blog/prototype.view.js'
+import BlogView from './Blog/BlogView.js'
 import path from './Blog/path.js'
 function Blog(site,status){
     EventEmmiter.call(this)
-    this._site=site
+    this._site=Promise.resolve(site)
     this._status=status
     this.pages={}
     this.pagemodules=[]
     this.pages_loaded=[]
     // refresh on userChange
-    this._site.then(site=>{
-        site.on('userChange',()=>{
-            this.status=this.status
-        })
+    site.on('userChange',()=>{
+        this.status=this.status
     })
-    // start add event listeners
-    this.on('newListener',(event,listener)=>
-        this.emit(event+'ListenerAdd',listener)
+    // start page plugin
+    this._pageDivs=[]
+    this._pagePlugins=[
+        Page.star_all,
+        Page.tableofcontents_all,
+    ]
+    // end page plugin
+    this.load=site.loadPlugins('blog',s=>
+        eval(`let module=anlitingModule;${s}`)
     )
-    this.on('pageLoadListenerAdd',listener=>{
-        for(let i in this.pages)
-            listener(this.pages[i])
-    })
-    this.on('pageContentLoad',Page.star_all)
-    this.on('pageContentLoad',Page.tableofcontents_all)
-    // end add event listeners
-    this.load=this._site.then(site=>{
-        return site.loadPlugins('blog',s=>
-            eval(`let module=anlitingModule;${s}`)
-        )
-    })
     this._getNext()
     this._styles=[]
+    this.view=new BlogView(this)
 }
 Object.setPrototypeOf(Blog.prototype,EventEmmiter.prototype)
 Blog.prototype._anchor_addTag=_anchor_addTag
@@ -52,6 +45,14 @@ Blog.prototype._style=function(n){
     this._styles.push(n)
     this.emit('_style')
 }
+Blog.prototype.addPageDiv=function(div){
+    this._pageDivs.push(div)
+    this._pagePlugins.forEach(p=>p(div))
+}
+Blog.prototype.addPagePlugin=function(p){
+    this._pageDivs.forEach(p)
+    this._pagePlugins.push(p)
+}
 Object.defineProperty(Blog.prototype,'status',{get(){
     return this._status
 },set(val){
@@ -61,6 +62,5 @@ Object.defineProperty(Blog.prototype,'status',{get(){
     this.emit('statusChange')
     this._getNext()
 }})
-Object.defineProperty(Blog.prototype,'view',view)
 Blog.prototype.path=path
 export default Blog

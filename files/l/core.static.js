@@ -308,10 +308,7 @@ function div_blog_content(pageView,page){
     div.style.display=pageView.hide?'none':'block';
     for(let s of div.getElementsByTagName('script'))
         eval(`let module=anlitingModule;${s.innerHTML}`);
-    page.blog.emit('pageContentLoad',div);
-    page.blog.on('pageContentLoadListenerAdd',listener=>
-        listener(div)
-    );
+    page.blog.addPageDiv(div);
     return div
 }
 function div_facebooklike(page){
@@ -1414,42 +1411,30 @@ BlogView.prototype.setupSuggestedTags=async function(){
     view.tagsDiv.style.display='';
 };
 
-var view$1 = {get(){
-    let view=new BlogView(this);
-    return view
-}};
-
 function Blog(site,status){
     EventEmmiter.call(this);
-    this._site=site;
+    this._site=Promise.resolve(site);
     this._status=status;
     this.pages={};
     this.pagemodules=[];
     this.pages_loaded=[];
     // refresh on userChange
-    this._site.then(site=>{
-        site.on('userChange',()=>{
-            this.status=this.status;
-        });
+    site.on('userChange',()=>{
+        this.status=this.status;
     });
-    // start add event listeners
-    this.on('newListener',(event,listener)=>
-        this.emit(event+'ListenerAdd',listener)
+    // start page plugin
+    this._pageDivs=[];
+    this._pagePlugins=[
+        BlogPage.star_all,
+        BlogPage.tableofcontents_all,
+    ];
+    // end page plugin
+    this.load=site.loadPlugins('blog',s=>
+        eval(`let module=anlitingModule;${s}`)
     );
-    this.on('pageLoadListenerAdd',listener=>{
-        for(let i in this.pages)
-            listener(this.pages[i]);
-    });
-    this.on('pageContentLoad',BlogPage.star_all);
-    this.on('pageContentLoad',BlogPage.tableofcontents_all);
-    // end add event listeners
-    this.load=this._site.then(site=>{
-        return site.loadPlugins('blog',s=>
-            eval(`let module=anlitingModule;${s}`)
-        )
-    });
     this._getNext();
     this._styles=[];
+    this.view=new BlogView(this);
 }
 Object.setPrototypeOf(Blog.prototype,EventEmmiter.prototype);
 Blog.prototype._anchor_addTag=anchor_addTag;
@@ -1466,6 +1451,14 @@ Blog.prototype._style=function(n){
     this._styles.push(n);
     this.emit('_style');
 };
+Blog.prototype.addPageDiv=function(div){
+    this._pageDivs.push(div);
+    this._pagePlugins.forEach(p=>p(div));
+};
+Blog.prototype.addPagePlugin=function(p){
+    this._pageDivs.forEach(p);
+    this._pagePlugins.push(p);
+};
 Object.defineProperty(Blog.prototype,'status',{get(){
     return this._status
 },set(val){
@@ -1475,7 +1468,6 @@ Object.defineProperty(Blog.prototype,'status',{get(){
     this.emit('statusChange');
     this._getNext();
 }});
-Object.defineProperty(Blog.prototype,'view',view$1);
 Blog.prototype.path=path;
 
 let {dom: dom$21}=altheaCore;

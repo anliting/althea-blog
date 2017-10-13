@@ -1,9 +1,9 @@
-import createHeader from './createHeader.js'
-import keydown from './prototype.keydown.js'
-import install_datalist_tags_suggested from './install_datalist_tags_suggested.js'
-import use_list_tags__count_suggested from './use_list_tags__count_suggested.js'
-import initialize_tags_suggested from './initialize_tags_suggested.js'
-import style from './style.js'
+import createHeader from './BlogView/createHeader.js'
+import keydown from './BlogView/prototype.keydown.js'
+import install_datalist_tags_suggested from './BlogView/install_datalist_tags_suggested.js'
+import use_list_tags__count_suggested from './BlogView/use_list_tags__count_suggested.js'
+import initialize_tags_suggested from './BlogView/initialize_tags_suggested.js'
+import style from './BlogView/style.js'
 import altheaCore from '/lib/core.static.js'
 let{dom}=altheaCore
 function createContents(blog){
