@@ -1452,12 +1452,12 @@ Blog.prototype._style=function(n){
     this._styles.push(n);
     this.emit('_style');
 };
-Blog.prototype.addPageDiv=function(div){
+Blog.prototype.addPageDiv=async function(div){
     this._pageDivs.push(div);
-    this._pagePlugins.forEach(p=>p(div));
+    await Promise.all(this._pagePlugins.map(p=>p(div)));
 };
-Blog.prototype.addPagePlugin=function(p){
-    this._pageDivs.forEach(p);
+Blog.prototype.addPagePlugin=async function(p){
+    await Promise.all(this._pageDivs.map(p));
     this._pagePlugins.push(p);
 };
 Object.defineProperty(Blog.prototype,'status',{get(){
