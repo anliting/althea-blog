@@ -14,7 +14,12 @@ Pagemodule.prototype.compile=function(s){
         s=s||'';
         s=s.split(d.name).join(d.content);
     });
-    s=s.replace(/\[nothing\][\s\S]*?\[\/nothing\]/g,s=>{
+    s=s.replace(/\[encodeURIComponent\][\s\S]*?\[\/encodeURIComponent\]/g,s=>{
+        return encodeURIComponent(s.substring(
+            '[encodeURIComponent]'.length,
+            s.length-'[/encodeURIComponent]'.length
+        ))
+    }).replace(/\[nothing\][\s\S]*?\[\/nothing\]/g,s=>{
         return ''
     }).replace(
         /\[ignorePluralSpaceCharacters\][\s\S]*?\[\/ignorePluralSpaceCharacters\]/g,
