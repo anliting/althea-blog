@@ -1,11 +1,10 @@
-import altheaCore from '/lib/core.static.js'
+import{EventEmmiter,ImageUploader,dom}from '/lib/core.static.js'
 import SetForm from './Editpage/SetForm.js'
 import initialize from './Editpage/initialize.js'
 import editors from './Editpage/prototype.editors.js'
 import setup_form from './Editpage/prototype.setup_form.js'
 import submit from './Editpage/prototype.submit.js'
 import style from './Editpage/style.js'
-let{EventEmmiter,ImageUploader,dom}=altheaCore
 let
     div_main,
     isMobile

@@ -75,7 +75,8 @@ ${env.althea.loadModule(
         editpageEnv:{
             id_page:env.id_page,
         }
-    }
+    },
+    {esm:1}
 )}
     `
 }
