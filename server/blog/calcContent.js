@@ -47,7 +47,6 @@ ${env.althea.loadModule(
         }
     },
     {
-        esm:true,
         sharedWorker:true,
     }
 )}

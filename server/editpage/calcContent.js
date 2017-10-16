@@ -76,7 +76,6 @@ ${env.althea.loadModule(
             id_page:env.id_page,
         }
     },
-    {esm:1}
 )}
     `
 }
