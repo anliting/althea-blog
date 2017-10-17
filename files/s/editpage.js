@@ -1,4 +1,5 @@
 import moduleLoader from 'https://cdn.rawgit.com/anliting/module/533c10b65a8b71c14de16f5ed99e466ddf8a2bae/src/esm/moduleLoader.js'
+import{dom}from'/lib/core.static.js'
 import{Editpage,Site}from'/plugins/althea-blog/l/core.static.js'
 let site=new Site
 ;(async()=>{
@@ -14,7 +15,7 @@ let site=new Site
     site.on('userChange',()=>
         location='/'
     )
-    document.head.appendChild(Editpage.style)
+    dom.head(Editpage.style)
     await editpageReady
-    new Editpage(Promise.resolve(site))
+    new Editpage(site)
 })()

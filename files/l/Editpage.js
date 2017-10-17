@@ -21,10 +21,8 @@ function Editpage(site){
         document.getElementById('input_newname')
     )
     this.currentEditor=0
-    this.load=this._site.then(site=>
-        site.loadPlugins('editpage',s=>
-            eval(`let module=anlitingModule;${s}`)
-        )
+    this.load=this._site.loadPlugins('editpage',s=>
+        eval(`let module=anlitingModule;${s}`)
     )
     // start set up image uploader
     let imageUploader=new ImageUploader(this._site)
@@ -54,7 +52,7 @@ function Editpage(site){
 }
 Object.setPrototypeOf(Editpage.prototype,EventEmmiter.prototype)
 Object.defineProperty(Editpage.prototype,'currentUser',{get(){
-    return this._site.then(site=>site.currentUser)
+    return this._site.currentUser
 }})
 Editpage.prototype.setup_form=setup_form
 Editpage.prototype.submit=submit

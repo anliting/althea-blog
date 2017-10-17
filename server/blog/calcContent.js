@@ -38,7 +38,6 @@ ${env.environmentvariables.og?og(env,title,url_request):''}
 <link rel=icon href=images/icon.png>
 <body>
 ${env.althea.loadModule(
-    env.envVars,
     //'plugins/althea-blog/s/blog.js',
     'plugins/althea-blog/s/blog.static.js',
     {
