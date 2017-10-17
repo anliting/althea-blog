@@ -153,11 +153,6 @@ function setup(){
     a_comment.href='javascript:';
     a_comment.innerHTML='<i class=material-icons>comment</i>';
     a_comment.onclick=()=>{
-        $&&$('html,body').animate({
-            scrollTop:
-                $(textarea_comment__form_comment).offset().top+
-                    80-$(window).height()
-        },320);
         textarea_comment__form_comment.focus();
     };
     textarea_comment__form_comment=dom$4.textarea();
@@ -274,8 +269,13 @@ function createDiv(pageView,page){
     // tags
     let contentDiv=div_blog_content(pageView,page);
     pageView.on('clickHideshow',()=>{
-        pageView.hide=!pageView.hide;
-        $&&$(contentDiv).toggle(320);
+        if(pageView.hide){
+            contentDiv.style.display='';
+            pageView.hide=0;
+        }else{
+            contentDiv.style.display='none';
+            pageView.hide=1;
+        }
     });
     div.appendChild(page.h1_title());
     div.appendChild(page.div_author=    page.createAuthorDiv());

@@ -10,11 +10,6 @@ function setup(){
     a_comment.href='javascript:'
     a_comment.innerHTML='<i class=material-icons>comment</i>'
     a_comment.onclick=()=>{
-        $&&$('html,body').animate({
-            scrollTop:
-                $(textarea_comment__form_comment).offset().top+
-                    80-$(window).height()
-        },320)
         textarea_comment__form_comment.focus()
     }
     textarea_comment__form_comment=dom.textarea()

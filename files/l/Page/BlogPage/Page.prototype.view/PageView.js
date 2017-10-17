@@ -19,8 +19,13 @@ function createDiv(pageView,page){
     // tags
     let contentDiv=div_blog_content(pageView,page)
     pageView.on('clickHideshow',()=>{
-        pageView.hide=!pageView.hide
-        $&&$(contentDiv).toggle(320)
+        if(pageView.hide){
+            contentDiv.style.display=''
+            pageView.hide=0
+        }else{
+            contentDiv.style.display='none'
+            pageView.hide=1
+        }
     })
     div.appendChild(page.h1_title())
     div.appendChild(page.div_author=    page.createAuthorDiv())
