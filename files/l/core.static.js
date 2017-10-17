@@ -1678,19 +1678,17 @@ async function initialize(editpage){
     setup$2(editpage,editpage.isMobile);
     let res=await Promise.all([
         getData(editpage),
-        editpage._site.then(site=>
-            site.send('getTags')
-        ),
-        editpage._site.then(async site=>{
-            let res=await site.send('getPagemodules0');
+        editpage._site.send('getTags'),
+        (async()=>{
+            let res=await editpage._site.send('getPagemodules0');
             return Promise.all(res.map(async id=>{
-                let pagemodule=await site.getPagemodule(id);
+                let pagemodule=await editpage._site.getPagemodule(id);
                 return pagemodule.load([
                     'priority',
                     'name',
                 ])
             }))
-        }),
+        })(),
     ]);
     let data=res[0];
     data.tags=res[1];
@@ -1801,23 +1799,20 @@ var setup_form = function(){
     });
 };
 
-function submit(){
+async function submit(){
     this.changeEditor(0);
-    return this._site.then(site=>
-        site.send({
-            function:'editpage',
-            id_page:this.id,
-            id_pagemodule:
-                +document.getElementById('select_id_pagemodule').value,
-            ispublic:document.getElementById('select_privacy').value==2,
-            tags:this.setOfTags.toArray(),
-            pagenames:this.setOfNames.toArray(),
-            title:document.getElementById('input_title').value,
-            content:this.textarea_content.value,
-        })
-    ).then(id=>({
-        id,
-    }))
+    let id=await this._site.send({
+        function:'editpage',
+        id_page:this.id,
+        id_pagemodule:
+            +document.getElementById('select_id_pagemodule').value,
+        ispublic:document.getElementById('select_privacy').value==2,
+        tags:this.setOfTags.toArray(),
+        pagenames:this.setOfNames.toArray(),
+        title:document.getElementById('input_title').value,
+        content:this.textarea_content.value,
+    });
+    return{id}
 }
 
 var style$1 = `html{
@@ -1944,10 +1939,8 @@ function Editpage(site){
         document.getElementById('input_newname')
     );
     this.currentEditor=0;
-    this.load=this._site.then(site=>
-        site.loadPlugins('editpage',s=>
-            eval(`let module=anlitingModule;${s}`)
-        )
+    this.load=this._site.loadPlugins('editpage',s=>
+        eval(`let module=anlitingModule;${s}`)
     );
     // start set up image uploader
     let imageUploader=new ImageUploader(this._site);
@@ -1977,7 +1970,7 @@ function Editpage(site){
 }
 Object.setPrototypeOf(Editpage.prototype,EventEmmiter$1.prototype);
 Object.defineProperty(Editpage.prototype,'currentUser',{get(){
-    return this._site.then(site=>site.currentUser)
+    return this._site.currentUser
 }});
 Editpage.prototype.setup_form=setup_form;
 Editpage.prototype.submit=submit;
