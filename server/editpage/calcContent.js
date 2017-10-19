@@ -7,7 +7,7 @@ function calcContent(env){
 <meta name=viewport content='width=device-width,initial-scale=1'>
 <body>
 ${env.althea.loadModule(
-    'plugins/althea-blog/s/editpage.js',
+    'plugins/althea-blog/editpage.js',
     {
         editpageEnv:{
             id_page:env.id_page,

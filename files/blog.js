@@ -1,5 +1,5 @@
 import altheaCore from '/lib/core.static.js'
-import core from '/plugins/althea-blog/l/core.static.js'
+import core from '/plugins/althea-blog/core.static.js'
 import setupAutoScroll from './blog/setupAutoScroll.js'
 let
     {Progress,Snapshot,hacker,moduleLoader}=altheaCore,

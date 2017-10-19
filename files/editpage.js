@@ -1,5 +1,5 @@
 import{dom}from'/lib/core.static.js'
-import{Editpage,Site}from'/plugins/althea-blog/l/core.static.js'
+import{Editpage,Site}from'/plugins/althea-blog/core.static.js'
 let site=new Site
 window.environment=arg.editpageEnv
 site.on('userChange',()=>
