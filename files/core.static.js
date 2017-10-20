@@ -1435,9 +1435,7 @@ function Blog(site,status){
         BlogPage.tableofcontents_all,
     ];
     // end page plugin
-    this.load=site.loadPlugins('blog',s=>
-        eval(`let module=anlitingModule;${s}`)
-    );
+    this.load=site.loadPlugins0('blog',this);
     this._getNext();
     this._styles=[];
     this.view=new BlogView(this);
