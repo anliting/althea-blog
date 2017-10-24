@@ -2011,9 +2011,7 @@ function Editpage(site){
             document.getElementById('input_newname')
         );
         this.currentEditor=0;
-        this.load=this._site.loadPlugins('editpage',s=>
-            eval(`let module=anlitingModule;${s}`)
-        );
+        this.load=this._site.loadPlugins0('editpage',this);
         // start set up image uploader
         let imageUploader=new ImageUploader(this._site);
         let fileButton=dom.createFileButton('Image');
