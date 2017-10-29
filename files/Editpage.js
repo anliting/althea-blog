@@ -1,4 +1,6 @@
-import{EventEmmiter,ImageUploader,dom,moduleLoader}from '/lib/core.static.js'
+import{
+    EventEmmiter,ImageUploader,dom,moduleLoader
+}from'/lib/core.static.js'
 import SetForm from './Editpage/SetForm.js'
 import initialize from './Editpage/initialize.js'
 import editors from './Editpage/prototype.editors.js'
