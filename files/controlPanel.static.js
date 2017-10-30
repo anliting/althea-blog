@@ -1,5 +1,30 @@
 import { Site, dom } from '/lib/core.static.js';
 
+function createSiteNode(){
+    return dom.div(
+        dom.div({className:'material menu'},
+            dom.div(
+                {
+                    className:'out',
+                    onclick:()=>{
+                        this.out();
+                    }
+                },
+                'Site',
+            )
+        ),
+        dom.div(
+            {className:'material content'},
+            dom.p('Title: ',dom.input()),
+            dom.p('Description: ',dom.input()),
+            dom.p('Banner Title: ',dom.input()),
+            dom.p('Tagline: ',dom.input()),
+            dom.p('Footer: ',dom.input()),
+            dom.p(dom.button('Apply')),
+        ),
+    )
+}
+
 let site=new Site;
 function TagsPage(){
     this.mainDiv=dom.div(async()=>{
@@ -42,6 +67,27 @@ function TagsPage(){
     }
 }
 
+function createTagsNode(){
+    let tagsPage=new TagsPage;
+    return dom.div(
+        dom.div({className:'material menu'},
+            dom.div(
+                {
+                    className:'out',
+                    onclick:()=>{
+                        this.out();
+                    }
+                },
+                'Tags',
+            )
+        ),
+        dom.div(
+            {className:'material content'},
+            tagsPage.mainDiv,
+        ),
+    )
+}
+
 var style = `
 .controlPanel .material{
     background-color:#fff;
@@ -61,32 +107,14 @@ var style = `
     float:right;
     content:'>';
 }
+.controlPanel .material.content{
+    padding:16px;
+}
+.controlPanel .material.menu+.material.content{
+    margin-top:16px;
+}
 `;
 
-function createTagsPage(){
-    let tagsPage=new TagsPage;
-    return dom.div(
-        dom.div({className:'material menu'},
-            dom.div(
-                {
-                    className:'out',
-                    onclick:()=>{
-                        this.out();
-                    }
-                },
-                'Tags',
-            )
-        ),
-        dom.div(
-            {className:'material'},
-            n=>{dom(n.style,{
-                padding:'16px',
-                marginTop:'16px',
-            });},
-            tagsPage.mainDiv,
-        ),
-    )
-}
 function ControlPanel(){
     this.array=[];
     this.ui=dom.div({className:'controlPanel'},
@@ -96,12 +124,13 @@ function ControlPanel(){
         dom.div({
             className:'in',
             onclick:()=>{
+                this.in(createSiteNode.call(this));
             },
         },'Site'),
         dom.div({
             className:'in',
             onclick:()=>{
-                this.in(createTagsPage.call(this));
+                this.in(createTagsNode.call(this));
             },
         },'Tags'),
     ));
