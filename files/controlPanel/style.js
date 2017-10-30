@@ -19,7 +19,8 @@ body>.main{
     border-top:1px solid #ddd;
 }
 .controlPanel .material.menu>div.out:before{
-    content:'< ';
+    maring-right:16px;
+    content:'<';
 }
 .controlPanel .material.menu>div.in:after{
     float:right;
