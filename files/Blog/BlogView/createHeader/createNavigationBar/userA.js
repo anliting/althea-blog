@@ -31,7 +31,9 @@ function innerDiv(blog,u){
             dom.br(),
             dom.a('Drive',{href:`home/${u.username}`}),
             dom.br(),
-            dom.a('Settings',{href:'settings'}),
+            dom.a('Control Panel',{href:'control-panel'}),
+            dom.br(),
+            dom.a('Blog Control Panel',{href:'blog-control-panel'}),
             dom.br(),
             dom.a('New Page',{href:'newpage'}),
         ],n=>{
