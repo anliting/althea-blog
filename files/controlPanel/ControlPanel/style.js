@@ -17,4 +17,10 @@ export default`
     float:right;
     content:'>';
 }
+.controlPanel .material.content{
+    padding:16px;
+}
+.controlPanel .material.menu+.material.content{
+    margin-top:16px;
+}
 `

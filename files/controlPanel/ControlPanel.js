@@ -1,30 +1,7 @@
 import{dom}from'/lib/core.static.js'
-import TagsPage from './ControlPanel/TagsPage.js'
+import createSiteNode from './ControlPanel/createSiteNode.js'
+import createTagsNode from './ControlPanel/createTagsNode.js'
 import style from './ControlPanel/style.js'
-function createTagsPage(){
-    let tagsPage=new TagsPage
-    return dom.div(
-        dom.div({className:'material menu'},
-            dom.div(
-                {
-                    className:'out',
-                    onclick:()=>{
-                        this.out()
-                    }
-                },
-                'Tags',
-            )
-        ),
-        dom.div(
-            {className:'material'},
-            n=>{dom(n.style,{
-                padding:'16px',
-                marginTop:'16px',
-            })},
-            tagsPage.mainDiv,
-        ),
-    )
-}
 function ControlPanel(){
     this.array=[]
     this.ui=dom.div({className:'controlPanel'},
@@ -34,12 +11,13 @@ function ControlPanel(){
         dom.div({
             className:'in',
             onclick:()=>{
+                this.in(createSiteNode.call(this))
             },
         },'Site'),
         dom.div({
             className:'in',
             onclick:()=>{
-                this.in(createTagsPage.call(this))
+                this.in(createTagsNode.call(this))
             },
         },'Tags'),
     ))
