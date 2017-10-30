@@ -2,26 +2,26 @@ import { Site, dom } from '/lib/core.static.js';
 
 let site=new Site;
 function TagsPage(){
-}
-TagsPage.prototype.initialize=async function(){
-    this.isInitialized=true;
-    this.mainDiv=dom.div();
-    let data=await site.send('getTagsWithCount');
-    this.mainDiv.innerHTML='';
-    let table=dom.table();
-    table.classList.add('bordered');
-    table.classList.add('padding4px');
-    this.mainDiv.appendChild(table);
-    table.innerHTML=
-        '<thead>'+
-            '<tr>'+
-                '<th>Tagname'+
-                '<th>Count'+
-            '</tr>'+
-        '</thead>';
-    data.map(
-        tag=>table.appendChild(tr_tag(tag))
-    );
+    this.mainDiv=dom.div(async()=>{
+        let data=await site.send('getTagsWithCount');
+        return dom.table(
+            {
+                className:'bordered padding4px',
+                innerHTML:`
+                    <thead>
+                        <tr>
+                            <th>Tagname
+                            <th>Count
+                        </tr>
+                    </thead>
+                `
+            },
+            n=>{
+                n.style.margin='0 auto';
+            },
+            data.map(tr_tag),
+        )
+    });
     function tr_tag(tag){
         return dom.tr(td_name(),td_count())
         function td_name(){
@@ -40,7 +40,7 @@ TagsPage.prototype.initialize=async function(){
             return td
         }
     }
-};
+}
 
 var style = `
 .controlPanel .material{
@@ -65,7 +65,6 @@ var style = `
 
 function createTagsPage(){
     let tagsPage=new TagsPage;
-    tagsPage.initialize();
     return dom.div(
         dom.div({className:'material menu'},
             dom.div(
@@ -80,7 +79,10 @@ function createTagsPage(){
         ),
         dom.div(
             {className:'material'},
-            n=>{n.style.marginTop='16px';},
+            n=>{dom(n.style,{
+                padding:'16px',
+                marginTop:'16px',
+            });},
             tagsPage.mainDiv,
         ),
     )
@@ -111,8 +113,6 @@ ControlPanel.prototype.in=function(e){
     this.ui.appendChild(e);
 };
 ControlPanel.prototype.out=function(){
-    if(!this.array.length)
-        return
     this.ui.removeChild(this.array.pop());
     if(this.array.length)
         this.ui.appendChild(this.array[this.array.length-1]);
