@@ -2,6 +2,7 @@ export default`
 body{
     font-family:sans-serif;
     background-color:#eee;
+    overflow-y:scroll;
 }
 body>.main{
     max-width:600px;
@@ -13,6 +14,9 @@ body>.main{
 }
 .controlPanel .material.menu>div{
     padding:16px;
+}
+.controlPanel .material.menu>div+div{
+    border-top:1px solid #ddd;
 }
 .controlPanel .material.menu>div.out:before{
     content:'< ';

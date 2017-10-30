@@ -32,6 +32,11 @@ function ControlPanel(){
         dom.div({
             className:'in',
             onclick:()=>{
+            },
+        },'Site'),
+        dom.div({
+            className:'in',
+            onclick:()=>{
                 this.in(createTagsPage.call(this))
             },
         },'Tags'),
