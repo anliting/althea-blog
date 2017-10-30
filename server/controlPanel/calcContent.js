@@ -1,5 +1,5 @@
 function calcContent(env){
-    let content=`
+    return`
 <!doctype html>
 <title>Blog Control Panel</title>
 <base href=${env.config.root}>
@@ -7,12 +7,12 @@ function calcContent(env){
 <body>
 ${env.althea.loadModule(
     'plugins/althea-blog/controlPanel.js',
+    //'plugins/althea-blog/controlPanel.static.js',
     null,
     {
         sharedWorker:1,
     },
 )}
 `
-    return content
 }
 module.exports=calcContent

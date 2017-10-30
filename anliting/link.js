@@ -17,6 +17,7 @@ async function link(input,file){
     })
 }
 ;(async()=>{
-    await link(`files/core.js`,`files/core.static.js`)
     await link(`files/blog.js`,`files/blog.static.js`)
+    await link(`files/controlPanel.js`,`files/controlPanel.static.js`)
+    await link(`files/core.js`,`files/core.static.js`)
 })()

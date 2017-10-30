@@ -1,9 +1,8 @@
 import{dom}from'/lib/core.static.js'
-import TagsPage from './TagsPage.js'
-import style from './style.js'
+import TagsPage from './ControlPanel/TagsPage.js'
+import style from './ControlPanel/style.js'
 function createTagsPage(){
     let tagsPage=new TagsPage
-    tagsPage.initialize()
     return dom.div(
         dom.div({className:'material menu'},
             dom.div(
@@ -18,7 +17,10 @@ function createTagsPage(){
         ),
         dom.div(
             {className:'material'},
-            n=>{n.style.marginTop='16px'},
+            n=>{dom(n.style,{
+                padding:'16px',
+                marginTop:'16px',
+            })},
             tagsPage.mainDiv,
         ),
     )
@@ -49,8 +51,6 @@ ControlPanel.prototype.in=function(e){
     this.ui.appendChild(e)
 }
 ControlPanel.prototype.out=function(){
-    if(!this.array.length)
-        return
     this.ui.removeChild(this.array.pop())
     if(this.array.length)
         this.ui.appendChild(this.array[this.array.length-1])
