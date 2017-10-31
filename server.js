@@ -12,7 +12,7 @@ module.exports=async althea=>{
     loadBlogProperties(db)
     Object.entries(queryFunctions).map(([k,v])=>{
         althea.addQueryFunction(k,(opt,env)=>
-            v(db,opt,env)
+            v(db,opt,env,althea)
         )
     })
     althea.addPagemodule('/',r=>blog(db,r))

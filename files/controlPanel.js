@@ -1,5 +1,6 @@
-import{dom}from'/lib/core.static.js'
+import{Site,dom}from'/lib/core.static.js'
 import ControlPanel from './controlPanel/ControlPanel.js'
+let site=new Site
 dom.head(
     dom.style(`
         body{
@@ -13,8 +14,10 @@ dom.head(
         }
     `,ControlPanel.style)
 )
+let controlPanel=new ControlPanel
+controlPanel.send=site.send.bind(site)
 dom.body(
-    dom((new ControlPanel).ui,
+    dom(controlPanel.ui,
         n=>{n.classList.add('main')}
     )
 )

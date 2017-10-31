@@ -12,15 +12,45 @@ function createSiteNode(){
                 'Site',
             )
         ),
-        dom.div(
-            {className:'material content'},
-            dom.p('Title: ',dom.input()),
-            dom.p('Description: ',dom.input()),
-            dom.p('Banner Title: ',dom.input()),
-            dom.p('Tagline: ',dom.input()),
-            dom.p('Footer: ',dom.input()),
-            dom.p(dom.button('Apply')),
-        ),
+        (async()=>{
+            let
+                data=await this.send('blog_getData'),
+                title,
+                description,
+                bannerTitle,
+                tagline,
+                footer
+            return dom.div(
+                {className:'material content'},
+                dom.p('Title: ',
+                    title=dom.input({value:data.title})
+                ),
+                dom.p('Description: ',
+                    description=dom.input({value:data.description})
+                ),
+                dom.p('Banner Title: ',
+                    bannerTitle=dom.textarea(data.bannerTitle)
+                ),
+                dom.p('Tagline: ',
+                    tagline=dom.textarea(data.tagline)
+                ),
+                dom.p('Footer: ',
+                    footer=dom.textarea(data.footer)
+                ),
+                dom.p(dom.button('Apply',{onclick:async()=>{
+                    data.title=title.value
+                    data.description=description.value
+                    data.bannerTitle=bannerTitle.value
+                    data.tagline=tagline.value
+                    data.footer=footer.value
+                    await this.send({
+                        function:'blog_setData',
+                        data,
+                    })
+                    alert('Applied.')
+                }})),
+            )
+        })(),
     )
 }
 export default createSiteNode
