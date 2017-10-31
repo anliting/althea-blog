@@ -2,7 +2,12 @@ let
     entities=   require('entities'),
     url=        require('url')
 module.exports=calcContent
-function calcContent(env,lastversion_page){
+async function calcContent(althea,env,lastversion_page){
+    let data=JSON.parse(await althea.getData())
+    if(!('title' in data))
+        data.title='undefined'
+    if(!('description' in data))
+        data.description='undefined'
     let type=env.althea.lib.anliting.type
     let
         keys,
@@ -15,12 +20,12 @@ function calcContent(env,lastversion_page){
     keys=Object.keys(url_request.query)
     title=
         (lastversion_page&&lastversion_page.data.title+' - '||'')+
-        env.environmentvariables.sitename
-    metaDescription=env.environmentvariables.siteDescription
+        data.title
+    metaDescription=data.description
     list=url_request.pathname.split('/')
     content=`
 <!doctype html>
-<title>${entities.encodeHTML(title)}</title>
+<title>${entities.encodeHTML(data.title)}</title>
 <base href=${env.config.root}>
 <meta name=robots content=${
     (
@@ -34,7 +39,7 @@ function calcContent(env,lastversion_page){
 <meta name=description content='${entities.encodeHTML(metaDescription)}'>
 <meta name=viewport content='width=device-width,initial-scale=1'>
 <meta name=google content=notranslate>
-${env.environmentvariables.og?og(env,title,url_request):''}
+${env.environmentvariables.og?og(env,data,title,url_request):''}
 <link rel=icon href=images/icon.png>
 <body>
 ${env.althea.loadModule(
@@ -53,7 +58,7 @@ ${env.althea.loadModule(
 `
     return content
 }
-function og(env,title,url_request){
+function og(env,data,title,url_request){
     let
         ogUrl='https://'+
             env.environmentvariables.domainname+
@@ -61,12 +66,12 @@ function og(env,title,url_request){
         ogImage='https://'+
             env.environmentvariables.domainname+
             '/opengraph/banner0.png',
-        ogDescription=env.environmentvariables.siteDescription
+        ogDescription=data.description
     return`
 <meta property=og:url content=${ogUrl}>
 <meta property=og:title content='${entities.encodeHTML(title)}'>
 <meta property=og:site_name content='${
-    entities.encodeHTML(env.environmentvariables.sitename)
+    entities.encodeHTML(data.title)
 }'>
 <meta property=og:image content=${ogImage}>
 <meta property=og:description content='${entities.encodeHTML(ogDescription)}'>

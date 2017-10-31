@@ -1,17 +1,17 @@
 let
     calcContent=    require('./blog/calcContent')
-module.exports=(db,env)=>{
+module.exports=(althea,db,env)=>{
     if(!env.althea.allowOrigin(env.envVars,env.request.headers.origin))
         return 403
     if(env.request.method=='GET')
-        return get(db,env)
+        return get(althea,db,env)
     env.headers.allow='GET'
     return{
         status:405,
         headers:env.headers,
     }
 }
-async function get(db,env){
+async function get(althea,db,env){
     let pv
     // Get page and pageversion if it is specified.
     if(env.id_page)
@@ -22,6 +22,6 @@ async function get(db,env){
     return{
         status:200,
         headers:env.headers,
-        content:calcContent(env,pv),
+        content:await calcContent(althea,env,pv),
     }
 }

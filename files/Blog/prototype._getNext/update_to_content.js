@@ -43,7 +43,7 @@ async function update_to_content(process,pages){
         page.tags=pv.tags.sort((a,b)=>a.localeCompare(b))
         return page
     }))
-    await site.load
+    let title=(await site.send('blog_getData')).title
     if(!process.continue)
         return
     pages.map(page=>{
@@ -53,9 +53,9 @@ async function update_to_content(process,pages){
         document.title=
             this.pages[process.status.pageId].title+
             ' - '+
-            site.name
+            title
     }else{
-        document.title=site.name
+        document.title=title
     }
 }
 export default update_to_content

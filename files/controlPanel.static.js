@@ -13,22 +13,52 @@ function createSiteNode(){
                 'Site',
             )
         ),
-        dom.div(
-            {className:'material content'},
-            dom.p('Title: ',dom.input()),
-            dom.p('Description: ',dom.input()),
-            dom.p('Banner Title: ',dom.input()),
-            dom.p('Tagline: ',dom.input()),
-            dom.p('Footer: ',dom.input()),
-            dom.p(dom.button('Apply')),
-        ),
+        (async()=>{
+            let
+                data=await this.send('blog_getData'),
+                title,
+                description,
+                bannerTitle,
+                tagline,
+                footer;
+            return dom.div(
+                {className:'material content'},
+                dom.p('Title: ',
+                    title=dom.input({value:data.title})
+                ),
+                dom.p('Description: ',
+                    description=dom.input({value:data.description})
+                ),
+                dom.p('Banner Title: ',
+                    bannerTitle=dom.textarea(data.bannerTitle)
+                ),
+                dom.p('Tagline: ',
+                    tagline=dom.textarea(data.tagline)
+                ),
+                dom.p('Footer: ',
+                    footer=dom.textarea(data.footer)
+                ),
+                dom.p(dom.button('Apply',{onclick:async()=>{
+                    data.title=title.value;
+                    data.description=description.value;
+                    data.bannerTitle=bannerTitle.value;
+                    data.tagline=tagline.value;
+                    data.footer=footer.value;
+                    await this.send({
+                        function:'blog_setData',
+                        data,
+                    });
+                    alert('Applied.');
+                }})),
+            )
+        })(),
     )
 }
 
-let site=new Site;
+let site$1=new Site;
 function TagsPage(){
     this.mainDiv=dom.div(async()=>{
-        let data=await site.send('getTagsWithCount');
+        let data=await site$1.send('getTagsWithCount');
         return dom.table(
             {
                 className:'bordered padding4px',
@@ -148,6 +178,7 @@ ControlPanel.prototype.out=function(){
 };
 ControlPanel.style=style;
 
+let site=new Site;
 dom.head(
     dom.style(`
         body{
@@ -161,8 +192,10 @@ dom.head(
         }
     `,ControlPanel.style)
 );
+let controlPanel=new ControlPanel;
+controlPanel.send=site.send.bind(site);
 dom.body(
-    dom((new ControlPanel).ui,
+    dom(controlPanel.ui,
         n=>{n.classList.add('main');}
     )
 );

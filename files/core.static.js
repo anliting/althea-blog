@@ -699,7 +699,7 @@ async function update_to_content(process,pages){
         page.tags=pv.tags.sort((a,b)=>a.localeCompare(b));
         return page
     }));
-    await site.load;
+    let title=(await site.send('blog_getData')).title;
     if(!process.continue)
         return
     pages.map(page=>{
@@ -709,9 +709,9 @@ async function update_to_content(process,pages){
         document.title=
             this.pages[process.status.pageId].title+
             ' - '+
-            site.name;
+            title;
     }else{
-        document.title=site.name;
+        document.title=title;
     }
 }
 
@@ -1072,6 +1072,7 @@ function createNavigationBar(view){
 
 let {dom: dom$12}=altheaCore;
 function createHeader(blog,view){
+    let blog_getData=blog._site.then(site=>site.send('blog_getData'));
     let div=dom$12.div(
         createTitle(),
         createTagline(),
@@ -1091,7 +1092,7 @@ function createHeader(blog,view){
             div.appendChild(
                 createA(
                     site.clientUrlRoot,
-                    site.bannerTitle
+                    (await blog_getData).bannerTitle,
                 )
             );
         })();
@@ -1115,10 +1116,10 @@ function createHeader(blog,view){
     }
     function createTagline(){
         let div=dom$12.div();
-        div.className='tagline';
-        blog._site.then(s=>s.load).then(site=>{
-            div.innerHTML=site.blogTagline;
-        });
+        div.className='tagline'
+        ;(async()=>{
+            div.innerHTML=(await blog_getData).tagline;
+        })();
         return div
     }
     function createSearchForTags(view){
@@ -1366,7 +1367,7 @@ function createFooter(view){
     let div=dom$11.div();
     div.className='footer';
     view.blog._site.then(async site=>{
-        let res=await site.send('getBlogFooter');
+        let res=(await site.send('blog_getData')).footer;
         div.innerHTML=res;
     });
     return div

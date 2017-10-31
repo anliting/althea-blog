@@ -15,7 +15,7 @@ module.exports=async althea=>{
             v(db,opt,env,althea)
         )
     })
-    althea.addPagemodule('/',r=>blog(db,r))
+    althea.addPagemodule('/',r=>blog(althea,db,r))
     althea.addPagemodule('/blog-control-panel',r=>controlPanel(db,r))
     althea.addPagemodule('/newpage',editpage)
     althea.addPagemodule(e=>{

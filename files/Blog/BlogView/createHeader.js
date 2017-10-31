@@ -5,6 +5,7 @@ import createNavigationBar from './createHeader/createNavigationBar.js'
 import altheaCore from '/lib/core.static.js'
 let{dom}=altheaCore
 function createHeader(blog,view){
+    let blog_getData=blog._site.then(site=>site.send('blog_getData'))
     let div=dom.div(
         createTitle(),
         createTagline(),
@@ -24,7 +25,7 @@ function createHeader(blog,view){
             div.appendChild(
                 createA(
                     site.clientUrlRoot,
-                    site.bannerTitle
+                    (await blog_getData).bannerTitle,
                 )
             )
         })()
@@ -49,9 +50,9 @@ function createHeader(blog,view){
     function createTagline(){
         let div=dom.div()
         div.className='tagline'
-        blog._site.then(s=>s.load).then(site=>{
-            div.innerHTML=site.blogTagline
-        })
+        ;(async()=>{
+            div.innerHTML=(await blog_getData).tagline
+        })()
         return div
     }
     function createSearchForTags(view){

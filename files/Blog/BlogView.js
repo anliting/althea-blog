@@ -20,7 +20,7 @@ function createFooter(view){
     let div=dom.div()
     div.className='footer'
     view.blog._site.then(async site=>{
-        let res=await site.send('getBlogFooter')
+        let res=(await site.send('blog_getData')).footer
         div.innerHTML=res
     })
     return div
