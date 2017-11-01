@@ -24,7 +24,7 @@ module.exports=async althea=>{
         if(res)
             e.tags_selected=path.slice(2)
         return res
-    },r=>blog(db,r))
+    },r=>blog(althea,db,r))
     althea.addPagemodule(async r=>{
         let path=r.analyze.request.parsedUrl.pathname.split('/')
         let res=await checkIfIsPageRequest(db,r,path)
@@ -45,7 +45,7 @@ module.exports=async althea=>{
         if(r.analyze.blog.status)
             return r.analyze.blog.status
         else if(r.analyze.blog.type=='blogHome')
-            return await blog(db,r)
+            return await blog(althea,db,r)
         else if(r.analyze.blog.type=='editpage')
             return await editpage(r)
     })
