@@ -20,7 +20,8 @@ function createSiteNode(){
                 description,
                 bannerTitle,
                 tagline,
-                footer;
+                footer,
+                og;
             return dom.div(
                 {className:'material content'},
                 dom.p('Title: ',
@@ -38,12 +39,19 @@ function createSiteNode(){
                 dom.p('Footer: ',
                     footer=dom.textarea(data.footer)
                 ),
+                dom.p(
+                    dom.label(
+                        og=dom.input({type:'checkbox',checked:data.og}),
+                        'Use open graph.',
+                    ),
+                ),
                 dom.p(dom.button('Apply',{onclick:async()=>{
                     data.title=title.value;
                     data.description=description.value;
                     data.bannerTitle=bannerTitle.value;
                     data.tagline=tagline.value;
                     data.footer=footer.value;
+                    data.og=og.checked;
                     await this.send({
                         function:'blog_setData',
                         data,

@@ -8,6 +8,8 @@ async function calcContent(althea,env,lastversion_page){
         data.title='undefined'
     if(!('description' in data))
         data.description='undefined'
+    if(!('og' in data))
+        data.og=false
     let type=env.althea.lib.anliting.type
     let
         keys,
@@ -39,7 +41,7 @@ async function calcContent(althea,env,lastversion_page){
 <meta name=description content='${entities.encodeHTML(metaDescription)}'>
 <meta name=viewport content='width=device-width,initial-scale=1'>
 <meta name=google content=notranslate>
-${env.environmentvariables.og?og(env,data,title,url_request):''}
+${data.og?og(env,data,title,url_request):''}
 <link rel=icon href=images/icon.png>
 <body>
 ${env.althea.loadModule(

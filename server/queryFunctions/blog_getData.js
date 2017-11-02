@@ -10,5 +10,7 @@ module.exports=async function(db,opt,env,althea){
         data.tagline=''
     if(!('footer' in data))
         data.footer=''
+    if(!('og' in data))
+        data.og=0
     return data
 }
