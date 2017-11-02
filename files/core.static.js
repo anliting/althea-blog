@@ -1091,13 +1091,12 @@ function createHeader(blog,view){
             await site.load;
             div.appendChild(
                 createA(
-                    site.clientUrlRoot,
                     (await blog_getData).bannerTitle,
                 )
             );
         })();
         return div
-        function createA(clientUrlRoot,bannerTitle){
+        function createA(bannerTitle){
             let a=dom$12.a({href:''});
             a.onclick=e=>{
                 if(
