@@ -13,10 +13,11 @@ export default function(){
             e.ctrlKey&&e.shiftKey&&e.keyCode==83
         ))
             return
-        editpage.submit().then(page=>{
+        ;(async()=>{
+            let page=await editpage.submit()
             onbeforeunload=null
             location=page.id
-        })
+        })()
     })
     showHtmlA.addEventListener('click',e=>{
         e.preventDefault()
@@ -31,15 +32,13 @@ export default function(){
         editpage.show_preview()
     })
     button_save.addEventListener('click',()=>{
-        editpage.submit().then(page=>{
-            // to-do: let user know
-        })
+        // to-do: let user know
+        editpage.submit()
     })
-    button_submit.addEventListener('click',()=>{
-        editpage.submit().then(page=>{
-            onbeforeunload=null
-            location=page.id
-        })
+    button_submit.addEventListener('click',async()=>{
+        let page=await editpage.submit()
+        onbeforeunload=null
+        location=page.id
     })
     input_newtag.addEventListener('keypress',e=>{
         editpage.setOfTags.onkeypress(e)

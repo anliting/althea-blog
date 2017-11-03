@@ -36,9 +36,10 @@ function setupAutoScroll(blog){
         }
         function handle(){
             if(e.keyCode==67){ // c
-                blog._currentUser.then(u=>
-                    u.isadmin&&(location='blog-control-panel')
-                );
+                (async()=>{
+                    let u=await blog._currentUser;
+                    u.isadmin&&(location='blog-control-panel');
+                })();
             }else if(e.keyCode==71) // g
                 dy=-document.body.scrollHeight;
             else if(e.keyCode==74) // j
@@ -48,9 +49,10 @@ function setupAutoScroll(blog){
             else if(e.keyCode==77) // m
                 blog.navigationbar.toggle();
             else if(e.keyCode==78){ // n
-                blog._currentUser.then(u=>
-                    u.isadmin&&(location='newpage')
-                );
+                (async()=>{
+                    let u=await blog._currentUser;
+                    u.isadmin&&(location='newpage');
+                })();
             }else if(e.keyCode==80){ // p
                 print();
             }else if(e.keyCode==82){ // r
@@ -136,7 +138,7 @@ let site=new Site;(async()=>{
         {p:main,s:4}
     ]);
 })();
-async function loadBlog(site,status,Blog$$1){
+function loadBlog(site,status,Blog$$1){
     return new Blog$$1(site,status)
 }
 function createMainThread(site,blog){
@@ -172,7 +174,7 @@ async function createThisThread(blog){
 }
 async function createBlogThread(site,blog){
     let
-        view=               blog.then(o=>o.view);
+        view=blog.view;
     blog=await blog;
     site=await site;
     view=await view;

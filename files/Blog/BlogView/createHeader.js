@@ -2,8 +2,7 @@ import checkSetupIndex from './createHeader/checkSetupIndex.js'
 import createInput from './createHeader/createInput.js'
 import setupSelectedTagsDiv from './createHeader/setupSelectedTagsDiv.js'
 import createNavigationBar from './createHeader/createNavigationBar.js'
-import altheaCore from '/lib/core.static.js'
-let{dom}=altheaCore
+import {dom}from '/lib/core.static.js'
 function createHeader(blog,view){
     let blog_getData=blog._site.send('blog_getData')
     let div=dom.div(

@@ -35,18 +35,19 @@ function keydown(e){
         }else if(e.keyCode==72){ // h
             blog.status={}
         }else if(e.keyCode==76){ // l
-            Promise.all([
-                blog._currentUser,
-                blog._site,
-            ]).then(vals=>{
-                let
-                    user=vals[0],
-                    site=vals[1]
+            ;(async()=>{
+                let[
+                    user,
+                    site,
+                ]=await Promise.all([
+                    blog._currentUser,
+                    blog._site,
+                ])
                 if(user.isAnonymous)
                     site.showLoginForm
                 else
                     site.logout
-            })
+            })()
         }else if(e.keyCode==79){ // o
             let x=currentPage()
             if(!x)

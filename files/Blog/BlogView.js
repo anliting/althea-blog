@@ -4,8 +4,7 @@ import install_datalist_tags_suggested from './BlogView/install_datalist_tags_su
 import use_list_tags__count_suggested from './BlogView/use_list_tags__count_suggested.js'
 import initialize_tags_suggested from './BlogView/initialize_tags_suggested.js'
 import style from './BlogView/style.js'
-import altheaCore from '/lib/core.static.js'
-let{dom}=altheaCore
+import {dom}from '/lib/core.static.js'
 function createContents(blog){
     let div=dom.div({className:'contents'})
     blog.on('pageLoad',page=>{

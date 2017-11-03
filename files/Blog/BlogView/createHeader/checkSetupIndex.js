@@ -1,5 +1,4 @@
-import altheaCore from '/lib/core.static.js'
-let{dom}=altheaCore
+import {dom}from '/lib/core.static.js'
 async function checkSetupIndex(blog,div){
     if(!blog.status.tagNames)
         return

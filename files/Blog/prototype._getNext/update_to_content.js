@@ -5,25 +5,30 @@ async function update_to_content(process,pages){
     let site=await this._site
     pages=await Promise.all(pages.map(async p=>{
         let page=await site.getPage(p)
-        let res=await Promise.all([
-            page.load([
-                'preferredPagename',
-                'page_derived_from',
-                'page_derived_to',
-                'author',
-                'timestamp_insert',
-                'timestamp_lastmodified',
-            ]),
-            page.lastversion.then(pageVersion=>pageVersion.load([
-                'public',
-                'title',
-                'content',
-                'id_pagemodule',
-            ])),
-        ]).then(vals=>({
-            page:vals[0],
-            pageVersion:vals[1],
-        }))
+        let res=await(async()=>{
+            let vals=await Promise.all([
+                page.load([
+                    'preferredPagename',
+                    'page_derived_from',
+                    'page_derived_to',
+                    'author',
+                    'timestamp_insert',
+                    'timestamp_lastmodified',
+                ]),
+                (async()=>
+                    (await page.lastversion).load([
+                        'public',
+                        'title',
+                        'content',
+                        'id_pagemodule',
+                    ])
+                )(),
+            ])
+            return{
+                page:vals[0],
+                pageVersion:vals[1],
+            }
+        })()
         page=new BlogPage(
             this,
             res.page.id,

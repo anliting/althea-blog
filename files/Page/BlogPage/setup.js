@@ -1,5 +1,4 @@
-import altheaCore from '/lib/core.static.js'
-let{dom}=altheaCore
+import {dom}from '/lib/core.static.js'
 function setup(){
     let
         page=this,

@@ -18,7 +18,7 @@ let site=new Site
         {p:main,s:4}
     ])
 })()
-async function loadBlog(site,status,Blog){
+function loadBlog(site,status,Blog){
     return new Blog(site,status)
 }
 function createMainThread(site,blog){
@@ -54,7 +54,7 @@ async function createThisThread(blog){
 }
 async function createBlogThread(site,blog){
     let
-        view=               blog.then(o=>o.view)
+        view=blog.view
     blog=await blog
     site=await site
     view=await view

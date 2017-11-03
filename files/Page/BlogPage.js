@@ -2,8 +2,7 @@ import EventEmmiter from 'https://gitcdn.link/cdn/anliting/simple.js/99b7ab1b872
 import setup from './BlogPage/setup.js'
 import view from './BlogPage/Page.prototype.view.js'
 import createPrivacyTable from './BlogPage/Page.prototype.createPrivacyTable.js'
-import altheaCore from '/lib/core.static.js'
-let{dom}=altheaCore
+import {dom}from '/lib/core.static.js'
 function BlogPage(blog,id,ispublic,title,id_pagemodule){
     EventEmmiter.call(this)
     this.blog=blog

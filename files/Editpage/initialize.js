@@ -1,7 +1,6 @@
 import setup from './initialize/setup.js'
 import update from './initialize/update.js'
-import altheaCore from '/lib/core.static.js'
-let{browser}=altheaCore
+import {browser}from '/lib/core.static.js'
 async function getData(editpage){
     let res={}
     if(editpage.id){

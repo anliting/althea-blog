@@ -1,5 +1,4 @@
-import altheaCore from '/lib/core.static.js'
-let{dom,order}=altheaCore
+import {dom,order}from '/lib/core.static.js'
 function privacyTd(page){
     return dom.td(span_privacy())
     function span_privacy(){

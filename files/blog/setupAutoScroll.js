@@ -33,9 +33,10 @@ function setupAutoScroll(blog){
         }
         function handle(){
             if(e.keyCode==67){ // c
-                blog._currentUser.then(u=>
+                ;(async()=>{
+                    let u=await blog._currentUser
                     u.isadmin&&(location='blog-control-panel')
-                )
+                })()
             }else if(e.keyCode==71) // g
                 dy=-document.body.scrollHeight
             else if(e.keyCode==74) // j
@@ -45,9 +46,10 @@ function setupAutoScroll(blog){
             else if(e.keyCode==77) // m
                 blog.navigationbar.toggle()
             else if(e.keyCode==78){ // n
-                blog._currentUser.then(u=>
+                ;(async()=>{
+                    let u=await blog._currentUser
                     u.isadmin&&(location='newpage')
-                )
+                })()
             }else if(e.keyCode==80){ // p
                 print()
             }else if(e.keyCode==82){ // r

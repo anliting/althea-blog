@@ -1,6 +1,5 @@
 import path from '../../path.js'
-import altheaCore from '/lib/core.static.js'
-let{dom}=altheaCore
+import {dom}from '/lib/core.static.js'
 function createInput(blog,view){
     let input=dom.input()
     input.setAttribute('list',view.datalist_input_searchForTag.id)

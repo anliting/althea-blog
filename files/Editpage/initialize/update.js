@@ -1,6 +1,5 @@
-import altheaCore from '/lib/core.static.js'
+import {dom}from '/lib/core.static.js'
 import Pagemodule from '../../Pagemodule.js'
-let{dom}=altheaCore
 function update(editpage,data){
     data.pagemodules.map(async e=>{
         let definitions=await e.definitions

@@ -1,5 +1,4 @@
-import altheaCore from '/lib/core.static.js'
-let{dom}=altheaCore
+import {dom}from '/lib/core.static.js'
 function html_stars(rating){
     let output=''
     for(let i=0;i<5;i++){

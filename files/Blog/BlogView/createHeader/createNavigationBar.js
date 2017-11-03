@@ -1,7 +1,6 @@
 import event from './createNavigationBar/event.js'
 import userA from './createNavigationBar/userA.js'
-import altheaCore from '/lib/core.static.js'
-let{dom}=altheaCore
+import {dom}from '/lib/core.static.js'
 function createNavigationBar(view){
     let
         blog=view.blog,
@@ -24,10 +23,10 @@ function createNavigationBar(view){
         return dom.a('About',{href:'about'})
     }
     function perUser(site,func){
-        site.currentUser.then(func)
-        site.on('userChange',()=>{
-            site.currentUser.then(func)
-        })
+        ;(async()=>func(await site.currentUser))()
+        site.on('userChange',
+            async()=>func(await site.currentUser)
+        )
     }
     function loginA(){
         let a=dom.a('Login',{href:'javascript:'})
