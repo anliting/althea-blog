@@ -34,7 +34,7 @@ function setupAutoScroll(blog){
         function handle(){
             if(e.keyCode==67){ // c
                 blog._currentUser.then(u=>
-                    u.isadmin&&(location='settings')
+                    u.isadmin&&(location='blog-control-panel')
                 )
             }else if(e.keyCode==71) // g
                 dy=-document.body.scrollHeight
