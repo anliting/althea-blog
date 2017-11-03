@@ -5,8 +5,8 @@ let{dom}=altheaCore
 function createNavigationBar(view){
     let
         blog=view.blog,
-        div=dom.div({className:'navigationBar'},menuA())
-        site=blog._site,
+        div=dom.div({className:'navigationBar'},menuA()),
+        site=blog._site
     perUser(site,async u=>{
         await u.load(['isAnonymous','username','isadmin'])
         let a=u.isAnonymous?loginA():userA(blog,div,u)

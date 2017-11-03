@@ -409,7 +409,7 @@ Site.prototype.getPageversion=async function(id){
     )
 };
 
-var site$1 = new Site;
+var site = new Site;
 
 let {dom: dom$7}=altheaCore;
 let str_show='<i class=material-icons>expand_more</i>';
@@ -526,7 +526,7 @@ function createPrivacyTable(pageView){
             a.innerHTML='<i class=material-icons>remove</i>';
             return a
             function remove(){
-                site$1.send({
+                site.send({
                     function:'removePage',
                     page:page.id
                 });
@@ -736,16 +736,16 @@ async function _getNext(){
 
 function calcPathByStatus(status){
     if('pageId' in status)
-        return site$1.path.blog.page(status.pageId)
+        return site.path.blog.page(status.pageId)
     if('tagNames' in status)
-        return site$1.path.blog.tag(status.tagNames)
-    return site$1.path.blog.root
+        return site.path.blog.tag(status.tagNames)
+    return site.path.blog.root
 }
 function getHrefByPage(page){
-    return site$1.path.blog.page(page.id)
+    return site.path.blog.page(page.id)
 }
 function getHrefByTags(tags){
-    return site$1.path.blog.tag(tags)
+    return site.path.blog.tag(tags)
 }
 var path = {
     calcPathByStatus,
@@ -996,8 +996,8 @@ let {dom: dom$15}=altheaCore;
 function createNavigationBar(view){
     let
         blog=view.blog,
-        div=dom$15.div({className:'navigationBar'},menuA());
-        site=blog._site,
+        div=dom$15.div({className:'navigationBar'},menuA()),
+        site=blog._site;
     perUser(site,async u=>{
         await u.load(['isAnonymous','username','isadmin']);
         let a=u.isAnonymous?loginA():userA(blog,div,u);
@@ -2059,8 +2059,8 @@ var core = {
     Pagemodule0,
     Pageversion,
     Site,
-    site: site$1,
+    site,
 };
 
-export { Blog, Comment, Editpage, Page, Pagemodule, Pagemodule0, Pageversion, Site, site$1 as site };
+export { Blog, Comment, Editpage, Page, Pagemodule, Pagemodule0, Pageversion, Site, site };
 export default core;
