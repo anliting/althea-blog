@@ -6,19 +6,18 @@ function createNavigationBar(view){
     let
         blog=view.blog,
         div=dom.div({className:'navigationBar'},menuA())
-    blog._site.then(site=>{
-        perUser(site,async u=>{
-            await u.load(['isAnonymous','username','isadmin'])
-            let a=u.isAnonymous?loginA():userA(blog,div,u)
-            div.appendChild(a)
-            {
-                let f=()=>{
-                    div.removeChild(a)
-                    site.off('userChange',f)
-                }
-                site.on('userChange',f)
+        site=blog._site,
+    perUser(site,async u=>{
+        await u.load(['isAnonymous','username','isadmin'])
+        let a=u.isAnonymous?loginA():userA(blog,div,u)
+        div.appendChild(a)
+        {
+            let f=()=>{
+                div.removeChild(a)
+                site.off('userChange',f)
             }
-        })
+            site.on('userChange',f)
+        }
     })
     return div
     function aboutA(){

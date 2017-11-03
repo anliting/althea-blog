@@ -57,9 +57,7 @@ async function loadPagemodules(blog){
     let[
         pagemodules,
     ]=await Promise.all([
-        blog._site.then(site=>
-            site.send('getPagemodules')
-        ),
+        blog._site.send('getPagemodules'),
     ]);
     pagemodules.map(p=>
         blog.pagemodules.push(new Pagemodule(
@@ -175,32 +173,30 @@ function setup(){
     }
 }
 
-let {dom: dom$5}=altheaCore;
 var commentForm = page=>{
-    let form=dom$5.form(
+    let form=dom.form(
         page.textarea_comment__form_comment,
-        dom$5.br(),
+        dom.br(),
         page.input_submit__form_comment
     );
     form.className='form_newcomment';
     form.onsubmit=async e=>{
         e.preventDefault();
         e.stopPropagation();
-        await page.blog._site.then(site=>
-            site.send({
-                function:'newComment',
-                page:page.id,
-                content:page.textarea_comment__form_comment.value,
-            })
-        );
+        let site=await page.blog._site;
+        await site.send({
+            function:'newComment',
+            page:page.id,
+            content:page.textarea_comment__form_comment.value,
+        });
         page.blog.status=page.blog.status;
     };
     return form
 };
 
-let {dom: dom$6,html: html$1}=altheaCore;
+let {dom: dom$5,html: html$1}=altheaCore;
 var commentDiv = (page,comment)=>{
-    let div=dom$6.div();
+    let div=dom$5.div();
     div.className='comments'
     ;(async()=>{
         comment=await comment;
@@ -238,7 +234,7 @@ var commentDiv = (page,comment)=>{
     })();
     return div
     function deleteA(id){
-        let a=dom$6.a('delete',{href:'javascript:'});
+        let a=dom$5.a('delete',{href:'javascript:'});
         a.onclick=async e=>{
             e.preventDefault();
             e.stopPropagation();
@@ -413,13 +409,13 @@ Site.prototype.getPageversion=async function(id){
     )
 };
 
-var site = new Site;
+var site$1 = new Site;
 
-let {dom: dom$8}=altheaCore;
+let {dom: dom$7}=altheaCore;
 let str_show='<i class=material-icons>expand_more</i>';
 let str_hide='<i class=material-icons>expand_less</i>';
 function createHideShowA(page,pageView){
-    let a_hideshow=dom$8.a({
+    let a_hideshow=dom$7.a({
         className:'a_hideshow functionbutton',
         href:'javascript:',
         innerHTML:pageView.hide?str_show:str_hide,
@@ -432,11 +428,11 @@ function createHideShowA(page,pageView){
     return a_hideshow
 }
 
-let {dom: dom$9,order}=altheaCore;
+let {dom: dom$8,order}=altheaCore;
 function privacyTd(page){
-    return dom$9.td(span_privacy())
+    return dom$8.td(span_privacy())
     function span_privacy(){
-        let span=dom$9.span(span=>{span.style.fontStyle='italic';});
+        let span=dom$8.span(span=>{span.style.fontStyle='italic';});
         let a=[
             (async()=>{
                 let site=await page.blog._site;
@@ -457,7 +453,7 @@ function privacyTd(page){
         );
         return span
         function dateSpan(){
-            let span=dom$9.span(
+            let span=dom$8.span(
                 dateToString(new Date(page.timestamp_insert))
             );
             span.title=`Last modified: ${
@@ -466,7 +462,7 @@ function privacyTd(page){
             return span
         }
         function privateSpan(){
-            return dom$9.span('private')
+            return dom$8.span('private')
         }
         function dateToString(d){
             return`${d.getFullYear()}-${1+d.getMonth()}-${
@@ -477,12 +473,12 @@ function privacyTd(page){
     }
 }
 
-let {dom: dom$7}=altheaCore;
+let {dom: dom$6}=altheaCore;
 function createPrivacyTable(pageView){
     let
         page=this,
         table_privacy;
-    table_privacy=dom$7.table(
+    table_privacy=dom$6.table(
         tr_privacy(page),
         tr_tags()
     );
@@ -490,13 +486,13 @@ function createPrivacyTable(pageView){
     table_privacy.style.marginBottom='20px';
     return table_privacy
     function tr_privacy(page){
-        return dom$7.tr(
+        return dom$6.tr(
             privacyTd(page),
             td_functions()
         )
     }
     function td_functions(){
-        let td=dom$7.td(
+        let td=dom$6.td(
             createHideShowA(page,pageView),
             page.a_comment
         );
@@ -512,14 +508,14 @@ function createPrivacyTable(pageView){
         })();
         return td
         function a_editpage(){
-            let a=dom$7.a();
+            let a=dom$6.a();
             a.className='a_editpage functionbutton';
             a.href=page.id+'/edit';
             a.innerHTML='<i class=material-icons>mode_edit</i>';
             return a
         }
         function a_removepage(){
-            let a=dom$7.a();
+            let a=dom$6.a();
             a.className='functionbutton a_removepage';
             a.href='javascript:';
             a.onclick=()=>{
@@ -530,7 +526,7 @@ function createPrivacyTable(pageView){
             a.innerHTML='<i class=material-icons>remove</i>';
             return a
             function remove(){
-                site.send({
+                site$1.send({
                     function:'removePage',
                     page:page.id
                 });
@@ -538,11 +534,11 @@ function createPrivacyTable(pageView){
         }
     }
     function tr_tags(){
-        return dom$7.tr(td())
+        return dom$6.tr(td())
     }
     function td(){
         let
-            td=dom$7.td(),
+            td=dom$6.td(),
             isFirst;
         if(page.tags.length){
             page.tags.sort();
@@ -726,15 +722,13 @@ async function _getNext(){
     this.once('statusChange',()=>
         process.continue=0
     );
-    let data=await this._site.then(site=>
-        site.send({
-            function:       'getSuggestedPages',
-            page:           process.status.pageId||0,
-            pageversion:    process.status.pageversionId||0,
-            tags_selected:  process.status.tagNames||[],
-            pages_loaded:   this.pages_loaded,
-        })
-    );
+    let data=await this._site.send({
+        function:       'getSuggestedPages',
+        page:           process.status.pageId||0,
+        pageversion:    process.status.pageversionId||0,
+        tags_selected:  process.status.tagNames||[],
+        pages_loaded:   this.pages_loaded,
+    });
     await this._loadPagemodules;
     await update_to_content.call(this,process,data.slice(0,4));
     this.getting--;
@@ -742,16 +736,16 @@ async function _getNext(){
 
 function calcPathByStatus(status){
     if('pageId' in status)
-        return site.path.blog.page(status.pageId)
+        return site$1.path.blog.page(status.pageId)
     if('tagNames' in status)
-        return site.path.blog.tag(status.tagNames)
-    return site.path.blog.root
+        return site$1.path.blog.tag(status.tagNames)
+    return site$1.path.blog.root
 }
 function getHrefByPage(page){
-    return site.path.blog.page(page.id)
+    return site$1.path.blog.page(page.id)
 }
 function getHrefByTags(tags){
-    return site.path.blog.tag(tags)
+    return site$1.path.blog.tag(tags)
 }
 var path = {
     calcPathByStatus,
@@ -759,13 +753,13 @@ var path = {
     getHrefByTags,
 };
 
-let {dom: dom$10}=altheaCore;
+let {dom: dom$9}=altheaCore;
 function anchor_addTag(tag){
     let
         tagsToSelect=(this.status.tagNames||[]).slice();
     tagsToSelect.push(tag.name);
     let
-        a=dom$10.a(tag.name,{
+        a=dom$9.a(tag.name,{
             className:'addTag',
             href:path.getHrefByTags(tagsToSelect),
         });
@@ -785,7 +779,7 @@ function anchor_addTag(tag){
     return a
 }
 
-let {dom: dom$13}=altheaCore;
+let {dom: dom$12}=altheaCore;
 async function checkSetupIndex(blog,div){
     if(!blog.status.tagNames)
         return
@@ -813,11 +807,11 @@ async function checkSetupIndex(blog,div){
     }
     a.sort((a,b)=>a.title.localeCompare(b.title));
     chunks(a,12).map(a=>{
-        let ul=dom$13.ul();
+        let ul=dom$12.ul();
         ul.style.float='left';
         for(let p of a){
             let
-                li=dom$13.li(),
+                li=dom$12.li(),
                 a=p.page.a;
             if(!p.public)
                 a.style.color='black';
@@ -841,7 +835,7 @@ async function checkSetupIndex(blog,div){
     });
     div.appendChild(createClearBothDiv());
     function createClearBothDiv(){
-        return dom$13.div(n=>{n.style.clear='both';})
+        return dom$12.div(n=>{n.style.clear='both';})
     }
     async function getPagesByTags(){
         return(await blog._site).send({
@@ -857,9 +851,9 @@ async function checkSetupIndex(blog,div){
     }
 }
 
-let {dom: dom$14}=altheaCore;
+let {dom: dom$13}=altheaCore;
 function createInput(blog,view){
-    let input=dom$14.input();
+    let input=dom$13.input();
     input.setAttribute('list',view.datalist_input_searchForTag.id);
     input.addEventListener('keydown',e=>{
         if(e.keyCode!=13)
@@ -889,14 +883,14 @@ function createInput(blog,view){
     return input
 }
 
-let {dom: dom$15}=altheaCore;
+let {dom: dom$14}=altheaCore;
 function setupSelectedTagsDiv(blog,div){
     if(!('tagNames' in blog.status))
         return
     blog.status.tagNames.map((t,i)=>{
         div.appendChild(span());
         function span(){
-            let span=dom$15.span(
+            let span=dom$14.span(
                 t+' ',
                 a(),{
                     id:'span_tag_'+t,
@@ -907,7 +901,7 @@ function setupSelectedTagsDiv(blog,div){
             return span
         }
         function a(){
-            let anchor=dom$15.a('-');
+            let anchor=dom$14.a('-');
             let tagsToSelect=(blog.status.tagNames||[]).slice();
             tagsToSelect.splice(i,1);
             anchor.href='javascript:';
@@ -945,21 +939,21 @@ var event = {
     }
 };
 
-let {dom: dom$17}=altheaCore;
+let {dom: dom$16}=altheaCore;
 function userA(blog,div,u){
-    let a=dom$17.a(u.username,{href:'javascript:'});
+    let a=dom$16.a(u.username,{href:'javascript:'});
     a.onclick=e=>{
         e.preventDefault();
         e.stopPropagation();
         let n=userDiv(blog,u);
         event.onceClickOrBlurButNotMouseDown(n,()=>div.removeChild(n));
-        dom$17(div,n);
+        dom$16(div,n);
         n.focus();
     };
     return a
 }
 function userDiv(blog,u){
-    let div=dom$17.div(innerDiv(blog,u),{tabIndex:0});
+    let div=dom$16.div(innerDiv(blog,u),{tabIndex:0});
     div.style.position='relative';
     div.style.outline='none';
     div.style.height='0';
@@ -968,19 +962,19 @@ function userDiv(blog,u){
     return div
 }
 function innerDiv(blog,u){
-    return dom$17.div(
+    return dom$16.div(
         logoutA(blog),
-        dom$17.br(),
-        dom$17.a('Profile',{href:`user/${u.username}`}),
+        dom$16.br(),
+        dom$16.a('Profile',{href:`user/${u.username}`}),
         u.isadmin&&[
-            dom$17.br(),
-            dom$17.a('Drive',{href:`home/${u.username}`}),
-            dom$17.br(),
-            dom$17.a('Control Panel',{href:'control-panel'}),
-            dom$17.br(),
-            dom$17.a('Blog Control Panel',{href:'blog-control-panel'}),
-            dom$17.br(),
-            dom$17.a('New Page',{href:'newpage'}),
+            dom$16.br(),
+            dom$16.a('Drive',{href:`home/${u.username}`}),
+            dom$16.br(),
+            dom$16.a('Control Panel',{href:'control-panel'}),
+            dom$16.br(),
+            dom$16.a('Blog Control Panel',{href:'blog-control-panel'}),
+            dom$16.br(),
+            dom$16.a('New Page',{href:'newpage'}),
         ],n=>{
             n.style.margin='0 auto';
             n.style.backgroundColor='white';
@@ -989,7 +983,7 @@ function innerDiv(blog,u){
     )
 }
 function logoutA(blog){
-    let a=dom$17.a('Logout');
+    let a=dom$16.a('Logout');
     a.href='javascript:';
     a.onclick=async e=>{
         e.preventDefault()
@@ -998,28 +992,27 @@ function logoutA(blog){
     return a
 }
 
-let {dom: dom$16}=altheaCore;
+let {dom: dom$15}=altheaCore;
 function createNavigationBar(view){
     let
         blog=view.blog,
-        div=dom$16.div({className:'navigationBar'},menuA());
-    blog._site.then(site=>{
-        perUser(site,async u=>{
-            await u.load(['isAnonymous','username','isadmin']);
-            let a=u.isAnonymous?loginA():userA(blog,div,u);
-            div.appendChild(a);
-            {
-                let f=()=>{
-                    div.removeChild(a);
-                    site.off('userChange',f);
-                };
-                site.on('userChange',f);
-            }
-        });
+        div=dom$15.div({className:'navigationBar'},menuA());
+        site=blog._site,
+    perUser(site,async u=>{
+        await u.load(['isAnonymous','username','isadmin']);
+        let a=u.isAnonymous?loginA():userA(blog,div,u);
+        div.appendChild(a);
+        {
+            let f=()=>{
+                div.removeChild(a);
+                site.off('userChange',f);
+            };
+            site.on('userChange',f);
+        }
     });
     return div
     function aboutA(){
-        return dom$16.a('About',{href:'about'})
+        return dom$15.a('About',{href:'about'})
     }
     function perUser(site,func){
         site.currentUser.then(func);
@@ -1028,7 +1021,7 @@ function createNavigationBar(view){
         });
     }
     function loginA(){
-        let a=dom$16.a('Login',{href:'javascript:'});
+        let a=dom$15.a('Login',{href:'javascript:'});
         a.onclick=async e=>{
             e.preventDefault();
             e.stopPropagation()
@@ -1037,7 +1030,7 @@ function createNavigationBar(view){
         return a
     }
     function menuA(){
-        let a=dom$16.a('Menu');
+        let a=dom$15.a('Menu');
         a.href='javascript:';
         a.onclick=e=>{
             e.preventDefault();
@@ -1052,7 +1045,7 @@ function createNavigationBar(view){
         return a
     }
     function menuDiv(){
-        let div=dom$16.div(innerDiv());
+        let div=dom$15.div(innerDiv());
         div.style.position='relative';
         div.style.height='0';
         div.style.width='100%';
@@ -1061,7 +1054,7 @@ function createNavigationBar(view){
         div.tabIndex=0;
         return div
         function innerDiv(){
-            let div=dom$16.div(aboutA());
+            let div=dom$15.div(aboutA());
             div.style.margin='0 auto';
             div.style.backgroundColor='white';
             div.style.border='1px solid lightgray';
@@ -1070,10 +1063,10 @@ function createNavigationBar(view){
     }
 }
 
-let {dom: dom$12}=altheaCore;
+let {dom: dom$11}=altheaCore;
 function createHeader(blog,view){
-    let blog_getData=blog._site.then(site=>site.send('blog_getData'));
-    let div=dom$12.div(
+    let blog_getData=blog._site.send('blog_getData');
+    let div=dom$11.div(
         createTitle(),
         createTagline(),
         createNavigationBar(view),
@@ -1084,7 +1077,7 @@ function createHeader(blog,view){
     div.className='header';
     return div
     function createTitle(){
-        let div=dom$12.div();
+        let div=dom$11.div();
         div.className='title'
         ;(async()=>{
             let site=await blog._site;
@@ -1097,7 +1090,7 @@ function createHeader(blog,view){
         })();
         return div
         function createA(bannerTitle){
-            let a=dom$12.a({href:''});
+            let a=dom$11.a({href:''});
             a.onclick=e=>{
                 if(
                     e.which!=1||
@@ -1114,7 +1107,7 @@ function createHeader(blog,view){
         }
     }
     function createTagline(){
-        let div=dom$12.div();
+        let div=dom$11.div();
         div.className='tagline'
         ;(async()=>{
             div.innerHTML=(await blog_getData).tagline;
@@ -1122,7 +1115,7 @@ function createHeader(blog,view){
         return div
     }
     function createSearchForTags(view){
-        let div=dom$12.div(
+        let div=dom$11.div(
             createSelectedTagsDiv(),
             view.input=createInput(blog,view),
             view.datalist_input_searchForTag
@@ -1130,7 +1123,7 @@ function createHeader(blog,view){
         div.className='searchForTags';
         return div
         function createSelectedTagsDiv(){
-            let div=dom$12.div();
+            let div=dom$11.div();
             div.className='selectedTags';
             setupSelectedTagsDiv(blog,div);
             blog.on('statusChange',()=>{
@@ -1141,7 +1134,7 @@ function createHeader(blog,view){
         }
     }
     function createTags(view){
-        let div=dom$12.div();
+        let div=dom$11.div();
         div.className='tags';
         blog.on('statusChange',()=>{
             div.innerHTML='';
@@ -1152,7 +1145,7 @@ function createHeader(blog,view){
         return div
     }
     function createIndex(){
-        let div=dom$12.div();
+        let div=dom$11.div();
         div.className='index';
         checkSetupIndex(blog,div);
         blog.on('statusChange',()=>{
@@ -1276,21 +1269,21 @@ function randomId(length){
     return 'a'+res
 }
 
-let {dom: dom$18}=altheaCore;
+let {dom: dom$17}=altheaCore;
 function install_datalist_tags_suggested(blogView){
-    blogView.datalist_input_searchForTag=dom$18.datalist();
+    blogView.datalist_input_searchForTag=dom$17.datalist();
     // known best solution
     blogView.datalist_input_searchForTag.id=randomId(16);
 }
 
-let {dom: dom$19}=altheaCore;
+let {dom: dom$18}=altheaCore;
 function use_list_tags__count_suggested(blogView,list,div){
     list.sort((a,b)=>
         a.name.localeCompare(b.name)
     );
     blogView.datalist_input_searchForTag.innerHTML='';
     list.map(e=>{
-        let o=dom$19.option({value:e.name});
+        let o=dom$18.option({value:e.name});
         blogView.datalist_input_searchForTag.appendChild(o);
     });
     let tagsToSelect=(blogView.blog.status.tagNames||[]).slice();
@@ -1303,10 +1296,10 @@ function use_list_tags__count_suggested(blogView,list,div){
     });
     div.appendChild(div_clearboth());
     function ul(){
-        return dom$19.ul(ul=>{ul.style.float='left';})
+        return dom$18.ul(ul=>{ul.style.float='left';})
     }
     function li(t){
-        return dom$19.li(a(t))
+        return dom$18.li(a(t))
     }
     function a(t){
         tagsToSelect.push(t.name);
@@ -1318,7 +1311,7 @@ function use_list_tags__count_suggested(blogView,list,div){
         return a
     }
     function div_clearboth(){
-        return dom$19.div(div=>{div.style.clear='both';})
+        return dom$18.div(div=>{div.style.clear='both';})
     }
 }
 
@@ -1351,9 +1344,9 @@ body{
 }
 `;
 
-let {dom: dom$11}=altheaCore;
+let {dom: dom$10}=altheaCore;
 function createContents(blog){
-    let div=dom$11.div({className:'contents'});
+    let div=dom$10.div({className:'contents'});
     blog.on('pageLoad',page=>{
         div.appendChild(page.view.domElement);
     });
@@ -1363,21 +1356,17 @@ function createContents(blog){
     return div
 }
 function createFooter(view){
-    let div=dom$11.div();
-    div.className='footer';
-    view.blog._site.then(async site=>{
-        let res=(await site.send('blog_getData')).footer;
-        div.innerHTML=res;
-    });
-    return div
+    return dom$10.div({className:'footer'},async div=>{
+        div.innerHTML=(await view.blog._site.send('blog_getData')).footer;
+    })
 }
 function BlogView(blog){
     this.blog=blog;
-    this.div=dom$11.div();
+    this.div=dom$10.div();
     this.div.className='blog';
     install_datalist_tags_suggested(this);
     {
-        let s=dom$11.style();
+        let s=dom$10.style();
         let u=()=>
             this.blog._styles.map(n=>
                 s.appendChild(n)
@@ -1400,12 +1389,10 @@ BlogView.prototype.setupSuggestedTags=async function(){
         view=this,
         blog=this.blog;
     let vals=await Promise.all([
-        blog._site.then(site=>
-            site.send({
-                function:'getSuggestedTags',
-                tags:blog.status.tagNames||[]
-            })
-        ),
+        blog._site.send({
+            function:'getSuggestedTags',
+            tags:blog.status.tagNames||[]
+        }),
     ]);
     let
         res=vals[0];
@@ -1420,7 +1407,7 @@ BlogView.prototype.setupSuggestedTags=async function(){
 
 function Blog(site,status){
     EventEmmiter.call(this);
-    this._site=Promise.resolve(site);
+    this._site=site;
     this._status=status;
     this.pages={};
     this.pagemodules=[];
@@ -1475,7 +1462,7 @@ Object.defineProperty(Blog.prototype,'status',{get(){
 }});
 Blog.prototype.path=path;
 
-let {dom: dom$20}=altheaCore;
+let {dom: dom$19}=altheaCore;
 function SetForm(span_tags,input){
     this.tags=[];
     this.tagIdInTagsByName={};
@@ -1496,8 +1483,8 @@ SetForm.prototype.addTag=function(name){
     setForm.span_tags.appendChild(tag.body);
     function Tag(name){
         let
-            span_name=dom$20.span(),
-            span=dom$20.span(
+            span_name=dom$19.span(),
+            span=dom$19.span(
                 span_name,
                 ' ',
                 a()
@@ -1507,7 +1494,7 @@ SetForm.prototype.addTag=function(name){
         this.body=span;
         this.name=name;
         function a(){
-            let a=dom$20.a();
+            let a=dom$19.a();
             a.onclick=()=>{
                 let id=setForm.tagIdInTagsByName[name];
                 setForm.tags[id]=setForm.tags[setForm.tags.length-1];
@@ -1552,7 +1539,7 @@ function setup$2(editpage,isMobile){
     return
 }
 
-let {dom: dom$21}=altheaCore;
+let {dom: dom$20}=altheaCore;
 function update(editpage,data){
     data.pagemodules.map(async e=>{
         let definitions=await e.definitions;
@@ -1577,7 +1564,7 @@ function update(editpage,data){
         a.priority-b.priority
     );
     data.pagemodules.map(e=>{
-        let option=dom$21.option(e.name);
+        let option=dom$20.option(e.name);
         option.value=e.id;
         if(editpage.id&&e.id==data.lastversion_page.id_pagemodule)
             option.selected='selected';
@@ -1592,7 +1579,7 @@ function update(editpage,data){
         editpage.setOfNames.addTag(e);
     });
     data.tags.map(e=>{
-        let option=dom$21.option({value:e});
+        let option=dom$20.option({value:e});
         document.getElementById('tags').appendChild(
             option
         );
@@ -2072,8 +2059,8 @@ var core = {
     Pagemodule0,
     Pageversion,
     Site,
-    site,
+    site: site$1,
 };
 
-export { Blog, Comment, Editpage, Page, Pagemodule, Pagemodule0, Pageversion, Site, site };
+export { Blog, Comment, Editpage, Page, Pagemodule, Pagemodule0, Pageversion, Site, site$1 as site };
 export default core;

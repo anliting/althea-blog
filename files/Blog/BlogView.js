@@ -17,13 +17,9 @@ function createContents(blog){
     return div
 }
 function createFooter(view){
-    let div=dom.div()
-    div.className='footer'
-    view.blog._site.then(async site=>{
-        let res=(await site.send('blog_getData')).footer
-        div.innerHTML=res
+    return dom.div({className:'footer'},async div=>{
+        div.innerHTML=(await view.blog._site.send('blog_getData')).footer
     })
-    return div
 }
 function BlogView(blog){
     this.blog=blog
@@ -54,12 +50,10 @@ BlogView.prototype.setupSuggestedTags=async function(){
         view=this,
         blog=this.blog
     let vals=await Promise.all([
-        blog._site.then(site=>
-            site.send({
-                function:'getSuggestedTags',
-                tags:blog.status.tagNames||[]
-            })
-        ),
+        blog._site.send({
+            function:'getSuggestedTags',
+            tags:blog.status.tagNames||[]
+        }),
     ])
     let
         res=vals[0]

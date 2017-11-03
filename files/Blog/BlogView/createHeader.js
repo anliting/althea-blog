@@ -5,7 +5,7 @@ import createNavigationBar from './createHeader/createNavigationBar.js'
 import altheaCore from '/lib/core.static.js'
 let{dom}=altheaCore
 function createHeader(blog,view){
-    let blog_getData=blog._site.then(site=>site.send('blog_getData'))
+    let blog_getData=blog._site.send('blog_getData')
     let div=dom.div(
         createTitle(),
         createTagline(),

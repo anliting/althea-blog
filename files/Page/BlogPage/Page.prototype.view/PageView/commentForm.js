@@ -1,5 +1,4 @@
-import altheaCore from '/lib/core.static.js'
-let{dom}=altheaCore
+import {dom}from '/lib/core.static.js'
 export default page=>{
     let form=dom.form(
         page.textarea_comment__form_comment,
@@ -10,13 +9,12 @@ export default page=>{
     form.onsubmit=async e=>{
         e.preventDefault()
         e.stopPropagation()
-        await page.blog._site.then(site=>
-            site.send({
-                function:'newComment',
-                page:page.id,
-                content:page.textarea_comment__form_comment.value,
-            })
-        )
+        let site=await page.blog._site
+        await site.send({
+            function:'newComment',
+            page:page.id,
+            content:page.textarea_comment__form_comment.value,
+        })
         page.blog.status=page.blog.status
     }
     return form

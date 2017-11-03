@@ -10,15 +10,13 @@ async function _getNext(){
     this.once('statusChange',()=>
         process.continue=0
     )
-    let data=await this._site.then(site=>
-        site.send({
-            function:       'getSuggestedPages',
-            page:           process.status.pageId||0,
-            pageversion:    process.status.pageversionId||0,
-            tags_selected:  process.status.tagNames||[],
-            pages_loaded:   this.pages_loaded,
-        })
-    )
+    let data=await this._site.send({
+        function:       'getSuggestedPages',
+        page:           process.status.pageId||0,
+        pageversion:    process.status.pageversionId||0,
+        tags_selected:  process.status.tagNames||[],
+        pages_loaded:   this.pages_loaded,
+    })
     await this._loadPagemodules
     await update_to_content.call(this,process,data.slice(0,4))
     this.getting--

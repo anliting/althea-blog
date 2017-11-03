@@ -1,5 +1,5 @@
-import altheaCore from '/lib/core.static.js';
-import core from '/plugins/althea-blog/core.static.js';
+import { Progress, Snapshot, hacker, moduleLoader } from '/lib/core.static.js';
+import { Blog, Site } from '/plugins/althea-blog/core.static.js';
 
 function setupAutoScroll(blog){
     let
@@ -120,8 +120,7 @@ function setupAutoScroll(blog){
     }
 }
 
-let {Progress,Snapshot,hacker,moduleLoader}=altheaCore;
-let {Blog,site}=core;(async()=>{
+let site=new Site;(async()=>{
     let
         module=await moduleLoader(),
         blog=loadBlog(site,arg.status,Blog),
@@ -137,8 +136,8 @@ let {Blog,site}=core;(async()=>{
         {p:main,s:4}
     ]);
 })();
-async function loadBlog(site,status,Blog){
-    return new Blog(site,status)
+async function loadBlog(site,status,Blog$$1){
+    return new Blog$$1(site,status)
 }
 function createMainThread(site,blog){
     return[
@@ -186,10 +185,10 @@ async function createBlogThread(site,blog){
     );
     document.head.appendChild(await view.style);
 }
-async function setupProgress(Progress,a){
-    let p=new Progress(a),v=p.view;
+async function setupProgress(Progress$$1,a){
+    let p=new Progress$$1(a),v=p.view;
     let style=Object.assign(document.createElement('style'),{
-        textContent:Progress.style
+        textContent:Progress$$1.style
     });
     document.head.appendChild(style);
     document.body.appendChild(v.node);
@@ -199,10 +198,10 @@ async function setupProgress(Progress,a){
     document.body.removeChild(v.node);
     v.free;
 }
-async function setupApi(hacker,Snapshot,blog){
-    hacker.blog=await blog;
+async function setupApi(hacker$$1,Snapshot$$1,blog){
+    hacker$$1.blog=await blog;
     let
-        snapshot=new Snapshot(window);
+        snapshot=new Snapshot$$1(window);
     console.log('js/blog.js:',snapshot.new);
 }
 function setupGetNextOnScrollEvent(blog){

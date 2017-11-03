@@ -45,7 +45,7 @@ ${data.og?og(env,data,title,url_request):''}
 <link rel=icon href=images/icon.png>
 <body>
 ${env.althea.loadModule(
-    //'plugins/althea-blog/s/blog.js',
+    //'plugins/althea-blog/blog.js',
     'plugins/althea-blog/blog.static.js',
     {
         status:{
@@ -54,7 +54,7 @@ ${env.althea.loadModule(
         }
     },
     {
-        sharedWorker:true,
+        sharedWorker:1,
     }
 )}
 `

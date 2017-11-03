@@ -194,7 +194,7 @@ dom.head(
             background-color:#eee;
             overflow-y:scroll;
         }
-        body>.main{
+        body>.controlPanel{
             max-width:600px;
             margin:0 auto;
         }
@@ -203,7 +203,5 @@ dom.head(
 let controlPanel=new ControlPanel;
 controlPanel.send=site.send.bind(site);
 dom.body(
-    dom(controlPanel.ui,
-        n=>{n.classList.add('main');}
-    )
+    dom(controlPanel.ui)
 );

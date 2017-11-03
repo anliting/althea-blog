@@ -7,7 +7,7 @@ import BlogView from './Blog/BlogView.js'
 import path from './Blog/path.js'
 function Blog(site,status){
     EventEmmiter.call(this)
-    this._site=Promise.resolve(site)
+    this._site=site
     this._status=status
     this.pages={}
     this.pagemodules=[]

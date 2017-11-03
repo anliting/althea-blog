@@ -1,9 +1,7 @@
-import altheaCore from '/lib/core.static.js'
-import core from '/plugins/althea-blog/core.static.js'
+import {Progress,Snapshot,hacker,moduleLoader} from '/lib/core.static.js'
+import {Blog,Site}from '/plugins/althea-blog/core.static.js'
 import setupAutoScroll from './blog/setupAutoScroll.js'
-let
-    {Progress,Snapshot,hacker,moduleLoader}=altheaCore,
-    {Blog,site}=core
+let site=new Site
 ;(async()=>{
     let
         module=await moduleLoader(),
