@@ -1,32 +1,51 @@
 import{dom}from'/lib/core.static.js'
+function mdcTextdfield(name){
+    let node,input
+    node=dom.span({className:'mdc-textfield'},
+        n=>{n.dataset.mdcAutoInit='MDCTextfield'},
+        input=dom.input({className:'mdc-textfield__input',}),
+        dom.span({className:'mdc-textfield__label'},name),
+        dom.div({className:'mdc-textfield__bottom-line'}),
+    )
+    return{node,input}
+}
+function mdcTextdfieldTextarea(name){
+    let node,input
+    node=dom.label(
+        {className:`
+            mdc-textfield
+            mdc-textfield--fullwidth
+            mdc-textfield--textarea
+        `},
+        n=>{n.dataset.mdcAutoInit='MDCTextfield'},
+        input=dom.textarea({className:'mdc-textfield__input',rows:8}),
+        dom.span({className:'mdc-textfield__label'},name),
+    )
+    return{node,input}
+}
 function createSiteNode(){
     return dom.div(
         (async()=>{
             let
                 data=await this.send('blog_getData'),
-                title,
-                description,
-                bannerTitle,
-                tagline,
-                footer,
+                title=mdcTextdfield('Title'),
+                description=mdcTextdfield('Description'),
+                bannerTitle=mdcTextdfieldTextarea('Banner Title'),
+                tagline=mdcTextdfieldTextarea('Tagline'),
+                footer=mdcTextdfieldTextarea('Footer'),
                 og
+            title.input.value=data.title
+            description.input.value=data.description
+            bannerTitle.input.value=data.bannerTitle
+            tagline.input.value=data.tagline
+            footer.input.value=data.footer
             return dom.div(
                 {className:'shadow content'},
-                dom.p('Title: ',
-                    title=dom.input({value:data.title})
-                ),
-                dom.p('Description: ',
-                    description=dom.input({value:data.description})
-                ),
-                dom.p('Banner Title: ',
-                    bannerTitle=dom.textarea(data.bannerTitle)
-                ),
-                dom.p('Tagline: ',
-                    tagline=dom.textarea(data.tagline)
-                ),
-                dom.p('Footer: ',
-                    footer=dom.textarea(data.footer)
-                ),
+                dom.div(title.node),
+                dom.div(description.node),
+                dom.div(bannerTitle.node),
+                dom.div(tagline.node),
+                dom.div(footer.node),
                 dom.p(
                     dom.label(
                         og=dom.input({type:'checkbox',checked:data.og}),
@@ -34,11 +53,11 @@ function createSiteNode(){
                     ),
                 ),
                 dom.p(dom.button('Apply',{onclick:async()=>{
-                    data.title=title.value
-                    data.description=description.value
-                    data.bannerTitle=bannerTitle.value
-                    data.tagline=tagline.value
-                    data.footer=footer.value
+                    data.title=title.input.value
+                    data.description=description.input.value
+                    data.bannerTitle=bannerTitle.input.value
+                    data.tagline=tagline.input.value
+                    data.footer=footer.input.value
                     data.og=og.checked
                     await this.send({
                         function:'blog_setData',
@@ -46,6 +65,7 @@ function createSiteNode(){
                     })
                     alert('Applied.')
                 }})),
+                n=>{mdc.autoInit(n)},
             )
         })(),
     )
