@@ -1,33 +1,56 @@
 import { Site, dom, moduleLoader } from '/lib/core.static.js';
 
+function mdcTextdfield(name){
+    let node,input;
+    node=dom.label(
+        dom.span(n=>{n.style.color='#888';},`${name}: `),
+        {className:`
+            mdc-textfield
+            mdc-textfield--fullwidth
+        `},
+        n=>{n.dataset.mdcAutoInit='MDCTextfield';},
+        input=dom.input({className:'mdc-textfield__input',}),
+        dom.div({className:'mdc-textfield__bottom-line'}),
+    );
+    return{node,input}
+}
+function mdcTextdfieldTextarea(name){
+    let node,input;
+    node=dom.label(
+        {className:`
+            mdc-textfield
+            mdc-textfield--fullwidth
+            mdc-textfield--textarea
+        `},
+        n=>{n.dataset.mdcAutoInit='MDCTextfield';},
+        input=dom.textarea({className:'mdc-textfield__input',rows:8}),
+        dom.span({className:'mdc-textfield__label'},name),
+    );
+    return{node,input}
+}
 function createSiteNode(){
     return dom.div(
         (async()=>{
             let
                 data=await this.send('blog_getData'),
-                title,
-                description,
-                bannerTitle,
-                tagline,
-                footer,
+                title=mdcTextdfield('Title'),
+                description=mdcTextdfield('Description'),
+                bannerTitle=mdcTextdfieldTextarea('Banner Title'),
+                tagline=mdcTextdfieldTextarea('Tagline'),
+                footer=mdcTextdfieldTextarea('Footer'),
                 og;
+            title.input.value=data.title;
+            description.input.value=data.description;
+            bannerTitle.input.value=data.bannerTitle;
+            tagline.input.value=data.tagline;
+            footer.input.value=data.footer;
             return dom.div(
                 {className:'shadow content'},
-                dom.p('Title: ',
-                    title=dom.input({value:data.title})
-                ),
-                dom.p('Description: ',
-                    description=dom.input({value:data.description})
-                ),
-                dom.p('Banner Title: ',
-                    bannerTitle=dom.textarea(data.bannerTitle)
-                ),
-                dom.p('Tagline: ',
-                    tagline=dom.textarea(data.tagline)
-                ),
-                dom.p('Footer: ',
-                    footer=dom.textarea(data.footer)
-                ),
+                dom.p(title.node),
+                dom.p(description.node),
+                dom.p(bannerTitle.node),
+                dom.p(tagline.node),
+                dom.p(footer.node),
                 dom.p(
                     dom.label(
                         og=dom.input({type:'checkbox',checked:data.og}),
@@ -35,11 +58,11 @@ function createSiteNode(){
                     ),
                 ),
                 dom.p(dom.button('Apply',{onclick:async()=>{
-                    data.title=title.value;
-                    data.description=description.value;
-                    data.bannerTitle=bannerTitle.value;
-                    data.tagline=tagline.value;
-                    data.footer=footer.value;
+                    data.title=title.input.value;
+                    data.description=description.input.value;
+                    data.bannerTitle=bannerTitle.input.value;
+                    data.tagline=tagline.input.value;
+                    data.footer=footer.input.value;
                     data.og=og.checked;
                     await this.send({
                         function:'blog_setData',
@@ -47,6 +70,7 @@ function createSiteNode(){
                     });
                     alert('Applied.');
                 }})),
+                n=>{mdc.autoInit(n);},
             )
         })(),
     )
@@ -122,18 +146,17 @@ function TreeUi(){
     this.array=[];
 }
 TreeUi.prototype._apply=function(e){
-    if(this.array.length<2)
-        this._nodes.title.textContent=e.title;
-    else
-        dom(this._nodes.title,
-            {innerHTML:'',},
+    dom(this._nodes.title,
+        {innerHTML:'',},
+        1<this.array.length&&[
             dom.a({
                 className:`material-icons`,
                 onclick:()=>this.out(),
             },'chevron_left'),
             ' ',
-            e.title,
-        );
+        ],
+        e.title,
+    );
     this.node.appendChild(e.node);
 };
 TreeUi.prototype.in=function(e){
@@ -148,64 +171,72 @@ TreeUi.prototype.out=function(){
         this._apply(this.array[this.array.length-1]);
 };
 
+let css=[
+        'https://fonts.googleapis.com/icon?family=Material+Icons',
+        'https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css',
+    ];
 function ControlPanel(){
     TreeUi.apply(this,arguments);
     this._nodes={};
     this.node=dom.div({className:'controlPanel'},
         this._nodes.title=dom.h2(),
-    );
-    this.in({
-        title:'Blog Control Panel',
-        node:dom.div({className:'shadow'},
-            dom.ul({className:'mdc-list'},
-                dom.li(
-                    {
-                        className:'mdc-list-item',
-                        onclick:()=>this.in({
-                            title:'Site',
-                            node:createSiteNode.call(this)
-                        }),
-                    },
-                    'Site',
-                    dom.a({
-                        className:`
-                            mdc-list-item__end-detail
-                            material-icons
-                        `
-                    },'chevron_right'),
-                ),
-                dom.li(
-                    {
-                        className:'mdc-list-item',
-                        onclick:()=>this.in({
-                            title:'Tags',
-                            node:createTagsNode.call(this)
-                        }),
-                    },
-                    'Tags',
-                    dom.a({
-                        className:`
-                            mdc-list-item__end-detail
-                            material-icons
-                        `
-                    },'chevron_right'),
-                ),
+    )
+    ;(async()=>{
+        let module=await moduleLoader();
+        await module.scriptByPath('https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js');
+        this.in({
+            title:'Blog Control Panel',
+            node:dom.div({className:'shadow'},
+                dom.ul({className:'mdc-list'},
+                    dom.li(
+                        {
+                            className:'mdc-list-item',
+                            onclick:()=>this.in({
+                                title:'Site',
+                                node:createSiteNode.call(this)
+                            }),
+                        },
+                        'Site',
+                        dom.a({
+                            className:`
+                                mdc-list-item__end-detail
+                                material-icons
+                            `
+                        },'chevron_right'),
+                    ),
+                    dom.li(
+                        {
+                            className:'mdc-list-item',
+                            onclick:()=>this.in({
+                                title:'Tags',
+                                node:createTagsNode.call(this)
+                            }),
+                        },
+                        'Tags',
+                        dom.a({
+                            className:`
+                                mdc-list-item__end-detail
+                                material-icons
+                            `
+                        },'chevron_right'),
+                    ),
+                )
             )
-        )
-    });
+        });
+    })();
 }
 Object.setPrototypeOf(ControlPanel.prototype,TreeUi.prototype);
-ControlPanel.style=style;
+ControlPanel.style=async function(){
+    let module=await moduleLoader();
+    return style+(
+        await Promise.all(css.map(s=>module.getByPath(s)))
+    ).join('')
+};
 
-let css=[
-        'https://fonts.googleapis.com/icon?family=Material+Icons',
-        'https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css',
-    ];
 let site=new Site;
 let controlPanel=new ControlPanel;
 controlPanel.send=site.send.bind(site)
 ;(async()=>{
-    let module=await moduleLoader();
     dom.head(
         dom.style(
             `
@@ -220,8 +251,7 @@ controlPanel.send=site.send.bind(site)
                     margin:0 auto;
                 }
             `,
-            await Promise.all(css.map(s=>module.getByPath(s))),
-            ControlPanel.style,
+            await ControlPanel.style(),
         )
     );
     dom.body(

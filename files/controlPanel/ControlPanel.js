@@ -3,6 +3,11 @@ import createSiteNode from './ControlPanel/createSiteNode.js'
 import createTagsNode from './ControlPanel/createTagsNode.js'
 import style from './ControlPanel/style.js'
 import TreeUi from './ControlPanel/TreeUi.js'
+let
+    css=[
+        'https://fonts.googleapis.com/icon?family=Material+Icons',
+        'https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css',
+    ]
 function ControlPanel(){
     TreeUi.apply(this,arguments)
     this._nodes={}
@@ -54,5 +59,10 @@ function ControlPanel(){
     })()
 }
 Object.setPrototypeOf(ControlPanel.prototype,TreeUi.prototype)
-ControlPanel.style=style
+ControlPanel.style=async function(){
+    let module=await moduleLoader()
+    return style+(
+        await Promise.all(css.map(s=>module.getByPath(s)))
+    ).join('')
+}
 export default ControlPanel

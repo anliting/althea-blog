@@ -1,10 +1,14 @@
 import{dom}from'/lib/core.static.js'
 function mdcTextdfield(name){
     let node,input
-    node=dom.span({className:'mdc-textfield'},
+    node=dom.label(
+        dom.span(n=>{n.style.color='#888'},`${name}: `),
+        {className:`
+            mdc-textfield
+            mdc-textfield--fullwidth
+        `},
         n=>{n.dataset.mdcAutoInit='MDCTextfield'},
         input=dom.input({className:'mdc-textfield__input',}),
-        dom.span({className:'mdc-textfield__label'},name),
         dom.div({className:'mdc-textfield__bottom-line'}),
     )
     return{node,input}
@@ -41,11 +45,11 @@ function createSiteNode(){
             footer.input.value=data.footer
             return dom.div(
                 {className:'shadow content'},
-                dom.div(title.node),
-                dom.div(description.node),
-                dom.div(bannerTitle.node),
-                dom.div(tagline.node),
-                dom.div(footer.node),
+                dom.p(title.node),
+                dom.p(description.node),
+                dom.p(bannerTitle.node),
+                dom.p(tagline.node),
+                dom.p(footer.node),
                 dom.p(
                     dom.label(
                         og=dom.input({type:'checkbox',checked:data.og}),
