@@ -2,17 +2,6 @@ import { Site, dom } from '/lib/core.static.js';
 
 function createSiteNode(){
     return dom.div(
-        dom.div({className:'material menu'},
-            dom.div(
-                {
-                    className:'out',
-                    onclick:()=>{
-                        this.out();
-                    }
-                },
-                'Site',
-            )
-        ),
         (async()=>{
             let
                 data=await this.send('blog_getData'),
@@ -23,7 +12,7 @@ function createSiteNode(){
                 footer,
                 og;
             return dom.div(
-                {className:'material content'},
+                {className:'shadow content'},
                 dom.p('Title: ',
                     title=dom.input({value:data.title})
                 ),
@@ -108,92 +97,116 @@ function TagsPage(){
 function createTagsNode(){
     let tagsPage=new TagsPage;
     return dom.div(
-        dom.div({className:'material menu'},
-            dom.div(
-                {
-                    className:'out',
-                    onclick:()=>{
-                        this.out();
-                    }
-                },
-                'Tags',
-            )
-        ),
         dom.div(
-            {className:'material content'},
+            {className:'shadow content'},
             tagsPage.mainDiv,
         ),
     )
 }
 
 var style = `
-.controlPanel .material{
+.controlPanel .shadow{
     background-color:#fff;
     box-shadow:0 1px 4px rgba(0,0,0,.4);
 }
-.controlPanel .material.menu>div{
+.controlPanel .content{
     padding:16px;
 }
-.controlPanel .material.menu>div+div{
-    border-top:1px solid #ddd;
-}
-.controlPanel .material.menu>div.out:before{
-    margin-right:16px;
-    content:'<';
-}
-.controlPanel .material.menu>div.in:after{
-    float:right;
-    content:'>';
-}
-.controlPanel .material.content{
-    padding:16px;
-}
-.controlPanel .material.menu+.material.content{
-    margin-top:16px;
+.controlPanel>h2{
+    margin-left:16px;
+    cursor:default;
 }
 `;
 
 function TreeUi(){
     this.array=[];
 }
+TreeUi.prototype._apply=function(e){
+    if(this.array.length<2)
+        this._nodes.title.textContent=e.title;
+    else
+        dom(this._nodes.title,
+            {innerHTML:'',},
+            dom.a({
+                className:`material-icons`,
+                onclick:()=>this.out(),
+            },'chevron_left'),
+            ' ',
+            e.title,
+        );
+    this.node.appendChild(e.node);
+};
 TreeUi.prototype.in=function(e){
     if(this.array.length)
-        this.node.removeChild(this.array[this.array.length-1]);
+        this.node.removeChild(this.array[this.array.length-1].node);
     this.array.push(e);
-    this.node.appendChild(e);
+    this._apply(e);
 };
 TreeUi.prototype.out=function(){
-    this.node.removeChild(this.array.pop());
+    this.node.removeChild(this.array.pop().node);
     if(this.array.length)
-        this.node.appendChild(this.array[this.array.length-1]);
+        this._apply(this.array[this.array.length-1]);
 };
 
 function ControlPanel(){
     TreeUi.apply(this,arguments);
+    this._nodes={};
     this.node=dom.div({className:'controlPanel'},
-        dom.h2('Blog Control Panel'),
+        this._nodes.title=dom.h2(),
     );
-    this.in(dom.div({className:'material menu'},
-        dom.div({
-            className:'in',
-            onclick:()=>this.in(createSiteNode.call(this)),
-        },'Site'),
-        dom.div({
-            className:'in',
-            onclick:()=>this.in(createTagsNode.call(this)),
-        },'Tags'),
-    ));
+    this.in({
+        title:'Blog Control Panel',
+        node:dom.div({className:'shadow'},
+            dom.ul({className:'mdc-list'},
+                dom.li(
+                    {
+                        className:'mdc-list-item',
+                        onclick:()=>this.in({
+                            title:'Site',
+                            node:createSiteNode.call(this)
+                        }),
+                    },
+                    'Site',
+                    dom.a({
+                        className:`
+                            mdc-list-item__end-detail
+                            material-icons
+                        `
+                    },'chevron_right'),
+                ),
+                dom.li(
+                    {
+                        className:'mdc-list-item',
+                        onclick:()=>this.in({
+                            title:'Tags',
+                            node:createTagsNode.call(this)
+                        }),
+                    },
+                    'Tags',
+                    dom.a({
+                        className:`
+                            mdc-list-item__end-detail
+                            material-icons
+                        `
+                    },'chevron_right'),
+                ),
+            )
+        )
+    });
 }
 Object.setPrototypeOf(ControlPanel.prototype,TreeUi.prototype);
 ControlPanel.style=style;
 
 let site=new Site;
 dom.head(
+    dom.link({rel:'stylesheet',href:'https://fonts.googleapis.com/icon?family=Material+Icons'}),
+    dom.link({rel:'stylesheet',href:'https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css'}),
     dom.style(`
         body{
-            font-family:sans-serif;
-            background-color:#eee;
+            margin:0;
             overflow-y:scroll;
+            background-color:#eee;
+            font-family:sans-serif;
         }
         body>.controlPanel{
             max-width:600px;

@@ -1,17 +1,6 @@
 import{dom}from'/lib/core.static.js'
 function createSiteNode(){
     return dom.div(
-        dom.div({className:'material menu'},
-            dom.div(
-                {
-                    className:'out',
-                    onclick:()=>{
-                        this.out()
-                    }
-                },
-                'Site',
-            )
-        ),
         (async()=>{
             let
                 data=await this.send('blog_getData'),
@@ -22,7 +11,7 @@ function createSiteNode(){
                 footer,
                 og
             return dom.div(
-                {className:'material content'},
+                {className:'shadow content'},
                 dom.p('Title: ',
                     title=dom.input({value:data.title})
                 ),
