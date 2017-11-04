@@ -34,9 +34,9 @@ function createSiteNode(){
                 data=await this.send('blog_getData'),
                 title=mdcTextdfield('Title'),
                 description=mdcTextdfield('Description'),
-                bannerTitle=mdcTextdfieldTextarea('Banner Title'),
-                tagline=mdcTextdfieldTextarea('Tagline'),
-                footer=mdcTextdfieldTextarea('Footer'),
+                bannerTitle=mdcTextdfieldTextarea('Banner Title (HTML)'),
+                tagline=mdcTextdfieldTextarea('Tagline (HTML)'),
+                footer=mdcTextdfieldTextarea('Footer (HTML)'),
                 og
             title.input.value=data.title
             description.input.value=data.description
