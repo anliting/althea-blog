@@ -17,5 +17,5 @@ dom.head(
 let controlPanel=new ControlPanel
 controlPanel.send=site.send.bind(site)
 dom.body(
-    dom(controlPanel.ui)
+    dom(controlPanel.node)
 )

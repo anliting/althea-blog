@@ -153,37 +153,38 @@ var style = `
 }
 `;
 
-function ControlPanel(){
+function TreeUi(){
     this.array=[];
-    this.ui=dom.div({className:'controlPanel'},
+}
+TreeUi.prototype.in=function(e){
+    if(this.array.length)
+        this.node.removeChild(this.array[this.array.length-1]);
+    this.array.push(e);
+    this.node.appendChild(e);
+};
+TreeUi.prototype.out=function(){
+    this.node.removeChild(this.array.pop());
+    if(this.array.length)
+        this.node.appendChild(this.array[this.array.length-1]);
+};
+
+function ControlPanel(){
+    TreeUi.apply(this,arguments);
+    this.node=dom.div({className:'controlPanel'},
         dom.h2('Blog Control Panel'),
     );
     this.in(dom.div({className:'material menu'},
         dom.div({
             className:'in',
-            onclick:()=>{
-                this.in(createSiteNode.call(this));
-            },
+            onclick:()=>this.in(createSiteNode.call(this)),
         },'Site'),
         dom.div({
             className:'in',
-            onclick:()=>{
-                this.in(createTagsNode.call(this));
-            },
+            onclick:()=>this.in(createTagsNode.call(this)),
         },'Tags'),
     ));
 }
-ControlPanel.prototype.in=function(e){
-    if(this.array.length)
-        this.ui.removeChild(this.array[this.array.length-1]);
-    this.array.push(e);
-    this.ui.appendChild(e);
-};
-ControlPanel.prototype.out=function(){
-    this.ui.removeChild(this.array.pop());
-    if(this.array.length)
-        this.ui.appendChild(this.array[this.array.length-1]);
-};
+Object.setPrototypeOf(ControlPanel.prototype,TreeUi.prototype);
 ControlPanel.style=style;
 
 let site=new Site;
@@ -203,5 +204,5 @@ dom.head(
 let controlPanel=new ControlPanel;
 controlPanel.send=site.send.bind(site);
 dom.body(
-    dom(controlPanel.ui)
+    dom(controlPanel.node)
 );
