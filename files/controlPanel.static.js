@@ -1,5 +1,50 @@
 import { Site, dom, moduleLoader } from '/lib/core.static.js';
 
+let css=[
+        'https://fonts.googleapis.com/icon?family=Material+Icons',
+        'https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css',
+    ];
+let loaded;
+function loadMaterial(){
+    if(!loaded)
+        loaded=(async()=>{
+            let module=await moduleLoader();
+            await Promise.all([
+                (async()=>{
+                    dom.head(dom.style(
+                        await Promise.all(css.map(s=>module.getByPath(s)))
+                    ));
+                })(),
+                module.scriptByPath('https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js'),
+            ]);
+        })();
+    return loaded
+}
+
+function mdcButton(name){
+    return dom.button(
+        {className:'mdc-button mdc-button--raised'},
+        n=>{n.dataset.mdcAutoInit='MDCRipple';},
+        name,
+    )
+}
+function mdcSwitch(name){
+    let node,input;
+    node=dom.label(
+        dom.span(
+            {className:`mdc-switch`,},
+            input=dom.input({
+                type:'checkbox',
+                className:'mdc-switch__native-control',
+            }),
+            dom.div({className:`mdc-switch__background`},
+                dom.div({className:`mdc-switch__knob`}),
+            ),
+        ),
+        ` ${name}`,
+    );
+    return{node,input}
+}
 function mdcTextdfield(name){
     let node,input;
     node=dom.label(
@@ -17,14 +62,15 @@ function mdcTextdfield(name){
 function mdcTextdfieldTextarea(name){
     let node,input;
     node=dom.label(
-        {className:`
-            mdc-textfield
-            mdc-textfield--fullwidth
-            mdc-textfield--textarea
-        `},
-        n=>{n.dataset.mdcAutoInit='MDCTextfield';},
-        input=dom.textarea({className:'mdc-textfield__input',rows:8}),
-        dom.span({className:'mdc-textfield__label'},name),
+        dom.span(n=>{n.style.color='#888';},`${name}: `),
+        dom.span(
+            {className:`
+                mdc-textfield
+                mdc-textfield--fullwidth
+                mdc-textfield--textarea
+            `,},
+            input=dom.textarea({className:'mdc-textfield__input',rows:8}),
+        ),
     );
     return{node,input}
 }
@@ -33,17 +79,19 @@ function createSiteNode(){
         (async()=>{
             let
                 data=await this.send('blog_getData'),
-                title=mdcTextdfield('Title'),
+                title=      mdcTextdfield('Title'),
                 description=mdcTextdfield('Description'),
                 bannerTitle=mdcTextdfieldTextarea('Banner Title (HTML)'),
-                tagline=mdcTextdfieldTextarea('Tagline (HTML)'),
-                footer=mdcTextdfieldTextarea('Footer (HTML)'),
-                og;
+                tagline=    mdcTextdfieldTextarea('Tagline (HTML)'),
+                footer=     mdcTextdfieldTextarea('Footer (HTML)'),
+                og=         mdcSwitch('Use open graph.'),
+                apply=      mdcButton('Apply');
             title.input.value=data.title;
             description.input.value=data.description;
             bannerTitle.input.value=data.bannerTitle;
             tagline.input.value=data.tagline;
             footer.input.value=data.footer;
+            og.input.checked=data.og;
             return dom.div(
                 {className:'shadow content'},
                 dom.p(title.node),
@@ -51,25 +99,22 @@ function createSiteNode(){
                 dom.p(bannerTitle.node),
                 dom.p(tagline.node),
                 dom.p(footer.node),
+                dom.p(og.node),
                 dom.p(
-                    dom.label(
-                        og=dom.input({type:'checkbox',checked:data.og}),
-                        'Use open graph.',
-                    ),
+                    dom(apply,{onclick:async()=>{
+                        data.title=title.input.value;
+                        data.description=description.input.value;
+                        data.bannerTitle=bannerTitle.input.value;
+                        data.tagline=tagline.input.value;
+                        data.footer=footer.input.value;
+                        data.og=og.input.checked;
+                        await this.send({
+                            function:'blog_setData',
+                            data,
+                        });
+                        alert('Applied.');
+                    }})
                 ),
-                dom.p(dom.button('Apply',{onclick:async()=>{
-                    data.title=title.input.value;
-                    data.description=description.input.value;
-                    data.bannerTitle=bannerTitle.input.value;
-                    data.tagline=tagline.input.value;
-                    data.footer=footer.input.value;
-                    data.og=og.checked;
-                    await this.send({
-                        function:'blog_setData',
-                        data,
-                    });
-                    alert('Applied.');
-                }})),
                 n=>{mdc.autoInit(n);},
             )
         })(),
@@ -136,6 +181,9 @@ var style = `
 .controlPanel .content{
     padding:16px;
 }
+.controlPanel .mdc-textfield.mdc-textfield--fullwidth.mdc-textfield--textarea textarea{
+    resize:none;
+}
 .controlPanel>h2{
     margin-left:16px;
     cursor:default;
@@ -171,89 +219,70 @@ TreeUi.prototype.out=function(){
         this._apply(this.array[this.array.length-1]);
 };
 
-let css=[
-        'https://fonts.googleapis.com/icon?family=Material+Icons',
-        'https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css',
+let root=[
+        {
+            title:'Site',
+            function:createSiteNode,
+        },
+        {
+            title:'Tags',
+            function:createTagsNode,
+        },
     ];
 function ControlPanel(){
     TreeUi.apply(this,arguments);
     this._nodes={};
     this.node=dom.div({className:'controlPanel'},
         this._nodes.title=dom.h2(),
-    )
-    ;(async()=>{
-        let module=await moduleLoader();
-        await module.scriptByPath('https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js');
-        this.in({
-            title:'Blog Control Panel',
-            node:dom.div({className:'shadow'},
-                dom.ul({className:'mdc-list'},
+    );
+    this.in({
+        title:'Blog Control Panel',
+        node:dom.div({className:'shadow'},
+            dom.ul({className:'mdc-list'},
+                root.map(o=>
                     dom.li(
                         {
                             className:'mdc-list-item',
                             onclick:()=>this.in({
-                                title:'Site',
-                                node:createSiteNode.call(this)
+                                title:o.title,
+                                node:o.function.call(this),
                             }),
                         },
-                        'Site',
+                        o.title,
                         dom.a({
                             className:`
                                 mdc-list-item__end-detail
                                 material-icons
                             `
                         },'chevron_right'),
-                    ),
-                    dom.li(
-                        {
-                            className:'mdc-list-item',
-                            onclick:()=>this.in({
-                                title:'Tags',
-                                node:createTagsNode.call(this)
-                            }),
-                        },
-                        'Tags',
-                        dom.a({
-                            className:`
-                                mdc-list-item__end-detail
-                                material-icons
-                            `
-                        },'chevron_right'),
-                    ),
-                )
+                    )
+                ),
             )
-        });
-    })();
+        )
+    });
 }
 Object.setPrototypeOf(ControlPanel.prototype,TreeUi.prototype);
-ControlPanel.style=async function(){
-    let module=await moduleLoader();
-    return style+(
-        await Promise.all(css.map(s=>module.getByPath(s)))
-    ).join('')
-};
+ControlPanel.style=style;
 
-let site=new Site;
-let controlPanel=new ControlPanel;
-controlPanel.send=site.send.bind(site)
-;(async()=>{
-    dom.head(
-        dom.style(
-            `
-                body{
-                    margin:0;
-                    overflow-y:scroll;
-                    background-color:#eee;
-                    font-family:sans-serif;
-                }
-                body>.controlPanel{
-                    max-width:600px;
-                    margin:0 auto;
-                }
-            `,
-            await ControlPanel.style(),
-        )
-    );
+let site=new Site;(async()=>{
+    await loadMaterial();
+    let controlPanel=new ControlPanel;
+    controlPanel.send=site.send.bind(site);
+    dom.head(dom.style(
+        `
+            body{
+                margin:0;
+                overflow-y:scroll;
+                background-color:#eee;
+                font-family:sans-serif;
+            }
+            body>.controlPanel{
+                max-width:600px;
+                margin:0 auto;
+            }
+        `,
+        ControlPanel.style,
+    ));
     dom.body(
         dom(controlPanel.node)
     );
