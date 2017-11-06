@@ -18,7 +18,7 @@ function update(editpage,data){
                 'false'
         )
     ).checked='checked'*/
-    document.getElementById('select_privacy').value=
+    editpage._nodes.select_privacy.value=
         editpage.id&&data.lastversion_page.ispublic?2:1
     data.pagemodules.sort((a,b)=>
         a.priority-b.priority
@@ -28,7 +28,7 @@ function update(editpage,data){
         option.value=e.id
         if(editpage.id&&e.id==data.lastversion_page.id_pagemodule)
             option.selected='selected'
-        document.getElementById('select_id_pagemodule').appendChild(
+        editpage._nodes.select_id_pagemodule.appendChild(
             option
         )
     })

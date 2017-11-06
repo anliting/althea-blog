@@ -19,20 +19,12 @@ body{
 #div_main>table td{
     padding:2px;
 }
-#button_save{
-    padding:4px;
-}
-#button_submit{
-    padding:4px;
-}
 .setFormInput{
     margin:4px;
-    padding:4px;
 }
 input.title{
     box-sizing:border-box;
     width:100%;
-    padding:4px;
 }
 #td_content{
     height:100%;
@@ -44,7 +36,6 @@ input.title{
     box-sizing:border-box;
     width:100%;
     height:100%;
-    padding:4px;
 }
 #div_htmleditor{
     margin:0px;
@@ -81,20 +72,6 @@ span.name{
 }
 span.name a{
     text-decoration:none;
-}
-/* 2015-09-20 */
-#span_graphvisualizer{
-    display:none;
-}
-.nonMobile #span_graphvisualizer{
-    display:unset;
-}
-/* 2015-09-20 Make some select larger. */
-#select_id_pagemodule{
-    padding:4px;
-}
-#select_privacy{
-    padding:4px;
 }
 /* 2015-09-02 Make something float. */
 span.tag{

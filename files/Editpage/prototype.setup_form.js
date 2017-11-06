@@ -4,8 +4,8 @@ export default function(){
         showHtmlA=document.getElementById('showHtmlA'),
         htmlEditorA=document.getElementById('htmlEditorA'),
         previewA=document.getElementById('previewA'),
-        button_save=document.getElementById('button_save'),
-        button_submit=document.getElementById('button_submit'),
+        button_save=this._nodes.button_save,
+        button_submit=this._nodes.button_submit,
         input_newtag=this._nodes.input_newtag,
         input_newname=this._nodes.input_newname
     addEventListener('keydown',e=>{

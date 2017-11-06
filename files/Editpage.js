@@ -18,22 +18,15 @@ function Editpage(site){
         this.ui=dom.div({id:'div_main'},
             this._nodes.table_content=dom.table(
                 dom.tr(dom.td(
-                    dom.select({id:'select_id_pagemodule'},
-                    ),' ',
-                    dom.select({id:'select_privacy'},
+                    this._nodes.select_id_pagemodule=dom.select(),' ',
+                    this._nodes.select_privacy=dom.select(
                         dom.option({value:0},'Hidden'),
                         dom.option({value:1},'Private'),
                         dom.option({value:2},'Unlisted'),
                         dom.option({value:3},'Public'),
                     ),' ',
-                    dom.button({id:'button_save'},'Save'),' ',
-                    dom.button({id:'button_submit'},'Submit'),' ',
-                    dom.span({id:'span_graphvisualizer'},
-                        ' | ',
-                        dom.a({href:'plugins/graphvisualizer/visualizer.html'},
-                            'Graph Visualizer'
-                        )
-                    ),
+                    this._nodes.button_save=dom.button('Save'),' ',
+                    this._nodes.button_submit=dom.button('Submit'),' ',
                 )),
                 dom.tr({id:'tr_tags'},dom.td(
                     this._nodes.span_tags=dom.span(),
