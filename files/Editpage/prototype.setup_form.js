@@ -6,8 +6,8 @@ export default function(){
         previewA=document.getElementById('previewA'),
         button_save=document.getElementById('button_save'),
         button_submit=document.getElementById('button_submit'),
-        input_newtag=document.getElementById('input_newtag'),
-        input_newname=document.getElementById('input_newname')
+        input_newtag=this._nodes.input_newtag,
+        input_newname=this._nodes.input_newname
     addEventListener('keydown',e=>{
         if(!(
             e.ctrlKey&&e.shiftKey&&e.keyCode==83

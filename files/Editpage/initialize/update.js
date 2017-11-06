@@ -45,14 +45,14 @@ function update(editpage,data){
         )
     })
     if(editpage.id){
-        document.getElementById('input_title').value=
+        editpage._nodes.input_title.value=
             data.lastversion_page.title
         textarea_content.value=
             data.lastversion_page.content
     }
-    document.getElementById('input_newtag').disabled=false
-    document.getElementById('input_newname').disabled=false
-    document.getElementById('input_title').disabled=false
+    editpage._nodes.input_newtag.disabled=false
+    editpage._nodes.input_newname.disabled=false
+    editpage._nodes.input_title.disabled=false
     textarea_content.disabled=false
     if(editpage.id){
         textarea_content.selectionStart=

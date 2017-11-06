@@ -1565,14 +1565,14 @@ function update(editpage,data){
         );
     });
     if(editpage.id){
-        document.getElementById('input_title').value=
+        editpage._nodes.input_title.value=
             data.lastversion_page.title;
         textarea_content.value=
             data.lastversion_page.content;
     }
-    document.getElementById('input_newtag').disabled=false;
-    document.getElementById('input_newname').disabled=false;
-    document.getElementById('input_title').disabled=false;
+    editpage._nodes.input_newtag.disabled=false;
+    editpage._nodes.input_newname.disabled=false;
+    editpage._nodes.input_title.disabled=false;
     textarea_content.disabled=false;
     if(editpage.id){
         textarea_content.selectionStart=
@@ -1721,8 +1721,8 @@ var setup_form = function(){
         previewA=document.getElementById('previewA'),
         button_save=document.getElementById('button_save'),
         button_submit=document.getElementById('button_submit'),
-        input_newtag=document.getElementById('input_newtag'),
-        input_newname=document.getElementById('input_newname');
+        input_newtag=this._nodes.input_newtag,
+        input_newname=this._nodes.input_newname;
     addEventListener('keydown',e=>{
         if(!(
             e.ctrlKey&&e.shiftKey&&e.keyCode==83
@@ -1773,7 +1773,7 @@ async function submit(){
         ispublic:document.getElementById('select_privacy').value==2,
         tags:this.setOfTags.toArray(),
         pagenames:this.setOfNames.toArray(),
-        title:document.getElementById('input_title').value,
+        title:this._nodes.input_title.value,
         content:this.textarea_content.value,
     });
     return{id}
@@ -1793,11 +1793,11 @@ body{
     width:100%;
     height:100%;
 }
-#table_content{
+#div_main>table{
     width:100%;
     height:100%;
 }
-#table_content td{
+#div_main>table td{
     padding:2px;
 }
 #button_save{
@@ -1806,15 +1806,11 @@ body{
 #button_submit{
     padding:4px;
 }
-#input_newtag{
+.setFormInput{
     margin:4px;
     padding:4px;
 }
-#input_newname{
-    margin:4px;
-    padding:4px;
-}
-#input_title{
+input.title{
     box-sizing:border-box;
     width:100%;
     padding:4px;
@@ -1893,9 +1889,10 @@ span.name{
 function Editpage(site){
     EventEmmiter$1.call(this);
     this._site=site;
+    this._nodes={};
     dom.body(
         this.ui=dom.div({id:'div_main'},
-            dom.table({id:'table_content'},
+            this._nodes.table_content=dom.table(
                 dom.tr(dom.td(
                     dom.select({id:'select_id_pagemodule'},
                     ),' ',
@@ -1915,9 +1912,9 @@ function Editpage(site){
                     ),
                 )),
                 dom.tr({id:'tr_tags'},dom.td(
-                    dom.span({id:'span_tags'}),
-                    dom.input({
-                        id:'input_newtag',
+                    this._nodes.span_tags=dom.span(),
+                    this._nodes.input_newtag=dom.input({
+                        className:'setFormInput',
                         type:'text',
                         placeholder:'Tag ...',
                         disabled:true,
@@ -1926,17 +1923,17 @@ function Editpage(site){
                     }),
                 )),
                 dom.tr({id:'tr_names'},dom.td(
-                    dom.span({id:'span_names'}),
-                    dom.input({
-                        id:'input_newname',
+                    this._nodes.span_names=dom.span(),
+                    this._nodes.input_newname=dom.input({
+                        className:'setFormInput',
                         type:'text',
                         placeholder:'Name ...',
                         disabled:true,
                     }),
                 )),
                 dom.tr(dom.td(
-                    dom.input({
-                        id:'input_title',
+                    this._nodes.input_title=dom.input({
+                        className:'title',
                         type:'text',
                         placeholder:'Title',
                         disabled:true,
@@ -1945,7 +1942,7 @@ function Editpage(site){
                 dom.tr(dom.td(
                     dom.a({id:'showHtmlA',href:'javascript:'},'HTML'),' | ',
                     dom.a({id:'htmlEditorA',href:'javascript:'},'WYSIWYG (experimental)'),' | ',
-                    dom.a({id:'previewA',href:'javascript:'},'review (experimental)'),
+                    dom.a({id:'previewA',href:'javascript:'},'Preview (experimental)'),
                 )),
                 dom.tr(dom.td({id:'td_content'},
                     dom.div({id:'div_textarea_content'},
@@ -1969,12 +1966,12 @@ function Editpage(site){
         ]);
         this.pagemodules=[];
         this.setOfTags=new SetForm(
-            document.getElementById('span_tags'),
-            document.getElementById('input_newtag')
+            this._nodes.span_tags,
+            this._nodes.input_newtag,
         );
         this.setOfNames=new SetForm(
-            document.getElementById('span_names'),
-            document.getElementById('input_newname')
+            this._nodes.span_names,
+            this._nodes.input_newname,
         );
         this.currentEditor=0;
         this.load=this._site.loadPlugins0('editpage',this);
@@ -1992,7 +1989,7 @@ function Editpage(site){
             );
             fileButton.n.disabled=false;
         });
-        document.getElementById('table_content').appendChild(
+        this._nodes.table_content.appendChild(
             createUploadImageTr()
         );
         function createUploadImageTr(){

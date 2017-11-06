@@ -13,9 +13,10 @@ let
 function Editpage(site){
     EventEmmiter.call(this)
     this._site=site
+    this._nodes={}
     dom.body(
         this.ui=dom.div({id:'div_main'},
-            dom.table({id:'table_content'},
+            this._nodes.table_content=dom.table(
                 dom.tr(dom.td(
                     dom.select({id:'select_id_pagemodule'},
                     ),' ',
@@ -35,9 +36,9 @@ function Editpage(site){
                     ),
                 )),
                 dom.tr({id:'tr_tags'},dom.td(
-                    dom.span({id:'span_tags'}),
-                    dom.input({
-                        id:'input_newtag',
+                    this._nodes.span_tags=dom.span(),
+                    this._nodes.input_newtag=dom.input({
+                        className:'setFormInput',
                         type:'text',
                         placeholder:'Tag ...',
                         disabled:true,
@@ -46,17 +47,17 @@ function Editpage(site){
                     }),
                 )),
                 dom.tr({id:'tr_names'},dom.td(
-                    dom.span({id:'span_names'}),
-                    dom.input({
-                        id:'input_newname',
+                    this._nodes.span_names=dom.span(),
+                    this._nodes.input_newname=dom.input({
+                        className:'setFormInput',
                         type:'text',
                         placeholder:'Name ...',
                         disabled:true,
                     }),
                 )),
                 dom.tr(dom.td(
-                    dom.input({
-                        id:'input_title',
+                    this._nodes.input_title=dom.input({
+                        className:'title',
                         type:'text',
                         placeholder:'Title',
                         disabled:true,
@@ -65,7 +66,7 @@ function Editpage(site){
                 dom.tr(dom.td(
                     dom.a({id:'showHtmlA',href:'javascript:'},'HTML'),' | ',
                     dom.a({id:'htmlEditorA',href:'javascript:'},'WYSIWYG (experimental)'),' | ',
-                    dom.a({id:'previewA',href:'javascript:'},'review (experimental)'),
+                    dom.a({id:'previewA',href:'javascript:'},'Preview (experimental)'),
                 )),
                 dom.tr(dom.td({id:'td_content'},
                     dom.div({id:'div_textarea_content'},
@@ -89,12 +90,12 @@ function Editpage(site){
         ])
         this.pagemodules=[]
         this.setOfTags=new SetForm(
-            document.getElementById('span_tags'),
-            document.getElementById('input_newtag')
+            this._nodes.span_tags,
+            this._nodes.input_newtag,
         )
         this.setOfNames=new SetForm(
-            document.getElementById('span_names'),
-            document.getElementById('input_newname')
+            this._nodes.span_names,
+            this._nodes.input_newname,
         )
         this.currentEditor=0
         this.load=this._site.loadPlugins0('editpage',this)
@@ -112,7 +113,7 @@ function Editpage(site){
             )
             fileButton.n.disabled=false
         })
-        document.getElementById('table_content').appendChild(
+        this._nodes.table_content.appendChild(
             createUploadImageTr()
         )
         function createUploadImageTr(){

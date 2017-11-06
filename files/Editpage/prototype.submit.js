@@ -8,7 +8,7 @@ async function submit(){
         ispublic:document.getElementById('select_privacy').value==2,
         tags:this.setOfTags.toArray(),
         pagenames:this.setOfNames.toArray(),
-        title:document.getElementById('input_title').value,
+        title:this._nodes.input_title.value,
         content:this.textarea_content.value,
     })
     return{id}

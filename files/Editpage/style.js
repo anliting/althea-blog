@@ -12,11 +12,11 @@ body{
     width:100%;
     height:100%;
 }
-#table_content{
+#div_main>table{
     width:100%;
     height:100%;
 }
-#table_content td{
+#div_main>table td{
     padding:2px;
 }
 #button_save{
@@ -25,15 +25,11 @@ body{
 #button_submit{
     padding:4px;
 }
-#input_newtag{
+.setFormInput{
     margin:4px;
     padding:4px;
 }
-#input_newname{
-    margin:4px;
-    padding:4px;
-}
-#input_title{
+input.title{
     box-sizing:border-box;
     width:100%;
     padding:4px;
