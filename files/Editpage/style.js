@@ -19,9 +19,6 @@ body>.main>table{
 body>.main>table td{
     padding:2px;
 }
-.setFormInput{
-    margin:4px;
-}
 input.title{
     box-sizing:border-box;
     width:100%;
@@ -55,7 +52,6 @@ input.title{
 }
 span.tag{
     border:solid 1px lightgray;
-    padding:4px;
     margin-right:4px;
     margin-bottom:4px;
     font-family:sans-serif;
@@ -65,7 +61,6 @@ span.tag a{
 }
 span.name{
     border:solid 1px lightgray;
-    padding:4px;
     margin-right:4px;
     margin-bottom:4px;
     font-family:sans-serif;

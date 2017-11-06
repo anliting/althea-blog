@@ -8,7 +8,7 @@ window.environment=arg.editpageEnv
 site.on('userChange',()=>
     location='/'
 )
-dom.head(Editpage.style)
+dom.head(dom.style(Editpage.style))
 ;(async()=>{
     await editpage.load
     dom.body(editpage.node)
