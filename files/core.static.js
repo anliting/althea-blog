@@ -1543,7 +1543,7 @@ function update(editpage,data){
         )
     ).checked='checked'*/
     editpage._nodes.select_privacy.value=
-        editpage.id&&data.lastversion_page.ispublic?2:1;
+        editpage.id&&data.lastversion_page.ispublic?3:1;
     data.pagemodules.sort((a,b)=>
         a.priority-b.priority
     );
