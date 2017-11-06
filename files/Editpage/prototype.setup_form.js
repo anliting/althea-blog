@@ -1,9 +1,9 @@
 export default function(){
     let
         editpage=this,
-        showHtmlA=document.getElementById('showHtmlA'),
-        htmlEditorA=document.getElementById('htmlEditorA'),
-        previewA=document.getElementById('previewA'),
+        showHtmlA=this._nodes.showHtmlA,
+        htmlEditorA=this._nodes.htmlEditorA,
+        previewA=this._nodes.previewA,
         button_save=this._nodes.button_save,
         button_submit=this._nodes.button_submit,
         input_newtag=this._nodes.input_newtag,

@@ -7,18 +7,20 @@ import editors from './Editpage/prototype.editors.js'
 import setup_form from './Editpage/prototype.setup_form.js'
 import submit from './Editpage/prototype.submit.js'
 import style from './Editpage/style.js'
-let
-    div_main,
-    isMobile
 function Editpage(site){
     EventEmmiter.call(this)
     this._site=site
     this._nodes={}
     dom.body(
-        this.ui=dom.div({id:'div_main'},
+        this.node=this._nodes.main=dom.div({className:'main'},
             this._nodes.table_content=dom.table(
                 dom.tr(dom.td(
-                    this._nodes.select_id_pagemodule=dom.select(),' ',
+                    this._nodes.select_id_pagemodule=dom.select(
+                        dom.option(
+                            {value:0},
+                            'No Pagemodule',
+                        ),
+                    ),' ',
                     this._nodes.select_privacy=dom.select(
                         dom.option({value:0},'Hidden'),
                         dom.option({value:1},'Private'),
@@ -28,7 +30,7 @@ function Editpage(site){
                     this._nodes.button_save=dom.button('Save'),' ',
                     this._nodes.button_submit=dom.button('Submit'),' ',
                 )),
-                dom.tr({id:'tr_tags'},dom.td(
+                dom.tr(dom.td(
                     this._nodes.span_tags=dom.span(),
                     this._nodes.input_newtag=dom.input({
                         className:'setFormInput',
@@ -39,7 +41,7 @@ function Editpage(site){
                         n.setAttribute('list','tags')
                     }),
                 )),
-                dom.tr({id:'tr_names'},dom.td(
+                dom.tr(dom.td(
                     this._nodes.span_names=dom.span(),
                     this._nodes.input_newname=dom.input({
                         className:'setFormInput',
@@ -57,19 +59,26 @@ function Editpage(site){
                     }),
                 )),
                 dom.tr(dom.td(
-                    dom.a({id:'showHtmlA',href:'javascript:'},'HTML'),' | ',
-                    dom.a({id:'htmlEditorA',href:'javascript:'},'WYSIWYG (experimental)'),' | ',
-                    dom.a({id:'previewA',href:'javascript:'},'Preview (experimental)'),
+                    this._nodes.showHtmlA=dom.a({href:'javascript:'},'HTML'),' | ',
+                    this._nodes.htmlEditorA=dom.a({href:'javascript:'},'WYSIWYG (experimental)'),' | ',
+                    this._nodes.previewA=dom.a({href:'javascript:'},'Preview (experimental)'),
                 )),
-                dom.tr(dom.td({id:'td_content'},
-                    dom.div({id:'div_textarea_content'},
-                        dom.textarea({id:'textarea_content',disabled:true}),
+                dom.tr(dom.td({className:'contentTc'},
+                    this._nodes.div_textarea_content=dom.div(
+                        {className:'content'},
+                        this._nodes.textarea_content=dom.textarea({disabled:true}),
                     ),
-                    dom.div({id:'div_htmleditor'},n=>{n.style.display='none'}),
-                    dom.div({id:'div_preview'},n=>{n.style.display='none'}),
+                    this._nodes.div_htmleditor=dom.div(
+                        {className:'htmleditor'},
+                        n=>{n.style.display='none'}
+                    ),
+                    this._nodes.div_preview=dom.div(
+                        {className:'preview'},
+                        n=>{n.style.display='none'}
+                    ),
                 )),
             ),
-            dom.datalist({id:'tags'}),
+            this._nodes.tags=dom.datalist({id:'tags'}),
         ),
     )
     this.load=(async()=>{

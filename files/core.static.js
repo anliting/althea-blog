@@ -297,9 +297,14 @@ function div_blog_content(pageView,page){
     let
         div=dom.div({
             id:'blog_content_'+page.id,
-            innerHTML:page.blog.pagemodules[
-                page.id_pagemodule-1
-            ].compile(page.content),
+            innerHTML:
+                page.id_pagemodule?
+                    page.blog.pagemodules[
+                        page.id_pagemodule-1
+                    ].compile(page.content)
+                :
+                    page.content
+            ,
         });
     div.style.display=pageView.hide?'none':'block';
     for(let s of div.getElementsByTagName('script'))
@@ -1507,20 +1512,19 @@ SetForm.prototype.onkeypress=function(e){
 };
 
 function setup$2(editpage,isMobile){
-    let div_main=document.getElementById('div_main');
-    editpage.textarea_content=
-        document.getElementById('textarea_content');
+    let main=editpage._nodes.main;
+    editpage.textarea_content=editpage._nodes.textarea_content;
     onbeforeunload=()=>{
         return''
     };
-    div_main.classList.add(!isMobile?'nonMobile':'mobile');
+    main.classList.add(!isMobile?'nonMobile':'mobile');
     editpage.setup_form();
     editpage.emit('setUp');
     editpage.setUp=true;
-    return
 }
 
 function update(editpage,data){
+    let textarea_content=editpage._nodes.textarea_content;
     data.pagemodules.map(async e=>{
         let definitions=await e.definitions;
         editpage.pagemodules.push(new Pagemodule(
@@ -1560,7 +1564,7 @@ function update(editpage,data){
     });
     data.tags.map(e=>{
         let option=dom.option({value:e});
-        document.getElementById('tags').appendChild(
+        editpage._nodes.tags.appendChild(
             option
         );
     });
@@ -1573,7 +1577,7 @@ function update(editpage,data){
     editpage._nodes.input_newtag.disabled=false;
     editpage._nodes.input_newname.disabled=false;
     editpage._nodes.input_title.disabled=false;
-    textarea_content.disabled=false;
+    editpage._nodes.textarea_content.disabled=false;
     if(editpage.id){
         textarea_content.selectionStart=
         textarea_content.selectionEnd=0;
@@ -1663,38 +1667,32 @@ async function initialize(editpage){
 
 var editors = [
     {
-        come:function(){
-            document.getElementById(
-                'div_textarea_content'
-            ).style.display=
-                'block';
+        come(){
+            this._nodes.div_textarea_content.style.display='';
         },
-        leave:function(){
-            document.getElementById(
-                'div_textarea_content'
-            ).style.display=
-                'none';
+        leave(){
+            this._nodes.div_textarea_content.style.display='none';
         },
     },{
-        come:function(){
-            document.getElementById('div_htmleditor').innerHTML=
+        come(){
+            this._nodes.div_htmleditor.innerHTML=
                 this.textarea_content.value;
             this.htmleditor=new HTMLEditor(
-                document.getElementById('div_htmleditor')
+                this._nodes.div_htmleditor
             );
-            document.getElementById('div_htmleditor').style.display=
-                'block';
-        },leave:function(){
+            this._nodes.div_htmleditor.style.display='';
+        },leave(){
             this.textarea_content.value=
                 this.htmleditor.html();
-            document.getElementById('div_htmleditor').style.display=
-                'none';
+            this._nodes.div_htmleditor.style.display='none';
         },
     },{
-        come:function(){
-            let div_preview=document.getElementById('div_preview');
+        come(){
+            let div_preview=this._nodes.div_preview;
             div_preview.innerHTML=
-                this.pagemodules[1].compile(
+                this.pagemodules[
+                    this._nodes.select_id_pagemodule.value
+                ].compile(
                     this.textarea_content.value
                 );
             syntaxHighlighter.highlight_all(div_preview,()=>{
@@ -1704,11 +1702,9 @@ var editors = [
             BlogPage.tableofcontents_all(div_preview);
             graphvisualize_all(div_preview);
             MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
-            document.getElementById('div_preview').style.display=
-                'block';
-        },leave:function(){
-            document.getElementById('div_preview').style.display=
-                'none';
+            div_preview.style.display='';
+        },leave(){
+            this._nodes.div_preview.style.display='none';
         },
     },
 ];
@@ -1716,9 +1712,9 @@ var editors = [
 var setup_form = function(){
     let
         editpage=this,
-        showHtmlA=document.getElementById('showHtmlA'),
-        htmlEditorA=document.getElementById('htmlEditorA'),
-        previewA=document.getElementById('previewA'),
+        showHtmlA=this._nodes.showHtmlA,
+        htmlEditorA=this._nodes.htmlEditorA,
+        previewA=this._nodes.previewA,
         button_save=this._nodes.button_save,
         button_submit=this._nodes.button_submit,
         input_newtag=this._nodes.input_newtag,
@@ -1787,17 +1783,17 @@ body{
     min-height:360px;
     height:100%;
 }
-#div_main{
+body>.main{
     margin:0px auto;
     max-width:600px;
     width:100%;
     height:100%;
 }
-#div_main>table{
+body>.main>table{
     width:100%;
     height:100%;
 }
-#div_main>table td{
+body>.main>table td{
     padding:2px;
 }
 .setFormInput{
@@ -1807,18 +1803,18 @@ input.title{
     box-sizing:border-box;
     width:100%;
 }
-#td_content{
+.contentTc{
     height:100%;
 }
-#div_textarea_content{
+.content{
     height:100%;
 }
-#textarea_content{
+.content>textarea{
     box-sizing:border-box;
     width:100%;
     height:100%;
 }
-#div_htmleditor{
+.htmleditor{
     margin:0px;
     border:1px solid lightgray;
     padding:8px;
@@ -1826,7 +1822,7 @@ input.title{
     overflow-y:auto;
     line-height:100%;
 }
-#div_preview{
+.preview{
     margin:0px;
     border:1px solid lightgray;
     padding:8px;
@@ -1868,10 +1864,15 @@ function Editpage(site){
     this._site=site;
     this._nodes={};
     dom.body(
-        this.ui=dom.div({id:'div_main'},
+        this.node=this._nodes.main=dom.div({className:'main'},
             this._nodes.table_content=dom.table(
                 dom.tr(dom.td(
-                    this._nodes.select_id_pagemodule=dom.select(),' ',
+                    this._nodes.select_id_pagemodule=dom.select(
+                        dom.option(
+                            {value:0},
+                            'No Pagemodule',
+                        ),
+                    ),' ',
                     this._nodes.select_privacy=dom.select(
                         dom.option({value:0},'Hidden'),
                         dom.option({value:1},'Private'),
@@ -1881,7 +1882,7 @@ function Editpage(site){
                     this._nodes.button_save=dom.button('Save'),' ',
                     this._nodes.button_submit=dom.button('Submit'),' ',
                 )),
-                dom.tr({id:'tr_tags'},dom.td(
+                dom.tr(dom.td(
                     this._nodes.span_tags=dom.span(),
                     this._nodes.input_newtag=dom.input({
                         className:'setFormInput',
@@ -1892,7 +1893,7 @@ function Editpage(site){
                         n.setAttribute('list','tags');
                     }),
                 )),
-                dom.tr({id:'tr_names'},dom.td(
+                dom.tr(dom.td(
                     this._nodes.span_names=dom.span(),
                     this._nodes.input_newname=dom.input({
                         className:'setFormInput',
@@ -1910,19 +1911,26 @@ function Editpage(site){
                     }),
                 )),
                 dom.tr(dom.td(
-                    dom.a({id:'showHtmlA',href:'javascript:'},'HTML'),' | ',
-                    dom.a({id:'htmlEditorA',href:'javascript:'},'WYSIWYG (experimental)'),' | ',
-                    dom.a({id:'previewA',href:'javascript:'},'Preview (experimental)'),
+                    this._nodes.showHtmlA=dom.a({href:'javascript:'},'HTML'),' | ',
+                    this._nodes.htmlEditorA=dom.a({href:'javascript:'},'WYSIWYG (experimental)'),' | ',
+                    this._nodes.previewA=dom.a({href:'javascript:'},'Preview (experimental)'),
                 )),
-                dom.tr(dom.td({id:'td_content'},
-                    dom.div({id:'div_textarea_content'},
-                        dom.textarea({id:'textarea_content',disabled:true}),
+                dom.tr(dom.td({className:'contentTc'},
+                    this._nodes.div_textarea_content=dom.div(
+                        {className:'content'},
+                        this._nodes.textarea_content=dom.textarea({disabled:true}),
                     ),
-                    dom.div({id:'div_htmleditor'},n=>{n.style.display='none';}),
-                    dom.div({id:'div_preview'},n=>{n.style.display='none';}),
+                    this._nodes.div_htmleditor=dom.div(
+                        {className:'htmleditor'},
+                        n=>{n.style.display='none';}
+                    ),
+                    this._nodes.div_preview=dom.div(
+                        {className:'preview'},
+                        n=>{n.style.display='none';}
+                    ),
                 )),
             ),
-            dom.datalist({id:'tags'}),
+            this._nodes.tags=dom.datalist({id:'tags'}),
         ),
     );
     this.load=(async()=>{

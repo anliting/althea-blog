@@ -1,6 +1,7 @@
 import {dom}from '/lib/core.static.js'
 import Pagemodule from '../../Pagemodule.js'
 function update(editpage,data){
+    let textarea_content=editpage._nodes.textarea_content
     data.pagemodules.map(async e=>{
         let definitions=await e.definitions
         editpage.pagemodules.push(new Pagemodule(
@@ -40,7 +41,7 @@ function update(editpage,data){
     })
     data.tags.map(e=>{
         let option=dom.option({value:e})
-        document.getElementById('tags').appendChild(
+        editpage._nodes.tags.appendChild(
             option
         )
     })
@@ -53,7 +54,7 @@ function update(editpage,data){
     editpage._nodes.input_newtag.disabled=false
     editpage._nodes.input_newname.disabled=false
     editpage._nodes.input_title.disabled=false
-    textarea_content.disabled=false
+    editpage._nodes.textarea_content.disabled=false
     if(editpage.id){
         textarea_content.selectionStart=
         textarea_content.selectionEnd=0

@@ -55,9 +55,14 @@ function div_blog_content(pageView,page){
     let
         div=dom.div({
             id:'blog_content_'+page.id,
-            innerHTML:page.blog.pagemodules[
-                page.id_pagemodule-1
-            ].compile(page.content),
+            innerHTML:
+                page.id_pagemodule?
+                    page.blog.pagemodules[
+                        page.id_pagemodule-1
+                    ].compile(page.content)
+                :
+                    page.content
+            ,
         })
     div.style.display=pageView.hide?'none':'block'
     for(let s of div.getElementsByTagName('script'))

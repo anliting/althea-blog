@@ -6,17 +6,17 @@ body{
     min-height:360px;
     height:100%;
 }
-#div_main{
+body>.main{
     margin:0px auto;
     max-width:600px;
     width:100%;
     height:100%;
 }
-#div_main>table{
+body>.main>table{
     width:100%;
     height:100%;
 }
-#div_main>table td{
+body>.main>table td{
     padding:2px;
 }
 .setFormInput{
@@ -26,18 +26,18 @@ input.title{
     box-sizing:border-box;
     width:100%;
 }
-#td_content{
+.contentTc{
     height:100%;
 }
-#div_textarea_content{
+.content{
     height:100%;
 }
-#textarea_content{
+.content>textarea{
     box-sizing:border-box;
     width:100%;
     height:100%;
 }
-#div_htmleditor{
+.htmleditor{
     margin:0px;
     border:1px solid lightgray;
     padding:8px;
@@ -45,7 +45,7 @@ input.title{
     overflow-y:auto;
     line-height:100%;
 }
-#div_preview{
+.preview{
     margin:0px;
     border:1px solid lightgray;
     padding:8px;
