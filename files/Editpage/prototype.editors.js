@@ -22,13 +22,12 @@ export default[
         },
     },{
         come(){
-            let div_preview=
-            this._nodes.div_preview.innerHTML=
-                this.pagemodules[
-                    this._nodes.select_id_pagemodule.value
-                ].compile(
-                    this.textarea_content.value
-                )
+            let
+                pagemoduleId=this._nodes.select_id_pagemodule.value,
+                res=this.textarea_content.value
+            if(pagemoduleId)
+                res=this.pagemodules[pagemoduleId-1].compile(res)
+            this._nodes.div_preview.innerHTML=res
             this._nodes.div_preview.style.display=''
         },leave(){
             this._nodes.div_preview.style.display='none'
