@@ -1473,7 +1473,9 @@ var editors = [
     },{
         come(){
             let
-                pagemoduleId=this._nodes.select_id_pagemodule.value,
+                pagemoduleId=parseInt(
+                    this._nodes.select_id_pagemodule.value,10
+                ),
                 res=this.textarea_content.value;
             if(pagemoduleId)
                 res=this.pagemodules[pagemoduleId-1].compile(res);

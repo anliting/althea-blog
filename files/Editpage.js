@@ -1,6 +1,4 @@
-import{
-    EventEmmiter,
-}from'/lib/core.static.js'
+import{EventEmmiter}from'/lib/core.static.js'
 import editors from         './Editpage/prototype.editors.js'
 import setup_form from      './Editpage/prototype.setup_form.js'
 import submit from          './Editpage/prototype.submit.js'
