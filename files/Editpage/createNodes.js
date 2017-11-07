@@ -48,9 +48,15 @@ export default function(){
                 }),
             )),
             dom.tr(dom.td(
-                this._nodes.showHtmlA=dom.a({href:'javascript:'},'HTML'),' | ',
-                this._nodes.htmlEditorA=dom.a({href:'javascript:'},'WYSIWYG (experimental)'),' | ',
-                this._nodes.previewA=dom.a({href:'javascript:'},'Preview (experimental)'),
+                this._nodes.showHtmlA=dom.button(
+                    'HTML'
+                ),' ',
+                this._nodes.htmlEditorA=dom.button(
+                    'WYSIWYG (experimental)'
+                ),' ',
+                this._nodes.previewA=dom.button(
+                    'Preview (experimental)'
+                ),
             )),
             dom.tr(dom.td({className:'contentTc'},
                 this._nodes.div_textarea_content=dom.div(

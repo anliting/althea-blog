@@ -1,13 +1,14 @@
-import BlogPage from '../Blog/Page.js'
-export default[
-    {
+import page from '../page.js'
+export default{
+    html:{
         come(){
             this._nodes.div_textarea_content.style.display=''
         },
         leave(){
             this._nodes.div_textarea_content.style.display='none'
         },
-    },{
+    },
+    htmleditor:{
         come(){
             this._nodes.div_htmleditor.innerHTML=
                 this.textarea_content.value
@@ -20,19 +21,18 @@ export default[
                 this.htmleditor.html()
             this._nodes.div_htmleditor.style.display='none'
         },
-    },{
+    },
+    preview:{
         come(){
-            let
-                pagemoduleId=parseInt(
-                    this._nodes.select_id_pagemodule.value,10
-                ),
-                res=this.textarea_content.value
-            if(pagemoduleId)
-                res=this.pagemodules[pagemoduleId-1].compile(res)
-            this._nodes.div_preview.innerHTML=res
+            let p=Object.create(page)
+            p.getPagemodules=()=>this.pagemodules
+            this._nodes.div_preview.innerHTML=p.compile(
+                parseInt(this._nodes.select_id_pagemodule.value,10),
+                this.textarea_content.value,
+            )
             this._nodes.div_preview.style.display=''
         },leave(){
             this._nodes.div_preview.style.display='none'
         },
     },
-]
+}

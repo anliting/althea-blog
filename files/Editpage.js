@@ -1,4 +1,4 @@
-import{EventEmmiter}from'/lib/core.static.js'
+import{EventEmmiter}from    '/lib/core.static.js'
 import editors from         './Editpage/prototype.editors.js'
 import setup_form from      './Editpage/prototype.setup_form.js'
 import submit from          './Editpage/prototype.submit.js'
@@ -20,15 +20,6 @@ Object.defineProperty(Editpage.prototype,'currentUser',{get(){
 }})
 Editpage.prototype.setup_form=setup_form
 Editpage.prototype.submit=submit
-Editpage.prototype.show_html=function(){
-    this.changeEditor(0)
-}
-Editpage.prototype.show_htmleditor=function(){
-    this.changeEditor(1)
-}
-Editpage.prototype.show_preview=function(){
-    this.changeEditor(2)
-}
 Editpage.prototype.editors=editors
 Editpage.prototype.changeEditor=function(id){
     this.editors[this.currentEditor].leave.call(this)

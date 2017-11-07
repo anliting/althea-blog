@@ -21,15 +21,15 @@ export default function(){
     })
     showHtmlA.addEventListener('click',e=>{
         e.preventDefault()
-        editpage.show_html()
+        this.changeEditor('html')
     })
     htmlEditorA.addEventListener('click',e=>{
         e.preventDefault()
-        editpage.show_htmleditor()
+        this.changeEditor('htmleditor')
     })
     previewA.addEventListener('click',e=>{
         e.preventDefault()
-        editpage.show_preview()
+        this.changeEditor('preview')
     })
     button_save.addEventListener('click',()=>{
         // to-do: let user know

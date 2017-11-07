@@ -1,5 +1,5 @@
 import {dom}from '/lib/core.static.js'
-import Pagemodule from '../../Pagemodule.js'
+import Pagemodule from '../../../Pagemodule.js'
 function update(editpage,data){
     let textarea_content=editpage._nodes.textarea_content
     data.pagemodules.map(async e=>{

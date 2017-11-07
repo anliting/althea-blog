@@ -1,4 +1,4 @@
-import {dom}from '/lib/core.static.js'
+import{dom}from '/lib/core.static.js'
 function SetForm(span_tags,input){
     this.tags=[]
     this.tagIdInTagsByName={}
@@ -19,32 +19,35 @@ SetForm.prototype.addTag=function(name){
     setForm.span_tags.appendChild(tag.body)
     function Tag(name){
         let
-            span_name=dom.span(),
+            span_name,
             span=dom.span(
-                span_name,
+                {className:'tag'},
+                span_name=dom.span({innerHTML:name}),
                 ' ',
-                a()
+                a(),
             )
-        span_name.innerHTML=name
-        span.className='tag'
         this.body=span
         this.name=name
         function a(){
-            let a=dom.a()
-            a.onclick=()=>{
-                let id=setForm.tagIdInTagsByName[name]
-                setForm.tags[id]=setForm.tags[setForm.tags.length-1]
-                setForm.tagIdInTagsByName[setForm.tags[id].name]=id
-                delete setForm.tagIdInTagsByName[name]
-                setForm.tags.pop()
-                span.parentNode.removeChild(span)
-            }
-            a.href='javascript:'
-            a.style.verticalAlign='middle'
-            a.style.display='inline-block'
-            a.innerHTML=
-                '<i class=material-icons style=font-size:16pt>remove</i>'
-            return a
+            return dom.a({
+                href:'javascript:',
+                onclick(){
+                    let id=setForm.tagIdInTagsByName[name]
+                    setForm.tags[id]=setForm.tags[setForm.tags.length-1]
+                    setForm.tagIdInTagsByName[setForm.tags[id].name]=id
+                    delete setForm.tagIdInTagsByName[name]
+                    setForm.tags.pop()
+                    span.parentNode.removeChild(span)
+                },
+                innerHTML:`
+                    <i class=material-icons style=font-size:16pt>
+                        remove
+                    </i>
+                `
+            },a=>{
+                a.style.verticalAlign='middle'
+                a.style.display='inline-block'
+            })
         }
     }
 }

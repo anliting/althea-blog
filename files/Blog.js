@@ -1,10 +1,10 @@
 import EventEmmiter from 'https://gitcdn.link/cdn/anliting/simple.js/99b7ab1b872bc2da746dd648dd0c078b3bc6961e/src/simple/EventEmmiter.js'
 import loadPagemodules from './Blog/loadPagemodules.js'
-import Page from './Blog/Page.js'
-import _getNext from './Blog/prototype._getNext.js'
-import _anchor_addTag from './Blog/prototype._anchor_addTag.js'
-import BlogView from './Blog/BlogView.js'
-import path from './Blog/path.js'
+import Page from            './Page/Page.js'
+import _getNext from        './Blog/prototype._getNext.js'
+import _anchor_addTag from  './Blog/prototype._anchor_addTag.js'
+import BlogView from        './Blog/BlogView.js'
+import path from            './Blog/path.js'
 function Blog(site,status){
     EventEmmiter.call(this)
     this._site=site

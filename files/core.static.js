@@ -1449,15 +1449,26 @@ Object.defineProperty(Blog.prototype,'status',{get(){
 }});
 Blog.prototype.path=path;
 
-var editors = [
-    {
+var page = {
+    compile(pagemoduleId,source){
+        if(pagemoduleId){
+            let pagemodules=this.getPagemodules();
+            source=pagemodules[pagemoduleId-1].compile(source);
+        }
+        return source
+    },
+};
+
+var editors = {
+    html:{
         come(){
             this._nodes.div_textarea_content.style.display='';
         },
         leave(){
             this._nodes.div_textarea_content.style.display='none';
         },
-    },{
+    },
+    htmleditor:{
         come(){
             this._nodes.div_htmleditor.innerHTML=
                 this.textarea_content.value;
@@ -1470,22 +1481,21 @@ var editors = [
                 this.htmleditor.html();
             this._nodes.div_htmleditor.style.display='none';
         },
-    },{
+    },
+    preview:{
         come(){
-            let
-                pagemoduleId=parseInt(
-                    this._nodes.select_id_pagemodule.value,10
-                ),
-                res=this.textarea_content.value;
-            if(pagemoduleId)
-                res=this.pagemodules[pagemoduleId-1].compile(res);
-            this._nodes.div_preview.innerHTML=res;
+            let p=Object.create(page);
+            p.getPagemodules=()=>this.pagemodules;
+            this._nodes.div_preview.innerHTML=p.compile(
+                parseInt(this._nodes.select_id_pagemodule.value,10),
+                this.textarea_content.value,
+            );
             this._nodes.div_preview.style.display='';
         },leave(){
             this._nodes.div_preview.style.display='none';
         },
     },
-];
+};
 
 var setup_form = function(){
     let
@@ -1510,15 +1520,15 @@ var setup_form = function(){
     });
     showHtmlA.addEventListener('click',e=>{
         e.preventDefault();
-        editpage.show_html();
+        this.changeEditor('html');
     });
     htmlEditorA.addEventListener('click',e=>{
         e.preventDefault();
-        editpage.show_htmleditor();
+        this.changeEditor('htmleditor');
     });
     previewA.addEventListener('click',e=>{
         e.preventDefault();
-        editpage.show_preview();
+        this.changeEditor('preview');
     });
     button_save.addEventListener('click',()=>{
         // to-do: let user know
@@ -1681,9 +1691,15 @@ var createNodes = function(){
                 }),
             )),
             dom.tr(dom.td(
-                this._nodes.showHtmlA=dom.a({href:'javascript:'},'HTML'),' | ',
-                this._nodes.htmlEditorA=dom.a({href:'javascript:'},'WYSIWYG (experimental)'),' | ',
-                this._nodes.previewA=dom.a({href:'javascript:'},'Preview (experimental)'),
+                this._nodes.showHtmlA=dom.button(
+                    'HTML'
+                ),' ',
+                this._nodes.htmlEditorA=dom.button(
+                    'WYSIWYG (experimental)'
+                ),' ',
+                this._nodes.previewA=dom.button(
+                    'Preview (experimental)'
+                ),
             )),
             dom.tr(dom.td({className:'contentTc'},
                 this._nodes.div_textarea_content=dom.div(
@@ -1724,32 +1740,35 @@ SetForm.prototype.addTag=function(name){
     setForm.span_tags.appendChild(tag.body);
     function Tag(name){
         let
-            span_name=dom.span(),
+            span_name,
             span=dom.span(
-                span_name,
+                {className:'tag'},
+                span_name=dom.span({innerHTML:name}),
                 ' ',
-                a()
+                a(),
             );
-        span_name.innerHTML=name;
-        span.className='tag';
         this.body=span;
         this.name=name;
         function a(){
-            let a=dom.a();
-            a.onclick=()=>{
-                let id=setForm.tagIdInTagsByName[name];
-                setForm.tags[id]=setForm.tags[setForm.tags.length-1];
-                setForm.tagIdInTagsByName[setForm.tags[id].name]=id;
-                delete setForm.tagIdInTagsByName[name];
-                setForm.tags.pop();
-                span.parentNode.removeChild(span);
-            };
-            a.href='javascript:';
-            a.style.verticalAlign='middle';
-            a.style.display='inline-block';
-            a.innerHTML=
-                '<i class=material-icons style=font-size:16pt>remove</i>';
-            return a
+            return dom.a({
+                href:'javascript:',
+                onclick(){
+                    let id=setForm.tagIdInTagsByName[name];
+                    setForm.tags[id]=setForm.tags[setForm.tags.length-1];
+                    setForm.tagIdInTagsByName[setForm.tags[id].name]=id;
+                    delete setForm.tagIdInTagsByName[name];
+                    setForm.tags.pop();
+                    span.parentNode.removeChild(span);
+                },
+                innerHTML:`
+                    <i class=material-icons style=font-size:16pt>
+                        remove
+                    </i>
+                `
+            },a=>{
+                a.style.verticalAlign='middle';
+                a.style.display='inline-block';
+            })
         }
     }
 };
@@ -1932,7 +1951,7 @@ function load(){
             this._nodes.span_names,
             this._nodes.input_newname,
         );
-        this.currentEditor=0;
+        this.currentEditor='html';
         this.load=this._site.loadPlugins0('editpage',this);
         // start set up image uploader
         let imageUploader=new ImageUploader(this._site);
@@ -1977,15 +1996,6 @@ Object.defineProperty(Editpage.prototype,'currentUser',{get(){
 }});
 Editpage.prototype.setup_form=setup_form;
 Editpage.prototype.submit=submit;
-Editpage.prototype.show_html=function(){
-    this.changeEditor(0);
-};
-Editpage.prototype.show_htmleditor=function(){
-    this.changeEditor(1);
-};
-Editpage.prototype.show_preview=function(){
-    this.changeEditor(2);
-};
 Editpage.prototype.editors=editors;
 Editpage.prototype.changeEditor=function(id){
     this.editors[this.currentEditor].leave.call(this);

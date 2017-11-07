@@ -3,8 +3,8 @@ import{
     dom,
     moduleLoader,
 }from'/lib/core.static.js'
-import SetForm from         './SetForm.js'
-import initialize from      './initialize.js'
+import SetForm from         './load/SetForm.js'
+import initialize from      './load/initialize.js'
 function load(){
     this.load=(async()=>{
         let module=await moduleLoader()
@@ -18,7 +18,7 @@ function load(){
             this._nodes.span_names,
             this._nodes.input_newname,
         )
-        this.currentEditor=0
+        this.currentEditor='html'
         this.load=this._site.loadPlugins0('editpage',this)
         // start set up image uploader
         let imageUploader=new ImageUploader(this._site)
