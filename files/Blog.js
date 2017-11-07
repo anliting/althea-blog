@@ -1,6 +1,6 @@
 import EventEmmiter from 'https://gitcdn.link/cdn/anliting/simple.js/99b7ab1b872bc2da746dd648dd0c078b3bc6961e/src/simple/EventEmmiter.js'
 import loadPagemodules from './Blog/loadPagemodules.js'
-import Page from            './Page/Page.js'
+import corePlugins from     './corePlugins.js'
 import _getNext from        './Blog/prototype._getNext.js'
 import _anchor_addTag from  './Blog/prototype._anchor_addTag.js'
 import BlogView from        './Blog/BlogView.js'
@@ -18,10 +18,7 @@ function Blog(site,status){
     })
     // start page plugin
     this._pageDivs=[]
-    this._pagePlugins=[
-        Page.star_all,
-        Page.tableofcontents_all,
-    ]
+    this._pagePlugins=corePlugins.slice()
     // end page plugin
     this.load=site.loadPlugins0('blog',this)
     this._getNext()

@@ -1,4 +1,4 @@
-import {dom}from '/lib/core.static.js'
+import{dom}from'/lib/core.static.js'
 function html_stars(rating){
     let output=''
     for(let i=0;i<5;i++){
@@ -63,7 +63,7 @@ function tableofcontents_all(e){
         a[i].style.visibility='visible'
     }
 }
-export default({
+export default[
     star_all,
     tableofcontents_all,
-})
+]

@@ -133,10 +133,10 @@ function tableofcontents_all(e){
         a[i].style.visibility='visible';
     }
 }
-var Page = ({
+var corePlugins = [
     star_all,
     tableofcontents_all,
-});
+];
 
 function setup(){
     let
@@ -393,7 +393,7 @@ Site$1.prototype.getComment=async function(id){
 };
 Site$1.prototype.getPage=async function(id){
     // cache is disabled because of the comment feature
-    return new Page$1(this,id)
+    return new Page(this,id)
 };
 Site$1.prototype.getPagemodule=async function(id){
     return this._pagemodules[id]||(this._pagemodules[id]=
@@ -625,25 +625,25 @@ BlogPage$1.prototype.createDateDiv=function(){
     return div
 };
 
-function Page$1(){
+function Page(){
     AltheaObject.apply(this,arguments);
 }
-Object.setPrototypeOf(Page$1.prototype,AltheaObject.prototype);
-Page$1.prototype._loader='getPage';
-Object.defineProperty(Page$1.prototype,'a',{get(){
+Object.setPrototypeOf(Page.prototype,AltheaObject.prototype);
+Page.prototype._loader='getPage';
+Object.defineProperty(Page.prototype,'a',{get(){
     return dom.a({href:this.id},async a=>{
         let pv=await this.lastversion;
         await pv.load('title');
         a.textContent=pv.title||'Untitled';
     })
 }});
-Object.defineProperty(Page$1.prototype,'lastversion',{async get(){
+Object.defineProperty(Page.prototype,'lastversion',{async get(){
     await this.load('lastversionId');
     return this._site.getPageversion(this.lastversionId)
 }});
-Page$1.BlogPage=BlogPage$1;
+Page.BlogPage=BlogPage$1;
 
-let BlogPage=   Page$1.BlogPage;
+let BlogPage=   Page.BlogPage;
 async function update_to_content(process,pages){
     let site=await this._site;
     pages=await Promise.all(pages.map(async p=>{
@@ -1405,10 +1405,7 @@ function Blog(site,status){
     });
     // start page plugin
     this._pageDivs=[];
-    this._pagePlugins=[
-        Page.star_all,
-        Page.tableofcontents_all,
-    ];
+    this._pagePlugins=corePlugins.slice();
     // end page plugin
     this.load=site.loadPlugins0('blog',this);
     this._getNext();
@@ -1449,13 +1446,15 @@ Object.defineProperty(Blog.prototype,'status',{get(){
 }});
 Blog.prototype.path=path;
 
-var page = {
-    compile(pagemoduleId,source){
+var blog = {
+    newPageContentUi(pagemodule,plugins,source,pagemoduleId){
         if(pagemoduleId){
-            let pagemodules=this.getPagemodules();
-            source=pagemodules[pagemoduleId-1].compile(source);
+            let pagemodule=pagemodule(pagemoduleId);
+            source=pagemodule.compile(source);
         }
-        return source
+        let n=dom.div({innerHTML:source});
+        plugins.map(f=>f(n));
+        return n
     },
 };
 
@@ -1484,13 +1483,17 @@ var editors = {
     },
     preview:{
         come(){
-            let p=Object.create(page);
-            p.getPagemodules=()=>this.pagemodules;
-            this._nodes.div_preview.innerHTML=p.compile(
-                parseInt(this._nodes.select_id_pagemodule.value,10),
-                this.textarea_content.value,
-            );
             this._nodes.div_preview.style.display='';
+            this._nodes.div_preview.innerHTML='';
+            dom(
+                this._nodes.div_preview,
+                blog.newPageContentUi(
+                    id=>this.pagemodules[id-1],
+                    corePlugins,
+                    this.textarea_content.value,
+                    parseInt(this._nodes.select_id_pagemodule.value,10),
+                )
+            );
         },leave(){
             this._nodes.div_preview.style.display='none';
         },
@@ -1548,7 +1551,7 @@ var setup_form = function(){
 };
 
 async function submit(){
-    this.changeEditor(0);
+    this.changeEditor('html');
     let id=await this._site.send({
         function:'editpage',
         id_page:this.id,
@@ -2008,7 +2011,7 @@ var core = {
     Blog,
     Comment,
     Editpage,
-    Page: Page$1,
+    Page,
     Pagemodule,
     Pagemodule0,
     Pageversion,
@@ -2016,5 +2019,5 @@ var core = {
     site,
 };
 
-export { Blog, Comment, Editpage, Page$1 as Page, Pagemodule, Pagemodule0, Pageversion, Site$1 as Site, site };
+export { Blog, Comment, Editpage, Page, Pagemodule, Pagemodule0, Pageversion, Site$1 as Site, site };
 export default core;

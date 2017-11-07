@@ -1,4 +1,6 @@
-import page from '../page.js'
+import{dom}from'/lib/core.static.js'
+import blog from './blog0.js'
+import corePlugins from '../corePlugins.js'
 export default{
     html:{
         come(){
@@ -24,13 +26,17 @@ export default{
     },
     preview:{
         come(){
-            let p=Object.create(page)
-            p.getPagemodules=()=>this.pagemodules
-            this._nodes.div_preview.innerHTML=p.compile(
-                parseInt(this._nodes.select_id_pagemodule.value,10),
-                this.textarea_content.value,
-            )
             this._nodes.div_preview.style.display=''
+            this._nodes.div_preview.innerHTML=''
+            dom(
+                this._nodes.div_preview,
+                blog.newPageContentUi(
+                    id=>this.pagemodules[id-1],
+                    corePlugins,
+                    this.textarea_content.value,
+                    parseInt(this._nodes.select_id_pagemodule.value,10),
+                )
+            )
         },leave(){
             this._nodes.div_preview.style.display='none'
         },
