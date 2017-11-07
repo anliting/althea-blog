@@ -1447,9 +1447,11 @@ Object.defineProperty(Blog.prototype,'status',{get(){
 Blog.prototype.path=path;
 
 var blog = {
-    newPageContentUi(pagemodule,plugins,source,pagemoduleId){
+    newPageContentUi(
+        getPagemodule,plugins,source,pagemoduleId
+    ){
         if(pagemoduleId){
-            let pagemodule=pagemodule(pagemoduleId);
+            let pagemodule=getPagemodule(pagemoduleId);
             source=pagemodule.compile(source);
         }
         let n=dom.div({innerHTML:source});

@@ -1,8 +1,10 @@
 import{dom}from'/lib/core.static.js'
 export default{
-    newPageContentUi(pagemodule,plugins,source,pagemoduleId){
+    newPageContentUi(
+        getPagemodule,plugins,source,pagemoduleId
+    ){
         if(pagemoduleId){
-            let pagemodule=pagemodule(pagemoduleId)
+            let pagemodule=getPagemodule(pagemoduleId)
             source=pagemodule.compile(source)
         }
         let n=dom.div({innerHTML:source})
