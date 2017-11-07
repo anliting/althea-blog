@@ -133,7 +133,7 @@ function tableofcontents_all(e){
         a[i].style.visibility='visible';
     }
 }
-var BlogPage = ({
+var Page = ({
     star_all,
     tableofcontents_all,
 });
@@ -393,7 +393,7 @@ Site$1.prototype.getComment=async function(id){
 };
 Site$1.prototype.getPage=async function(id){
     // cache is disabled because of the comment feature
-    return new Page(this,id)
+    return new Page$1(this,id)
 };
 Site$1.prototype.getPagemodule=async function(id){
     return this._pagemodules[id]||(this._pagemodules[id]=
@@ -558,7 +558,7 @@ function createPrivacyTable(pageView){
     }
 }
 
-function BlogPage$2(blog,id,ispublic,title,id_pagemodule){
+function BlogPage$1(blog,id,ispublic,title,id_pagemodule){
     EventEmmiter.call(this);
     this.blog=blog;
     this.id=id;
@@ -567,16 +567,16 @@ function BlogPage$2(blog,id,ispublic,title,id_pagemodule){
     this.id_pagemodule=id_pagemodule;
     setup.call(this);
 }
-Object.setPrototypeOf(BlogPage$2.prototype,EventEmmiter.prototype);
-Object.defineProperty(BlogPage$2.prototype,'view',view);
-BlogPage$2.prototype.createPrivacyTable=createPrivacyTable;
-BlogPage$2.prototype.getHref=function(){
+Object.setPrototypeOf(BlogPage$1.prototype,EventEmmiter.prototype);
+Object.defineProperty(BlogPage$1.prototype,'view',view);
+BlogPage$1.prototype.createPrivacyTable=createPrivacyTable;
+BlogPage$1.prototype.getHref=function(){
     return this.preferredPagename?
         this.preferredPagename
     :
         this.id
 };
-BlogPage$2.prototype.h1_title=function(){
+BlogPage$1.prototype.h1_title=function(){
     let page=this;
     let h1_title=dom.h1(a_h1_title());
     h1_title.style.textAlign='center';
@@ -598,7 +598,7 @@ BlogPage$2.prototype.h1_title=function(){
         return a
     }
 };
-BlogPage$2.prototype.createAuthorDiv=function(){
+BlogPage$1.prototype.createAuthorDiv=function(){
     let div=dom.div();
     div.style.textAlign='center';
     div.style.display='none';
@@ -611,7 +611,7 @@ BlogPage$2.prototype.createAuthorDiv=function(){
     })();
     return div
 };
-BlogPage$2.prototype.createDateDiv=function(){
+BlogPage$1.prototype.createDateDiv=function(){
     let
         div=dom.div(),
         date=new Date(this.datetime_lastmodified);
@@ -625,25 +625,25 @@ BlogPage$2.prototype.createDateDiv=function(){
     return div
 };
 
-function Page(){
+function Page$1(){
     AltheaObject.apply(this,arguments);
 }
-Object.setPrototypeOf(Page.prototype,AltheaObject.prototype);
-Page.prototype._loader='getPage';
-Object.defineProperty(Page.prototype,'a',{get(){
+Object.setPrototypeOf(Page$1.prototype,AltheaObject.prototype);
+Page$1.prototype._loader='getPage';
+Object.defineProperty(Page$1.prototype,'a',{get(){
     return dom.a({href:this.id},async a=>{
         let pv=await this.lastversion;
         await pv.load('title');
         a.textContent=pv.title||'Untitled';
     })
 }});
-Object.defineProperty(Page.prototype,'lastversion',{async get(){
+Object.defineProperty(Page$1.prototype,'lastversion',{async get(){
     await this.load('lastversionId');
     return this._site.getPageversion(this.lastversionId)
 }});
-Page.BlogPage=BlogPage$2;
+Page$1.BlogPage=BlogPage$1;
 
-let BlogPage$1=   Page.BlogPage;
+let BlogPage=   Page$1.BlogPage;
 async function update_to_content(process,pages){
     let site=await this._site;
     pages=await Promise.all(pages.map(async p=>{
@@ -672,7 +672,7 @@ async function update_to_content(process,pages){
                 pageVersion:vals[1],
             }
         })();
-        page=new BlogPage$1(
+        page=new BlogPage(
             this,
             res.page.id,
             res.pageVersion.public,
@@ -1406,8 +1406,8 @@ function Blog(site,status){
     // start page plugin
     this._pageDivs=[];
     this._pagePlugins=[
-        BlogPage.star_all,
-        BlogPage.tableofcontents_all,
+        Page.star_all,
+        Page.tableofcontents_all,
     ];
     // end page plugin
     this.load=site.loadPlugins0('blog',this);
@@ -1449,222 +1449,6 @@ Object.defineProperty(Blog.prototype,'status',{get(){
 }});
 Blog.prototype.path=path;
 
-function SetForm(span_tags,input){
-    this.tags=[];
-    this.tagIdInTagsByName={};
-    this.span_tags=span_tags;
-    this.input=input;
-}
-SetForm.prototype.toArray=function(){
-    let res=[];
-    this.tags.map(t=>res.push(t.name));
-    return res
-};
-SetForm.prototype.addTag=function(name){
-    let
-        setForm=this,
-        tag=new Tag(name);
-    setForm.tags.push(tag);
-    setForm.tagIdInTagsByName[name]=setForm.tags.length-1;
-    setForm.span_tags.appendChild(tag.body);
-    function Tag(name){
-        let
-            span_name=dom.span(),
-            span=dom.span(
-                span_name,
-                ' ',
-                a()
-            );
-        span_name.innerHTML=name;
-        span.className='tag';
-        this.body=span;
-        this.name=name;
-        function a(){
-            let a=dom.a();
-            a.onclick=()=>{
-                let id=setForm.tagIdInTagsByName[name];
-                setForm.tags[id]=setForm.tags[setForm.tags.length-1];
-                setForm.tagIdInTagsByName[setForm.tags[id].name]=id;
-                delete setForm.tagIdInTagsByName[name];
-                setForm.tags.pop();
-                span.parentNode.removeChild(span);
-            };
-            a.href='javascript:';
-            a.style.verticalAlign='middle';
-            a.style.display='inline-block';
-            a.innerHTML=
-                '<i class=material-icons style=font-size:16pt>remove</i>';
-            return a
-        }
-    }
-};
-SetForm.prototype.onkeypress=function(e){
-    let name=this.input.value;
-    if(
-        e.key!='Enter'||
-        this.input.value==''||
-        this.tagIdInTagsByName[name]!==undefined
-    )
-        return
-    e.stopPropagation();
-    this.input.value='';
-    this.addTag(name);
-};
-
-function setup$2(editpage,isMobile){
-    let main=editpage._nodes.main;
-    editpage.textarea_content=editpage._nodes.textarea_content;
-    onbeforeunload=()=>{
-        return''
-    };
-    main.classList.add(!isMobile?'nonMobile':'mobile');
-    editpage.setup_form();
-    editpage.emit('setUp');
-    editpage.setUp=true;
-}
-
-function update(editpage,data){
-    let textarea_content=editpage._nodes.textarea_content;
-    data.pagemodules.map(async e=>{
-        let definitions=await e.definitions;
-        editpage.pagemodules.push(new Pagemodule(
-            e.id,
-            e.priority,
-            e.name,
-            definitions
-        ));
-    });
-    /*document.getElementById(
-        'input_ispublic_'+(
-            editpage.id&&data.lastversion_page.ispublic?
-                'true'
-            :
-                'false'
-        )
-    ).checked='checked'*/
-    editpage._nodes.select_privacy.value=
-        editpage.id&&data.lastversion_page.ispublic?3:1;
-    data.pagemodules.sort((a,b)=>
-        a.priority-b.priority
-    );
-    data.pagemodules.map(e=>{
-        let option=dom.option(e.name);
-        option.value=e.id;
-        if(editpage.id&&e.id==data.lastversion_page.id_pagemodule)
-            option.selected='selected';
-        editpage._nodes.select_id_pagemodule.appendChild(
-            option
-        );
-    });
-    editpage.id&&data.lastversion_page.tags.map(e=>{
-        editpage.setOfTags.addTag(e);
-    });
-    editpage.id&&data.page.pagenames.map(e=>{
-        editpage.setOfNames.addTag(e);
-    });
-    data.tags.map(e=>{
-        let option=dom.option({value:e});
-        editpage._nodes.tags.appendChild(
-            option
-        );
-    });
-    if(editpage.id){
-        editpage._nodes.input_title.value=
-            data.lastversion_page.title;
-        textarea_content.value=
-            data.lastversion_page.content;
-    }
-    editpage._nodes.input_newtag.disabled=false;
-    editpage._nodes.input_newname.disabled=false;
-    editpage._nodes.input_title.disabled=false;
-    editpage._nodes.textarea_content.disabled=false;
-    if(editpage.id){
-        textarea_content.selectionStart=
-        textarea_content.selectionEnd=0;
-        textarea_content.focus();
-    }
-}
-
-async function getData(editpage){
-    let res={};
-    if(editpage.id){
-        let
-            site=await editpage._site,
-            page=await site.getPage(editpage.id),
-            pageversion=await page.lastversion;
-        await Promise.all([
-            page.load([
-                'public',
-                'lastversionId',
-                'preferredPagename',
-                'timestamp_insert',
-                'timestamp_lastmodified',
-                'author',
-                'pagenames',
-            ]),
-            pageversion.load([
-                'content',
-                'id_page',
-                'id_pagemodule',
-                'id_user_author',
-                'public',
-                'isremoved',
-                'tags',
-                'timestamp_insert',
-                'title',
-            ]),
-        ]);
-        res.page={
-            id:page.id,
-            id_user_author:page.author,
-            ispublic:page.public,
-            id_lastversion:page.lastversionId,
-            isremoved:false,
-            preferredPagename:page.preferredPagename,
-            timestamp_insert:page.timestamp_insert,
-            timestamp_lastmodified:page.timestamp_lastmodified,
-            pagenames:page.pagenames,
-        };
-        res.lastversion_page={
-            content:pageversion.content,
-            id:pageversion.id,
-            id_page:pageversion.id_page,
-            id_pagemodule:pageversion.id_pagemodule,
-            id_user_author:pageversion.id_user_author,
-            ispublic:pageversion.public,
-            isremoved:pageversion.isremoved,
-            tags:pageversion.tags,
-            timestamp_insert:pageversion.timestamp_insert,
-            title:pageversion.title,
-        };
-    }
-    return res
-}
-async function initialize(editpage){
-    editpage.isMobile=browser.isMobile;
-    editpage.id=environment.id_page||0;
-    document.title=!editpage.id?'New Page':'Edit Page';
-    setup$2(editpage,editpage.isMobile);
-    let res=await Promise.all([
-        getData(editpage),
-        editpage._site.send('getTags'),
-        (async()=>{
-            let res=await editpage._site.send('getPagemodules0');
-            return Promise.all(res.map(async id=>{
-                let pagemodule=await editpage._site.getPagemodule(id);
-                return pagemodule.load([
-                    'priority',
-                    'name',
-                ])
-            }))
-        })(),
-    ]);
-    let data=res[0];
-    data.tags=res[1];
-    data.pagemodules=res[2];
-    update(editpage,data);
-}
-
 var editors = [
     {
         come(){
@@ -1688,21 +1472,14 @@ var editors = [
         },
     },{
         come(){
-            let div_preview=this._nodes.div_preview;
-            div_preview.innerHTML=
+            let div_preview=
+            this._nodes.div_preview.innerHTML=
                 this.pagemodules[
                     this._nodes.select_id_pagemodule.value
                 ].compile(
                     this.textarea_content.value
                 );
-            syntaxHighlighter.highlight_all(div_preview,()=>{
-                syntaxHighlighter.border_all(div_preview);
-            });
-            BlogPage.star_all(div_preview);
-            BlogPage.tableofcontents_all(div_preview);
-            graphvisualize_all(div_preview);
-            MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
-            div_preview.style.display='';
+            this._nodes.div_preview.style.display='';
         },leave(){
             this._nodes.div_preview.style.display='none';
         },
@@ -1926,21 +1703,225 @@ var createNodes = function(){
     );
 };
 
-function Editpage(site){
-    EventEmmiter$1.call(this);
-    this._site=site;
-    this._datalistId=Math.random().toString(36).substring(2);
-    createNodes.call(this);
-    this.node=this._nodes.main;
+function SetForm(span_tags,input){
+    this.tags=[];
+    this.tagIdInTagsByName={};
+    this.span_tags=span_tags;
+    this.input=input;
+}
+SetForm.prototype.toArray=function(){
+    let res=[];
+    this.tags.map(t=>res.push(t.name));
+    return res
+};
+SetForm.prototype.addTag=function(name){
+    let
+        setForm=this,
+        tag=new Tag(name);
+    setForm.tags.push(tag);
+    setForm.tagIdInTagsByName[name]=setForm.tags.length-1;
+    setForm.span_tags.appendChild(tag.body);
+    function Tag(name){
+        let
+            span_name=dom.span(),
+            span=dom.span(
+                span_name,
+                ' ',
+                a()
+            );
+        span_name.innerHTML=name;
+        span.className='tag';
+        this.body=span;
+        this.name=name;
+        function a(){
+            let a=dom.a();
+            a.onclick=()=>{
+                let id=setForm.tagIdInTagsByName[name];
+                setForm.tags[id]=setForm.tags[setForm.tags.length-1];
+                setForm.tagIdInTagsByName[setForm.tags[id].name]=id;
+                delete setForm.tagIdInTagsByName[name];
+                setForm.tags.pop();
+                span.parentNode.removeChild(span);
+            };
+            a.href='javascript:';
+            a.style.verticalAlign='middle';
+            a.style.display='inline-block';
+            a.innerHTML=
+                '<i class=material-icons style=font-size:16pt>remove</i>';
+            return a
+        }
+    }
+};
+SetForm.prototype.onkeypress=function(e){
+    let name=this.input.value;
+    if(
+        e.key!='Enter'||
+        this.input.value==''||
+        this.tagIdInTagsByName[name]!==undefined
+    )
+        return
+    e.stopPropagation();
+    this.input.value='';
+    this.addTag(name);
+};
+
+function setup$2(editpage,isMobile){
+    let main=editpage._nodes.main;
+    editpage.textarea_content=editpage._nodes.textarea_content;
+    onbeforeunload=()=>{
+        return''
+    };
+    main.classList.add(!isMobile?'nonMobile':'mobile');
+    editpage.setup_form();
+    editpage.emit('setUp');
+    editpage.setUp=true;
+}
+
+function update(editpage,data){
+    let textarea_content=editpage._nodes.textarea_content;
+    data.pagemodules.map(async e=>{
+        let definitions=await e.definitions;
+        editpage.pagemodules.push(new Pagemodule(
+            e.id,
+            e.priority,
+            e.name,
+            definitions
+        ));
+    });
+    /*document.getElementById(
+        'input_ispublic_'+(
+            editpage.id&&data.lastversion_page.ispublic?
+                'true'
+            :
+                'false'
+        )
+    ).checked='checked'*/
+    editpage._nodes.select_privacy.value=
+        editpage.id&&data.lastversion_page.ispublic?3:1;
+    data.pagemodules.sort((a,b)=>
+        a.priority-b.priority
+    );
+    data.pagemodules.map(e=>{
+        let option=dom.option(e.name);
+        option.value=e.id;
+        if(editpage.id&&e.id==data.lastversion_page.id_pagemodule)
+            option.selected='selected';
+        editpage._nodes.select_id_pagemodule.appendChild(
+            option
+        );
+    });
+    editpage.id&&data.lastversion_page.tags.map(e=>{
+        editpage.setOfTags.addTag(e);
+    });
+    editpage.id&&data.page.pagenames.map(e=>{
+        editpage.setOfNames.addTag(e);
+    });
+    data.tags.map(e=>{
+        let option=dom.option({value:e});
+        editpage._nodes.tags.appendChild(
+            option
+        );
+    });
+    if(editpage.id){
+        editpage._nodes.input_title.value=
+            data.lastversion_page.title;
+        textarea_content.value=
+            data.lastversion_page.content;
+    }
+    editpage._nodes.input_newtag.disabled=false;
+    editpage._nodes.input_newname.disabled=false;
+    editpage._nodes.input_title.disabled=false;
+    editpage._nodes.textarea_content.disabled=false;
+    if(editpage.id){
+        textarea_content.selectionStart=
+        textarea_content.selectionEnd=0;
+        textarea_content.focus();
+    }
+}
+
+async function getData(editpage){
+    let res={};
+    if(editpage.id){
+        let
+            site=await editpage._site,
+            page=await site.getPage(editpage.id),
+            pageversion=await page.lastversion;
+        await Promise.all([
+            page.load([
+                'public',
+                'lastversionId',
+                'preferredPagename',
+                'timestamp_insert',
+                'timestamp_lastmodified',
+                'author',
+                'pagenames',
+            ]),
+            pageversion.load([
+                'content',
+                'id_page',
+                'id_pagemodule',
+                'id_user_author',
+                'public',
+                'isremoved',
+                'tags',
+                'timestamp_insert',
+                'title',
+            ]),
+        ]);
+        res.page={
+            id:page.id,
+            id_user_author:page.author,
+            ispublic:page.public,
+            id_lastversion:page.lastversionId,
+            isremoved:false,
+            preferredPagename:page.preferredPagename,
+            timestamp_insert:page.timestamp_insert,
+            timestamp_lastmodified:page.timestamp_lastmodified,
+            pagenames:page.pagenames,
+        };
+        res.lastversion_page={
+            content:pageversion.content,
+            id:pageversion.id,
+            id_page:pageversion.id_page,
+            id_pagemodule:pageversion.id_pagemodule,
+            id_user_author:pageversion.id_user_author,
+            ispublic:pageversion.public,
+            isremoved:pageversion.isremoved,
+            tags:pageversion.tags,
+            timestamp_insert:pageversion.timestamp_insert,
+            title:pageversion.title,
+        };
+    }
+    return res
+}
+async function initialize(editpage){
+    editpage.isMobile=browser.isMobile;
+    document.title=!editpage.id?'New Page':'Edit Page';
+    setup$2(editpage,editpage.isMobile);
+    let res=await Promise.all([
+        getData(editpage),
+        editpage._site.send('getTags'),
+        (async()=>{
+            let res=await editpage._site.send('getPagemodules0');
+            return Promise.all(res.map(async id=>{
+                let pagemodule=await editpage._site.getPagemodule(id);
+                return pagemodule.load([
+                    'priority',
+                    'name',
+                ])
+            }))
+        })(),
+    ]);
+    let data=res[0];
+    data.tags=res[1];
+    data.pagemodules=res[2];
+    update(editpage,data);
+}
+
+function load(){
     this.load=(async()=>{
         let module=await moduleLoader();
-        await Promise.all([
-            module.scriptByPath('https://gitcdn.link/cdn/anliting/syntaxhighlighter/e84919de45c19a185a4caa411037e28d5695d16b/highlighter.js'),
-            module.scriptByPath('https://gitcdn.link/cdn/anliting/graphvisualizer/9f7c4b53cf2d24e1362dc609b63816238ac2fa88/visualizer.js'),
-            module.scriptByPath('https://gitcdn.link/cdn/anliting/htmleditor/9f904627c0ab99c4527ceb3c54a61c5704e6ddec/htmleditor.js'),
-            module.scriptByPath('https://gitcdn.link/cdn/mathjax/MathJax/d4ab1b35c96dd964eaa9e1ed2c86e39fffbdacf6/MathJax.js?config=TeX-AMS-MML_HTMLorMML'),
-            module.scriptByPath('https://gitcdn.link/cdn/sytelus/CryptoJS/7fbfbbee0d005b31746bc5858c70c359e98308e5/rollups/aes.js'),
-        ]);
+        await module.scriptByPath('https://gitcdn.link/cdn/anliting/htmleditor/9f904627c0ab99c4527ceb3c54a61c5704e6ddec/htmleditor.js'),
         this.pagemodules=[];
         this.setOfTags=new SetForm(
             this._nodes.span_tags,
@@ -1979,6 +1960,16 @@ function Editpage(site){
         initialize(this);
     })();
 }
+
+function Editpage(site,environment){
+    EventEmmiter$1.call(this);
+    this.id=environment.id_page||0;
+    this._site=site;
+    this._datalistId=Math.random().toString(36).substring(2);
+    createNodes.call(this);
+    this.node=this._nodes.main;
+    load.call(this);
+}
 Object.setPrototypeOf(Editpage.prototype,EventEmmiter$1.prototype);
 Object.defineProperty(Editpage.prototype,'currentUser',{get(){
     return this._site.currentUser
@@ -1996,9 +1987,9 @@ Editpage.prototype.show_preview=function(){
 };
 Editpage.prototype.editors=editors;
 Editpage.prototype.changeEditor=function(id){
-    this.editors[this.currentEditor].leave.bind(this)();
+    this.editors[this.currentEditor].leave.call(this);
     this.currentEditor=id;
-    this.editors[this.currentEditor].come.bind(this)();
+    this.editors[this.currentEditor].come.call(this);
 };
 Editpage.style=style$1;
 
@@ -2006,7 +1997,7 @@ var core = {
     Blog,
     Comment,
     Editpage,
-    Page,
+    Page: Page$1,
     Pagemodule,
     Pagemodule0,
     Pageversion,
@@ -2014,5 +2005,5 @@ var core = {
     site,
 };
 
-export { Blog, Comment, Editpage, Page, Pagemodule, Pagemodule0, Pageversion, Site$1 as Site, site };
+export { Blog, Comment, Editpage, Page$1 as Page, Pagemodule, Pagemodule0, Pageversion, Site$1 as Site, site };
 export default core;

@@ -22,21 +22,14 @@ export default[
         },
     },{
         come(){
-            let div_preview=this._nodes.div_preview
-            div_preview.innerHTML=
+            let div_preview=
+            this._nodes.div_preview.innerHTML=
                 this.pagemodules[
                     this._nodes.select_id_pagemodule.value
                 ].compile(
                     this.textarea_content.value
                 )
-            syntaxHighlighter.highlight_all(div_preview,()=>{
-                syntaxHighlighter.border_all(div_preview)
-            })
-            BlogPage.star_all(div_preview)
-            BlogPage.tableofcontents_all(div_preview)
-            graphvisualize_all(div_preview)
-            MathJax.Hub.Queue(['Typeset',MathJax.Hub])
-            div_preview.style.display=''
+            this._nodes.div_preview.style.display=''
         },leave(){
             this._nodes.div_preview.style.display='none'
         },

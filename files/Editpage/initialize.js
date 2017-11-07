@@ -58,7 +58,6 @@ async function getData(editpage){
 }
 async function initialize(editpage){
     editpage.isMobile=browser.isMobile
-    editpage.id=environment.id_page||0
     document.title=!editpage.id?'New Page':'Edit Page'
     setup(editpage,editpage.isMobile)
     let res=await Promise.all([
