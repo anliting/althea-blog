@@ -1,9 +1,6 @@
 export default function(){
     let
         editpage=this,
-        showHtmlA=this._nodes.showHtmlA,
-        htmlEditorA=this._nodes.htmlEditorA,
-        previewA=this._nodes.previewA,
         button_save=this._nodes.button_save,
         button_submit=this._nodes.button_submit,
         input_newtag=this._nodes.input_newtag,
@@ -18,18 +15,6 @@ export default function(){
             onbeforeunload=null
             location=page.id
         })()
-    })
-    showHtmlA.addEventListener('click',e=>{
-        e.preventDefault()
-        this.changeEditor('html')
-    })
-    htmlEditorA.addEventListener('click',e=>{
-        e.preventDefault()
-        this.changeEditor('htmleditor')
-    })
-    previewA.addEventListener('click',e=>{
-        e.preventDefault()
-        this.changeEditor('preview')
     })
     button_save.addEventListener('click',()=>{
         // to-do: let user know

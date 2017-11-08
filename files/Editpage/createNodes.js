@@ -48,15 +48,27 @@ export default function(){
                 }),
             )),
             dom.tr(dom.td(
-                this._nodes.showHtmlA=dom.button(
+                dom.button(
+                    {onclick:e=>{
+                        e.preventDefault()
+                        this.changeEditor('html')
+                    }},
                     'HTML'
                 ),' ',
                 arg.h&&[
-                    this._nodes.htmlEditorA=dom.button(
+                    dom.button(
+                        {onclick:e=>{
+                            e.preventDefault()
+                            this.changeEditor('htmleditor')
+                        }},
                         'WYSIWYG'
                     ),' ',
                 ],
-                this._nodes.previewA=dom.button(
+                dom.button(
+                    {onclick:e=>{
+                        e.preventDefault()
+                        this.changeEditor('preview')
+                    }},
                     'Preview'
                 ),
             )),

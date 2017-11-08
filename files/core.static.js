@@ -1509,9 +1509,6 @@ var editors = {
 var setup_form = function(){
     let
         editpage=this,
-        showHtmlA=this._nodes.showHtmlA,
-        htmlEditorA=this._nodes.htmlEditorA,
-        previewA=this._nodes.previewA,
         button_save=this._nodes.button_save,
         button_submit=this._nodes.button_submit,
         input_newtag=this._nodes.input_newtag,
@@ -1526,18 +1523,6 @@ var setup_form = function(){
             onbeforeunload=null;
             location=page.id;
         })();
-    });
-    showHtmlA.addEventListener('click',e=>{
-        e.preventDefault();
-        this.changeEditor('html');
-    });
-    htmlEditorA.addEventListener('click',e=>{
-        e.preventDefault();
-        this.changeEditor('htmleditor');
-    });
-    previewA.addEventListener('click',e=>{
-        e.preventDefault();
-        this.changeEditor('preview');
     });
     button_save.addEventListener('click',()=>{
         // to-do: let user know
@@ -1700,15 +1685,27 @@ var createNodes = function(){
                 }),
             )),
             dom.tr(dom.td(
-                this._nodes.showHtmlA=dom.button(
+                dom.button(
+                    {onclick:e=>{
+                        e.preventDefault();
+                        this.changeEditor('html');
+                    }},
                     'HTML'
                 ),' ',
                 arg.h&&[
-                    this._nodes.htmlEditorA=dom.button(
+                    dom.button(
+                        {onclick:e=>{
+                            e.preventDefault();
+                            this.changeEditor('htmleditor');
+                        }},
                         'WYSIWYG'
                     ),' ',
                 ],
-                this._nodes.previewA=dom.button(
+                dom.button(
+                    {onclick:e=>{
+                        e.preventDefault();
+                        this.changeEditor('preview');
+                    }},
                     'Preview'
                 ),
             )),
