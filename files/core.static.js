@@ -1446,20 +1446,6 @@ Object.defineProperty(Blog.prototype,'status',{get(){
 }});
 Blog.prototype.path=path;
 
-var blog = {
-    newPageContentUi(
-        getPagemodule,plugins,source,pagemoduleId
-    ){
-        if(pagemoduleId){
-            let pagemodule=getPagemodule(pagemoduleId);
-            source=pagemodule.compile(source);
-        }
-        let n=dom.div({innerHTML:source});
-        plugins.map(f=>f(n));
-        return n
-    },
-};
-
 var editors = {
     html:{
         come(){
@@ -1489,9 +1475,9 @@ var editors = {
             this._nodes.div_preview.innerHTML='';
             dom(
                 this._nodes.div_preview,
-                blog.newPageContentUi(
+                this.blog.newPageContentUi(
                     id=>this.pagemodules[id-1],
-                    corePlugins,
+                    this._pagePlugins,
                     this.textarea_content.value,
                     parseInt(this._nodes.select_id_pagemodule.value,10),
                 )
@@ -1958,6 +1944,14 @@ function load(){
         );
         this.currentEditor='html';
         this.load=this._site.loadPlugins0('editpage',this);
+        this._pagePlugins=corePlugins.slice();
+        this._site.loadPlugins0('blog',{
+            on(){},
+            _style(){},
+            addPagePlugin:p=>{
+                this._pagePlugins.push(p);
+            }
+        });
         // start set up image uploader
         let imageUploader=new ImageUploader(this._site);
         let fileButton=dom.createFileButton('Image');
@@ -1986,8 +1980,23 @@ function load(){
     })();
 }
 
+var blog = {
+    newPageContentUi(
+        getPagemodule,plugins,source,pagemoduleId
+    ){
+        if(pagemoduleId){
+            let pagemodule=getPagemodule(pagemoduleId);
+            source=pagemodule.compile(source);
+        }
+        let n=dom.div({innerHTML:source});
+        plugins.map(f=>f(n));
+        return n
+    },
+};
+
 function Editpage(site,environment){
     EventEmmiter$1.call(this);
+    this.blog=blog;
     this.id=environment.id_page||0;
     this._site=site;
     this._datalistId=Math.random().toString(36).substring(2);

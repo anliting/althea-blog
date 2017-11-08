@@ -5,8 +5,10 @@ import submit from          './Editpage/prototype.submit.js'
 import style from           './Editpage/style.js'
 import createNodes from     './Editpage/createNodes.js'
 import load from            './Editpage/load.js'
+import blog from            './Editpage/blog0.js'
 function Editpage(site,environment){
     EventEmmiter.call(this)
+    this.blog=blog
     this.id=environment.id_page||0
     this._site=site
     this._datalistId=Math.random().toString(36).substring(2)

@@ -5,6 +5,7 @@ import{
 }from'/lib/core.static.js'
 import SetForm from         './load/SetForm.js'
 import initialize from      './load/initialize.js'
+import corePlugins from     '../corePlugins.js'
 function load(){
     this.load=(async()=>{
         let module=await moduleLoader()
@@ -20,6 +21,14 @@ function load(){
         )
         this.currentEditor='html'
         this.load=this._site.loadPlugins0('editpage',this)
+        this._pagePlugins=corePlugins.slice()
+        this._site.loadPlugins0('blog',{
+            on(){},
+            _style(){},
+            addPagePlugin:p=>{
+                this._pagePlugins.push(p)
+            }
+        })
         // start set up image uploader
         let imageUploader=new ImageUploader(this._site)
         let fileButton=dom.createFileButton('Image')
