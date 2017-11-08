@@ -1407,7 +1407,14 @@ function Blog(site,status){
     this._pageDivs=[];
     this._pagePlugins=corePlugins.slice();
     // end page plugin
-    this.load=site.loadPlugins0('blog',this);
+    this.load=Promise.all([
+        site.loadPlugins0('blog',this),
+        (async()=>{
+            (await site.loadPlugins('blog_page')).forEach(p=>
+                this.addPagePlugin(p)
+            );
+        })(),
+    ]);
     this._getNext();
     this._styles=[];
     this.view=new BlogView(this);
@@ -1445,6 +1452,17 @@ Object.defineProperty(Blog.prototype,'status',{get(){
     this._getNext();
 }});
 Blog.prototype.path=path;
+Blog.newPageContentUi=function(
+    getPagemodule,plugins,source,pagemoduleId
+){
+    if(pagemoduleId){
+        let pagemodule=getPagemodule(pagemoduleId);
+        source=pagemodule.compile(source);
+    }
+    let n=dom.div({innerHTML:source});
+    plugins.map(f=>f(n));
+    return n
+};
 
 var editors = {
     html:{
@@ -1944,14 +1962,10 @@ function load(){
         );
         this.currentEditor='html';
         this.load=this._site.loadPlugins0('editpage',this);
-        this._pagePlugins=corePlugins.slice();
-        this._site.loadPlugins0('blog',{
-            on(){},
-            _style(){},
-            addPagePlugin:p=>{
-                this._pagePlugins.push(p);
-            }
-        });
+        this._pagePlugins=[
+            ...corePlugins,
+            ...await this._site.loadPlugins('blog_page'),
+        ];
         // start set up image uploader
         let imageUploader=new ImageUploader(this._site);
         let fileButton=dom.createFileButton('Image');
@@ -1980,23 +1994,9 @@ function load(){
     })();
 }
 
-var blog = {
-    newPageContentUi(
-        getPagemodule,plugins,source,pagemoduleId
-    ){
-        if(pagemoduleId){
-            let pagemodule=getPagemodule(pagemoduleId);
-            source=pagemodule.compile(source);
-        }
-        let n=dom.div({innerHTML:source});
-        plugins.map(f=>f(n));
-        return n
-    },
-};
-
 function Editpage(site,environment){
     EventEmmiter$1.call(this);
-    this.blog=blog;
+    this.blog=Blog;
     this.id=environment.id_page||0;
     this._site=site;
     this._datalistId=Math.random().toString(36).substring(2);

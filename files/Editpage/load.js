@@ -21,14 +21,10 @@ function load(){
         )
         this.currentEditor='html'
         this.load=this._site.loadPlugins0('editpage',this)
-        this._pagePlugins=corePlugins.slice()
-        this._site.loadPlugins0('blog',{
-            on(){},
-            _style(){},
-            addPagePlugin:p=>{
-                this._pagePlugins.push(p)
-            }
-        })
+        this._pagePlugins=[
+            ...corePlugins,
+            ...await this._site.loadPlugins('blog_page'),
+        ]
         // start set up image uploader
         let imageUploader=new ImageUploader(this._site)
         let fileButton=dom.createFileButton('Image')

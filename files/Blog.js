@@ -5,6 +5,7 @@ import _getNext from        './Blog/prototype._getNext.js'
 import _anchor_addTag from  './Blog/prototype._anchor_addTag.js'
 import BlogView from        './Blog/BlogView.js'
 import path from            './Blog/path.js'
+import{dom}from             '/lib/core.static.js'
 function Blog(site,status){
     EventEmmiter.call(this)
     this._site=site
@@ -20,7 +21,14 @@ function Blog(site,status){
     this._pageDivs=[]
     this._pagePlugins=corePlugins.slice()
     // end page plugin
-    this.load=site.loadPlugins0('blog',this)
+    this.load=Promise.all([
+        site.loadPlugins0('blog',this),
+        (async()=>{
+            ;(await site.loadPlugins('blog_page')).forEach(p=>
+                this.addPagePlugin(p)
+            )
+        })(),
+    ])
     this._getNext()
     this._styles=[]
     this.view=new BlogView(this)
@@ -58,4 +66,15 @@ Object.defineProperty(Blog.prototype,'status',{get(){
     this._getNext()
 }})
 Blog.prototype.path=path
+Blog.newPageContentUi=function(
+    getPagemodule,plugins,source,pagemoduleId
+){
+    if(pagemoduleId){
+        let pagemodule=getPagemodule(pagemoduleId)
+        source=pagemodule.compile(source)
+    }
+    let n=dom.div({innerHTML:source})
+    plugins.map(f=>f(n))
+    return n
+}
 export default Blog
