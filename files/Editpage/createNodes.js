@@ -1,4 +1,4 @@
-import{dom}from'/lib/core.static.js'
+import{arg,dom}from'/lib/core.static.js'
 export default function(){
     this._nodes={}
     this._nodes.main=dom.div({className:'main'},
@@ -51,11 +51,13 @@ export default function(){
                 this._nodes.showHtmlA=dom.button(
                     'HTML'
                 ),' ',
-                this._nodes.htmlEditorA=dom.button(
-                    'WYSIWYG (experimental)'
-                ),' ',
+                arg.h&&[
+                    this._nodes.htmlEditorA=dom.button(
+                        'WYSIWYG'
+                    ),' ',
+                ],
                 this._nodes.previewA=dom.button(
-                    'Preview (experimental)'
+                    'Preview'
                 ),
             )),
             dom.tr(dom.td({className:'contentTc'},

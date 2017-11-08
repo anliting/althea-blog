@@ -1,5 +1,5 @@
 import EventEmmiter from 'https://gitcdn.link/cdn/anliting/simple.js/99b7ab1b872bc2da746dd648dd0c078b3bc6961e/src/simple/EventEmmiter.js';
-import { AltheaObject, EventEmmiter as EventEmmiter$1, ImageUploader, Site, browser, dom, html, moduleLoader, order } from '/lib/core.static.js';
+import { AltheaObject, EventEmmiter as EventEmmiter$1, ImageUploader, Site, arg, browser, dom, html, moduleLoader, order } from '/lib/core.static.js';
 
 function Pagemodule(id,priority,name,definitions){
     this.id=id;
@@ -1703,11 +1703,13 @@ var createNodes = function(){
                 this._nodes.showHtmlA=dom.button(
                     'HTML'
                 ),' ',
-                this._nodes.htmlEditorA=dom.button(
-                    'WYSIWYG (experimental)'
-                ),' ',
+                arg.h&&[
+                    this._nodes.htmlEditorA=dom.button(
+                        'WYSIWYG'
+                    ),' ',
+                ],
                 this._nodes.previewA=dom.button(
-                    'Preview (experimental)'
+                    'Preview'
                 ),
             )),
             dom.tr(dom.td({className:'contentTc'},
