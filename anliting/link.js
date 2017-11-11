@@ -2,7 +2,7 @@ let
     rollup=require('rollup'),
     skip=[
         '/lib/core.static.js',
-        '/plugins/althea-blog/core.static.js',
+        '/plugins/blog/core.static.js',
         'https://gitcdn.link/cdn/anliting/simple.js/99b7ab1b872bc2da746dd648dd0c078b3bc6961e/src/simple/EventEmmiter.js',
     ]
 async function link(input,file){

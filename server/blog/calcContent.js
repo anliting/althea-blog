@@ -45,8 +45,8 @@ ${data.og?og(env,data,title,url_request):''}
 <link rel=icon href=images/icon.png>
 <body>
 ${env.althea.loadModule(
-    //'plugins/althea-blog/blog.js',
-    'plugins/althea-blog/blog.static.js',
+    //'plugins/blog/blog.js',
+    'plugins/blog/blog.static.js',
     {
         status:{
             pageId:         env.id_page,

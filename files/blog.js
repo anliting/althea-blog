@@ -1,5 +1,5 @@
 import {Progress,Snapshot,hacker,moduleLoader} from '/lib/core.static.js'
-import {Blog,Site}from '/plugins/althea-blog/core.static.js'
+import {Blog,Site}from '/plugins/blog/core.static.js'
 import setupAutoScroll from './blog/setupAutoScroll.js'
 let site=new Site
 ;(async()=>{
