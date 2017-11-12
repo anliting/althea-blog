@@ -1,5 +1,5 @@
 import{dom}from'/lib/core.static.js'
-function mdcButton(name){
+function mdcRaisedButton(name){
     return dom.button(
         {className:'mdc-button mdc-button--raised'},
         n=>{n.dataset.mdcAutoInit='MDCRipple'},
@@ -63,7 +63,7 @@ function createSiteNode(){
                 tagline=    mdcTextdfieldTextarea('Tagline (HTML)'),
                 footer=     mdcTextdfieldTextarea('Footer (HTML)'),
                 og=         mdcSwitch('Use open graph.'),
-                apply=      mdcButton('Apply')
+                apply=      mdcRaisedButton('Apply')
             title.input.value=data.title
             description.input.value=data.description
             bannerTitle.input.value=data.bannerTitle

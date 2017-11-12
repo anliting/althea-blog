@@ -6,11 +6,16 @@ TreeUi.prototype._apply=function(e){
     dom(this._nodes.title,
         {innerHTML:'',},
         1<this.array.length&&[
-            dom.a({
-                className:`material-icons`,
-                onclick:()=>this.out(),
-            },'chevron_left'),
-            ' ',
+            dom.a(
+                {
+                    className:`material-icons`,
+                    onclick:()=>this.out()
+                },
+                n=>{
+                    n.style.marginRight='8px'
+                },
+                'keyboard_backspace',
+            ),
         ],
         e.title,
     )
