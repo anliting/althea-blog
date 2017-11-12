@@ -21,7 +21,7 @@ function loadMaterial(){
     return loaded
 }
 
-function mdcButton(name){
+function mdcRaisedButton(name){
     return dom.button(
         {className:'mdc-button mdc-button--raised'},
         n=>{n.dataset.mdcAutoInit='MDCRipple';},
@@ -85,7 +85,7 @@ function createSiteNode(){
                 tagline=    mdcTextdfieldTextarea('Tagline (HTML)'),
                 footer=     mdcTextdfieldTextarea('Footer (HTML)'),
                 og=         mdcSwitch('Use open graph.'),
-                apply=      mdcButton('Apply');
+                apply=      mdcRaisedButton('Apply');
             title.input.value=data.title;
             description.input.value=data.description;
             bannerTitle.input.value=data.bannerTitle;
@@ -197,11 +197,16 @@ TreeUi.prototype._apply=function(e){
     dom(this._nodes.title,
         {innerHTML:'',},
         1<this.array.length&&[
-            dom.a({
-                className:`material-icons`,
-                onclick:()=>this.out(),
-            },'chevron_left'),
-            ' ',
+            dom.a(
+                {
+                    className:`material-icons`,
+                    onclick:()=>this.out()
+                },
+                n=>{
+                    n.style.marginRight='8px';
+                },
+                'keyboard_backspace',
+            ),
         ],
         e.title,
     );
