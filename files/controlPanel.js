@@ -1,9 +1,8 @@
-import{Site,dom}from        '/lib/core.static.js'
-import loadMaterial from    './controlPanel/loadMaterial.js'
+import{Site,dom,load}from   '/lib/core.static.js'
 import ControlPanel from    './controlPanel/ControlPanel.js'
 let site=new Site
 ;(async()=>{
-    await loadMaterial()
+    await load.material()
     let controlPanel=new ControlPanel
     controlPanel.send=site.send.bind(site)
     dom.head(dom.style(

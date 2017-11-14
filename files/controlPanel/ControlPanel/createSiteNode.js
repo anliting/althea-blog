@@ -2,8 +2,8 @@ import{dom}from'/lib/core.static.js'
 function mdcRaisedButton(name){
     return dom.button(
         {className:'mdc-button mdc-button--raised'},
-        n=>{n.dataset.mdcAutoInit='MDCRipple'},
         name,
+        n=>mdc.ripple.MDCRipple.attachTo(n),
     )
 }
 function mdcSwitch(name){
@@ -31,9 +31,9 @@ function mdcTextdfield(name){
             mdc-textfield
             mdc-textfield--fullwidth
         `},
-        n=>{n.dataset.mdcAutoInit='MDCTextfield'},
         input=dom.input({className:'mdc-textfield__input',}),
         dom.div({className:'mdc-textfield__bottom-line'}),
+        n=>mdc.textfield.MDCTextfield.attachTo(n),
     )
     return{node,input}
 }
@@ -93,7 +93,6 @@ function createSiteNode(){
                         alert('Applied.')
                     }})
                 ),
-                n=>{mdc.autoInit(n)},
             )
         })(),
     )

@@ -1,34 +1,10 @@
-import { Site, dom, moduleLoader } from '/lib/core.static.js';
-
-let root='https://unpkg.com/material-components-web@0.24.0/dist';
-let css=[
-        'https://fonts.googleapis.com/icon?family=Material+Icons',
-        `${root}/material-components-web.min.css`,
-    ];
-let loaded;
-function loadMaterial(){
-    if(!loaded)
-        loaded=(async()=>{
-            let module=await moduleLoader();
-            await Promise.all([
-                (async()=>{
-                    dom.head(dom.style(
-                        await Promise.all(css.map(s=>module.getByPath(s)))
-                    ));
-                })(),
-                module.scriptByPath(
-                    `${root}/material-components-web.min.js`
-                ),
-            ]);
-        })();
-    return loaded
-}
+import { Site, dom, load } from '/lib/core.static.js';
 
 function mdcRaisedButton(name){
     return dom.button(
         {className:'mdc-button mdc-button--raised'},
-        n=>{n.dataset.mdcAutoInit='MDCRipple';},
         name,
+        n=>mdc.ripple.MDCRipple.attachTo(n),
     )
 }
 function mdcSwitch(name){
@@ -56,9 +32,9 @@ function mdcTextdfield(name){
             mdc-textfield
             mdc-textfield--fullwidth
         `},
-        n=>{n.dataset.mdcAutoInit='MDCTextfield';},
         input=dom.input({className:'mdc-textfield__input',}),
         dom.div({className:'mdc-textfield__bottom-line'}),
+        n=>mdc.textfield.MDCTextfield.attachTo(n),
     );
     return{node,input}
 }
@@ -118,7 +94,6 @@ function createSiteNode(){
                         alert('Applied.');
                     }})
                 ),
-                n=>{mdc.autoInit(n);},
             )
         })(),
     )
@@ -227,7 +202,7 @@ TreeUi.prototype.out=function(){
         this._apply(this.array[this.array.length-1]);
 };
 
-let root$1=[
+let root=[
         {
             title:'Site',
             function:createSiteNode,
@@ -247,7 +222,7 @@ function ControlPanel(){
         title:'Blog Control Panel',
         node:dom.div({className:'shadow'},
             dom.ul({className:'mdc-list'},
-                root$1.map(o=>
+                root.map(o=>
                     dom.li(
                         {
                             className:'mdc-list-item',
@@ -273,7 +248,7 @@ Object.setPrototypeOf(ControlPanel.prototype,TreeUi.prototype);
 ControlPanel.style=style;
 
 let site=new Site;(async()=>{
-    await loadMaterial();
+    await load.material();
     let controlPanel=new ControlPanel;
     controlPanel.send=site.send.bind(site);
     dom.head(dom.style(
