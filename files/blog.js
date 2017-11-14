@@ -1,10 +1,10 @@
-import {Progress,Snapshot,hacker,moduleLoader} from '/lib/core.static.js'
+import {Progress,Snapshot,hacker,load} from '/lib/core.static.js'
 import {Blog,Site}from '/plugins/blog/core.static.js'
 import setupAutoScroll from './blog/setupAutoScroll.js'
 let site=new Site
 ;(async()=>{
     let
-        module=await moduleLoader(),
+        module=await load.module(),
         blog=loadBlog(site,arg.status,Blog),
         main=createMainThread(site,blog)
     if(

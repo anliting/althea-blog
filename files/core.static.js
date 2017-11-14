@@ -1,5 +1,5 @@
 import EventEmmiter from 'https://gitcdn.link/cdn/anliting/simple.js/99b7ab1b872bc2da746dd648dd0c078b3bc6961e/src/simple/EventEmmiter.js';
-import { AltheaObject, EventEmmiter as EventEmmiter$1, ImageUploader, Site, arg, browser, dom, html, moduleLoader, order } from '/lib/core.static.js';
+import { AltheaObject, EventEmmiter as EventEmmiter$1, ImageUploader, Site, arg, browser, dom, html, load, order } from '/lib/core.static.js';
 
 function Pagemodule(id,priority,name,definitions){
     this.id=id;
@@ -1946,9 +1946,9 @@ async function initialize(editpage){
     update(editpage,data);
 }
 
-function load(){
+function load$1(){
     this.load=(async()=>{
-        let module=await moduleLoader();
+        let module=await load.module();
         await module.scriptByPath('https://gitcdn.link/cdn/anliting/htmleditor/9f904627c0ab99c4527ceb3c54a61c5704e6ddec/htmleditor.js'),
         this.pagemodules=[];
         this.setOfTags=new SetForm(
@@ -2001,7 +2001,7 @@ function Editpage(site,environment){
     this._datalistId=Math.random().toString(36).substring(2);
     createNodes.call(this);
     this.node=this._nodes.main;
-    load.call(this);
+    load$1.call(this);
 }
 Object.setPrototypeOf(Editpage.prototype,EventEmmiter$1.prototype);
 Object.defineProperty(Editpage.prototype,'currentUser',{get(){
