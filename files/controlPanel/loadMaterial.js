@@ -1,8 +1,9 @@
 import{dom,moduleLoader}from'/lib/core.static.js'
 let
+    root='https://unpkg.com/material-components-web@0.24.0/dist',
     css=[
         'https://fonts.googleapis.com/icon?family=Material+Icons',
-        'https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css',
+        `${root}/material-components-web.min.css`,
     ],
     loaded
 function loadMaterial(){
@@ -15,7 +16,9 @@ function loadMaterial(){
                         await Promise.all(css.map(s=>module.getByPath(s)))
                     ))
                 })(),
-                module.scriptByPath('https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js'),
+                module.scriptByPath(
+                    `${root}/material-components-web.min.js`
+                ),
             ])
         })()
     return loaded
