@@ -1,8 +1,9 @@
 import { Site, dom, moduleLoader } from '/lib/core.static.js';
 
+let root='https://unpkg.com/material-components-web@0.24.0/dist';
 let css=[
         'https://fonts.googleapis.com/icon?family=Material+Icons',
-        'https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css',
+        `${root}/material-components-web.min.css`,
     ];
 let loaded;
 function loadMaterial(){
@@ -15,7 +16,9 @@ function loadMaterial(){
                         await Promise.all(css.map(s=>module.getByPath(s)))
                     ));
                 })(),
-                module.scriptByPath('https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js'),
+                module.scriptByPath(
+                    `${root}/material-components-web.min.js`
+                ),
             ]);
         })();
     return loaded
@@ -224,7 +227,7 @@ TreeUi.prototype.out=function(){
         this._apply(this.array[this.array.length-1]);
 };
 
-let root=[
+let root$1=[
         {
             title:'Site',
             function:createSiteNode,
@@ -244,7 +247,7 @@ function ControlPanel(){
         title:'Blog Control Panel',
         node:dom.div({className:'shadow'},
             dom.ul({className:'mdc-list'},
-                root.map(o=>
+                root$1.map(o=>
                     dom.li(
                         {
                             className:'mdc-list-item',
