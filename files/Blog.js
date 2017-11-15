@@ -5,7 +5,7 @@ import _getNext from        './Blog/prototype._getNext.js'
 import _anchor_addTag from  './Blog/prototype._anchor_addTag.js'
 import BlogView from        './Blog/BlogView.js'
 import path from            './Blog/path.js'
-import{dom}from             '/lib/core.static.js'
+import{dom,load}from             '/lib/core.static.js'
 function Blog(site,status){
     EventEmmiter.call(this)
     this._site=site
@@ -21,6 +21,9 @@ function Blog(site,status){
     this._pageDivs=[]
     this._pagePlugins=corePlugins.slice()
     // end page plugin
+    this._getNext()
+    this._styles=[]
+    this.view=new BlogView(this)
     this.load=Promise.all([
         site.loadPlugins0('blog',this),
         (async()=>{
@@ -28,10 +31,8 @@ function Blog(site,status){
                 this.addPagePlugin(p)
             )
         })(),
+		load.materialIcon(),
     ])
-    this._getNext()
-    this._styles=[]
-    this.view=new BlogView(this)
 }
 Object.setPrototypeOf(Blog.prototype,EventEmmiter.prototype)
 Blog.prototype._anchor_addTag=_anchor_addTag

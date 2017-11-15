@@ -1407,6 +1407,9 @@ function Blog(site,status){
     this._pageDivs=[];
     this._pagePlugins=corePlugins.slice();
     // end page plugin
+    this._getNext();
+    this._styles=[];
+    this.view=new BlogView(this);
     this.load=Promise.all([
         site.loadPlugins0('blog',this),
         (async()=>{
@@ -1414,10 +1417,8 @@ function Blog(site,status){
                 this.addPagePlugin(p)
             );
         })(),
+		load.materialIcon(),
     ]);
-    this._getNext();
-    this._styles=[];
-    this.view=new BlogView(this);
 }
 Object.setPrototypeOf(Blog.prototype,EventEmmiter.prototype);
 Blog.prototype._anchor_addTag=anchor_addTag;
