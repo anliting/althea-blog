@@ -8,8 +8,13 @@ import initialize from      './load/initialize.js'
 import corePlugins from     '../corePlugins.js'
 function load(){
     this.load=(async()=>{
-        let module=await coreLoad.module()
-        await module.scriptByPath('https://gitcdn.link/cdn/anliting/htmleditor/9f904627c0ab99c4527ceb3c54a61c5704e6ddec/htmleditor.js'),
+        await Promise.all([
+			(async()=>{
+				let module=await coreLoad.module()
+				await module.scriptByPath('https://gitcdn.link/cdn/anliting/htmleditor/9f904627c0ab99c4527ceb3c54a61c5704e6ddec/htmleditor.js')
+			})(),
+			coreLoad.materialIcon(),
+		])
         this.pagemodules=[]
         this.setOfTags=new SetForm(
             this._nodes.span_tags,

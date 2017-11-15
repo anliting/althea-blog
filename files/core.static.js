@@ -1949,8 +1949,13 @@ async function initialize(editpage){
 
 function load$1(){
     this.load=(async()=>{
-        let module=await load.module();
-        await module.scriptByPath('https://gitcdn.link/cdn/anliting/htmleditor/9f904627c0ab99c4527ceb3c54a61c5704e6ddec/htmleditor.js'),
+        await Promise.all([
+			(async()=>{
+				let module=await load.module();
+				await module.scriptByPath('https://gitcdn.link/cdn/anliting/htmleditor/9f904627c0ab99c4527ceb3c54a61c5704e6ddec/htmleditor.js');
+			})(),
+			load.materialIcon(),
+		]);
         this.pagemodules=[];
         this.setOfTags=new SetForm(
             this._nodes.span_tags,
