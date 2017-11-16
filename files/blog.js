@@ -1,34 +1,24 @@
-import {Progress,Snapshot,hacker,load} from '/lib/core.static.js'
-import {Blog,Site}from '/plugins/blog/core.static.js'
+import{Snapshot}from'/lib/core.static.js'
+import{Blog,Site}from'/plugins/blog/core.static.js'
 import setupAutoScroll from './blog/setupAutoScroll.js'
-let site=new Site
-;(async()=>{
-    let
-        module=await load.module(),
-        blog=loadBlog(site,arg.status,Blog),
-        main=createMainThread(site,blog)
-    if(
-        localStorage.althea&&
-        0<=String(localStorage.althea).split(' ').indexOf('h')
-    )
-        setupApi(hacker,Snapshot,blog)
-    setupProgress(Progress,[
-        site,
-        blog,
-        {p:main,s:4}
-    ])
-})()
-function loadBlog(site,status,Blog){
+let
+    site=new Site,
+    blog=loadBlog(arg.status),
+    main=createMainThread()
+if(
+    localStorage.althea&&
+    0<=String(localStorage.althea).split(' ').indexOf('h')
+)
+    setupApi(hacker)
+//setupProgress(main)
+function loadBlog(status){
     return new Blog(site,status)
 }
-function createMainThread(site,blog){
-    return[
-        {p:createThisThread(blog),s:1},
-        {p:createBlogThread(site,blog),s:3},
-    ]
+function createMainThread(){
+    createThisThread()
+    return createBlogThread()
 }
-async function createThisThread(blog){
-    blog=await blog
+async function createThisThread(){
     history.replaceState(
         JSON.stringify(blog.status),
         ''
@@ -52,14 +42,10 @@ async function createThisThread(blog){
     })
     blog.on('location',p=>location=p)
 }
-async function createBlogThread(site,blog){
-    let
-        view=blog.view
-    blog=await blog
-    site=await site
-    view=await view
+async function createBlogThread(){
+    let view=blog.view
     await blog.load
-    setupGetNextOnScrollEvent(blog)
+    setupGetNextOnScrollEvent()
     setupAutoScroll(blog)
     document.body.appendChild(view.div)
     document.body.addEventListener('keydown',e=>
@@ -67,7 +53,7 @@ async function createBlogThread(site,blog){
     )
     document.head.appendChild(await view.style)
 }
-async function setupProgress(Progress,a){
+async function setupProgress(a){
     let p=new Progress(a),v=p.view
     let style=Object.assign(document.createElement('style'),{
         textContent:Progress.style
@@ -80,13 +66,13 @@ async function setupProgress(Progress,a){
     document.body.removeChild(v.node)
     v.free
 }
-async function setupApi(hacker,Snapshot,blog){
-    hacker.blog=await blog
+async function setupApi(){
+    hacker.blog=blog
     let
         snapshot=new Snapshot(window)
     console.log('js/blog.js:',snapshot.new)
 }
-function setupGetNextOnScrollEvent(blog){
+function setupGetNextOnScrollEvent(){
     addEventListener('scroll',()=>{
         if(!(
             !('pageId' in blog.status)&&
