@@ -3,7 +3,7 @@ let
     skip=[
         '/lib/core.static.js',
         '/plugins/blog/core.static.js',
-        'https://gitcdn.link/cdn/anliting/simple.js/99b7ab1b872bc2da746dd648dd0c078b3bc6961e/src/simple/EventEmmiter.js',
+        'https://gitcdn.link/cdn/anliting/simple.js/eae977ecf2a856ecb072259aa63b003d186ba618/src/simple/EventEmmiter.js',
     ]
 async function link(input,file){
     let bundle=await rollup.rollup({

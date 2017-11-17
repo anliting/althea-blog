@@ -1,6 +1,6 @@
 import commentForm from './PageView/commentForm.js'
 import commentDiv from './PageView/commentDiv.js'
-import EventEmmiter from 'https://gitcdn.link/cdn/anliting/simple.js/99b7ab1b872bc2da746dd648dd0c078b3bc6961e/src/simple/EventEmmiter.js'
+import EventEmmiter from 'https://gitcdn.link/cdn/anliting/simple.js/eae977ecf2a856ecb072259aa63b003d186ba618/src/simple/EventEmmiter.js'
 import {dom}from '/lib/core.static.js'
 function PageView(page){
     EventEmmiter.call(this)
