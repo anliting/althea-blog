@@ -29,7 +29,7 @@ export default(page,comment)=>{
             `<table style=width:100%><tr><td>${
                 u.username
             }</td><td style=text-align:right>${
-                comment.timestamp_insert
+                (new Date(comment.timestamp_insert)).toLocaleString()
             }</td></tr></table><div>${
                 html.encodeText(comment.content)
             }</div>`
