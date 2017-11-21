@@ -1,4 +1,4 @@
-import EventEmmiter from 'https://gitcdn.link/cdn/anliting/simple.js/eae977ecf2a856ecb072259aa63b003d186ba618/src/simple/EventEmmiter.js';
+import { EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js';
 import { AltheaObject, EventEmmiter as EventEmmiter$1, ImageUploader, Site, arg, browser, dom, html, load, order } from '/lib/core.static.js';
 
 function Pagemodule(id,priority,name,definitions){
