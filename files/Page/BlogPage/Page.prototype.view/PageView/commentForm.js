@@ -11,7 +11,7 @@ export default page=>{
         e.stopPropagation()
         let site=await page.blog._site
         await site.send({
-            function:'newComment',
+            function:'blog_newComment',
             page:page.id,
             content:page.textarea_comment__form_comment.value,
         })

@@ -99,18 +99,16 @@ function createSiteNode(){
     )
 }
 
-function createCommentNode(){
+function createCommentsNode(){
     return dom.div(
-        dom.div(
-            {className:'shadow content'},
-        ),
+        {className:'shadow content'},
     )
 }
 
 let site$1=new Site;
 function TagsPage(){
     this.mainDiv=dom.div(async()=>{
-        let data=await site$1.send('getTagsWithCount');
+        let data=await site$1.send('blog_getTagsWithCount');
         return dom.table(
             {
                 className:'bordered padding4px',
@@ -152,10 +150,8 @@ function TagsPage(){
 function createTagsNode(){
     let tagsPage=new TagsPage;
     return dom.div(
-        dom.div(
-            {className:'shadow content'},
-            tagsPage.mainDiv,
-        ),
+        {className:'shadow content'},
+        tagsPage.mainDiv,
     )
 }
 
@@ -216,8 +212,8 @@ let root=[
             function:createSiteNode,
         },
         {
-            title:'Comment',
-            function:createCommentNode,
+            title:'Comments',
+            function:createCommentsNode,
         },
         {
             title:'Tags',

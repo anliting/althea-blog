@@ -58,7 +58,7 @@ async function checkSetupIndex(blog,div){
     }
     async function getPagesByTags(){
         return(await blog._site).send({
-            function:'getPagesByTags',
+            function:'blog_getPagesByTags',
             tags:blog.status.tagNames
         })
     }

@@ -4,7 +4,7 @@ function Page(){
     AltheaObject.apply(this,arguments)
 }
 Object.setPrototypeOf(Page.prototype,AltheaObject.prototype)
-Page.prototype._loader='getPage'
+Page.prototype._loader='blog_getPage'
 Object.defineProperty(Page.prototype,'a',{get(){
     return dom.a({href:this.id},async a=>{
         let pv=await this.lastversion

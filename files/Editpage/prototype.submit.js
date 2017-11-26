@@ -1,7 +1,7 @@
 async function submit(){
     this.changeEditor('html')
     let id=await this._site.send({
-        function:'editpage',
+        function:'blog_editpage',
         id_page:this.id,
         id_pagemodule:
             +this._nodes.select_id_pagemodule.value,

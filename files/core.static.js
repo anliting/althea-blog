@@ -56,7 +56,7 @@ async function loadPagemodules(blog){
     let[
         pagemodules,
     ]=await Promise.all([
-        blog._site.send('getPagemodules'),
+        blog._site.send('blog_getPagemodules'),
     ]);
     pagemodules.map(p=>
         blog.pagemodules.push(new Pagemodule(
@@ -182,7 +182,7 @@ var commentForm = page=>{
         e.stopPropagation();
         let site=await page.blog._site;
         await site.send({
-            function:'newComment',
+            function:'blog_newComment',
             page:page.id,
             content:page.textarea_comment__form_comment.value,
         });
@@ -236,7 +236,7 @@ var commentDiv = (page,comment)=>{
             e.stopPropagation();
             let site=await page.blog._site;
             await site.send({
-                function:'deleteComment',
+                function:'blog_deleteComment',
                 id
             });
             page.blog.status=page.blog.status;
@@ -362,7 +362,7 @@ function Pagemodule0(){
     AltheaObject.apply(this,arguments);
 }
 Object.setPrototypeOf(Pagemodule0.prototype,AltheaObject.prototype);
-Pagemodule0.prototype._loader='getPagemoduleInfo';
+Pagemodule0.prototype._loader='blog_getPagemoduleInfo';
 Object.defineProperty(Pagemodule0.prototype,'definitions',{get(){
     return this._site.send({
         function:'getDefinitionByPagemodule',
@@ -374,13 +374,13 @@ function Pageversion(){
     AltheaObject.apply(this,arguments);
 }
 Object.setPrototypeOf(Pageversion.prototype,AltheaObject.prototype);
-Pageversion.prototype._loader='getPageversion';
+Pageversion.prototype._loader='blog_getPageversion';
 
 function Comment(){
     AltheaObject.apply(this,arguments);
 }
 Object.setPrototypeOf(Comment.prototype,AltheaObject.prototype);
-Comment.prototype._loader='getComment';
+Comment.prototype._loader='blog_getComment';
 
 function Site$1(){
     Site.call(this);
@@ -521,7 +521,7 @@ function createPrivacyTable(pageView){
             return a
             function remove(){
                 site.send({
-                    function:'removePage',
+                    function:'blog_removePage',
                     page:page.id
                 });
             }
@@ -629,7 +629,7 @@ function Page(){
     AltheaObject.apply(this,arguments);
 }
 Object.setPrototypeOf(Page.prototype,AltheaObject.prototype);
-Page.prototype._loader='getPage';
+Page.prototype._loader='blog_getPage';
 Object.defineProperty(Page.prototype,'a',{get(){
     return dom.a({href:this.id},async a=>{
         let pv=await this.lastversion;
@@ -719,7 +719,7 @@ async function _getNext(){
         process.continue=0
     );
     let data=await this._site.send({
-        function:       'getSuggestedPages',
+        function:       'blog_getSuggestedPages',
         page:           process.status.pageId||0,
         pageversion:    process.status.pageversionId||0,
         tags_selected:  process.status.tagNames||[],
@@ -833,7 +833,7 @@ async function checkSetupIndex(blog,div){
     }
     async function getPagesByTags(){
         return(await blog._site).send({
-            function:'getPagesByTags',
+            function:'blog_getPagesByTags',
             tags:blog.status.tagNames
         })
     }
@@ -1377,7 +1377,7 @@ BlogView.prototype.setupSuggestedTags=async function(){
         blog=this.blog;
     let vals=await Promise.all([
         blog._site.send({
-            function:'getSuggestedTags',
+            function:'blog_getSuggestedTags',
             tags:blog.status.tagNames||[]
         }),
     ]);
@@ -1545,7 +1545,7 @@ var setup_form = function(){
 async function submit(){
     this.changeEditor('html');
     let id=await this._site.send({
-        function:'editpage',
+        function:'blog_editpage',
         id_page:this.id,
         id_pagemodule:
             +this._nodes.select_id_pagemodule.value,
@@ -1929,9 +1929,9 @@ async function initialize(editpage){
     setup$2(editpage,editpage.isMobile);
     let res=await Promise.all([
         getData(editpage),
-        editpage._site.send('getTags'),
+        editpage._site.send('blog_getTags'),
         (async()=>{
-            let res=await editpage._site.send('getPagemodules0');
+            let res=await editpage._site.send('blog_getPagemodules0');
             return Promise.all(res.map(async id=>{
                 let pagemodule=await editpage._site.getPagemodule(id);
                 return pagemodule.load([

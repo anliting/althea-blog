@@ -62,7 +62,7 @@ async function initialize(editpage){
     setup(editpage,editpage.isMobile)
     let res=await Promise.all([
         getData(editpage),
-        editpage._site.send('getTags'),
+        editpage._site.send('blog_getTags'),
         (async()=>{
             let res=await editpage._site.send('blog_getPagemodules0')
             return Promise.all(res.map(async id=>{

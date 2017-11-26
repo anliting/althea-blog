@@ -2,7 +2,7 @@ import{dom,Site}from '/lib/core.static.js'
 let site=new Site
 function TagsPage(){
     this.mainDiv=dom.div(async()=>{
-        let data=await site.send('getTagsWithCount')
+        let data=await site.send('blog_getTagsWithCount')
         return dom.table(
             {
                 className:'bordered padding4px',

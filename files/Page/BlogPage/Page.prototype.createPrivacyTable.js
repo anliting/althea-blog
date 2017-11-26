@@ -55,7 +55,7 @@ function createPrivacyTable(pageView){
             return a
             function remove(){
                 site.send({
-                    function:'removePage',
+                    function:'blog_removePage',
                     page:page.id
                 })
             }

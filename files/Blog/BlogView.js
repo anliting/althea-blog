@@ -50,7 +50,7 @@ BlogView.prototype.setupSuggestedTags=async function(){
         blog=this.blog
     let vals=await Promise.all([
         blog._site.send({
-            function:'getSuggestedTags',
+            function:'blog_getSuggestedTags',
             tags:blog.status.tagNames||[]
         }),
     ])

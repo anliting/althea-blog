@@ -11,7 +11,7 @@ async function _getNext(){
         process.continue=0
     )
     let data=await this._site.send({
-        function:       'getSuggestedPages',
+        function:       'blog_getSuggestedPages',
         page:           process.status.pageId||0,
         pageversion:    process.status.pageversionId||0,
         tags_selected:  process.status.tagNames||[],
