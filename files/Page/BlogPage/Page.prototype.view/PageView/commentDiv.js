@@ -44,7 +44,7 @@ export default(page,comment)=>{
             e.stopPropagation()
             let site=await page.blog._site
             await site.send({
-                function:'deleteComment',
+                function:'blog_deleteComment',
                 id
             })
             page.blog.status=page.blog.status

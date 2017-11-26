@@ -99,6 +99,14 @@ function createSiteNode(){
     )
 }
 
+function createCommentNode(){
+    return dom.div(
+        dom.div(
+            {className:'shadow content'},
+        ),
+    )
+}
+
 let site$1=new Site;
 function TagsPage(){
     this.mainDiv=dom.div(async()=>{
@@ -206,6 +214,10 @@ let root=[
         {
             title:'Site',
             function:createSiteNode,
+        },
+        {
+            title:'Comment',
+            function:createCommentNode,
         },
         {
             title:'Tags',

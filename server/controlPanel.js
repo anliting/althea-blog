@@ -6,8 +6,8 @@ function calcContent(env){
 <meta name=viewport content='width=device-width,initial-scale=1'>
 <body>
 ${env.althea.loadModule(
-    //'plugins/blog/controlPanel.js',
-    'plugins/blog/controlPanel.static.js',
+    'plugins/blog/controlPanel.js',
+    //'plugins/blog/controlPanel.static.js',
     null,
     {
         sharedWorker:1,

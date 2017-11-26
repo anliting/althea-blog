@@ -3,10 +3,8 @@ import TagsPage from './createTagsNode/TagsPage.js'
 function createTagsNode(){
     let tagsPage=new TagsPage
     return dom.div(
-        dom.div(
-            {className:'shadow content'},
-            tagsPage.mainDiv,
-        ),
+        {className:'shadow content'},
+        tagsPage.mainDiv,
     )
 }
 export default createTagsNode

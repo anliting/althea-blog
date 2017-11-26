@@ -1,13 +1,18 @@
 import{dom}from             '/lib/core.static.js'
-import createSiteNode from  './ControlPanel/createSiteNode.js'
-import createTagsNode from  './ControlPanel/createTagsNode.js'
-import style from           './ControlPanel/style.js'
-import TreeUi from          './ControlPanel/TreeUi.js'
+import createSiteNode from      './ControlPanel/createSiteNode.js'
+import createCommentsNode from  './ControlPanel/createCommentsNode.js'
+import createTagsNode from      './ControlPanel/createTagsNode.js'
+import style from               './ControlPanel/style.js'
+import TreeUi from              './ControlPanel/TreeUi.js'
 let
     root=[
         {
             title:'Site',
             function:createSiteNode,
+        },
+        {
+            title:'Comments',
+            function:createCommentsNode,
         },
         {
             title:'Tags',
