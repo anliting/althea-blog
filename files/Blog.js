@@ -25,7 +25,7 @@ function Blog(site,status){
     this._styles=[]
     this.view=new BlogView(this)
     this.load=Promise.all([
-        site.loadPlugins0('blog',this),
+        site.applyPlugins('blog',this),
         (async()=>{
             ;(await site.loadPlugins('blog_page')).forEach(p=>
                 this.addPagePlugin(p)

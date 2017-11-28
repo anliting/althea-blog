@@ -1394,7 +1394,7 @@ function Blog(site,status){
     this._styles=[];
     this.view=new BlogView(this);
     this.load=Promise.all([
-        site.loadPlugins0('blog',this),
+        site.applyPlugins('blog',this),
         (async()=>{
             (await site.loadPlugins('blog_page')).forEach(p=>
                 this.addPagePlugin(p)
@@ -1933,12 +1933,12 @@ async function initialize(editpage){
 function load$1(){
     this.load=(async()=>{
         await Promise.all([
-			(async()=>{
-				let module=await load.module();
-				await module.scriptByPath('https://gitcdn.link/cdn/anliting/htmleditor/9f904627c0ab99c4527ceb3c54a61c5704e6ddec/htmleditor.js');
-			})(),
-			load.materialIcon(),
-		]);
+            (async()=>{
+                let module=await load.module();
+                await module.scriptByPath('https://gitcdn.link/cdn/anliting/htmleditor/9f904627c0ab99c4527ceb3c54a61c5704e6ddec/htmleditor.js');
+            })(),
+            load.materialIcon(),
+        ]);
         this.pagemodules=[];
         this.setOfTags=new SetForm(
             this._nodes.span_tags,
@@ -1949,7 +1949,7 @@ function load$1(){
             this._nodes.input_newname,
         );
         this.currentEditor='html';
-        this.load=this._site.loadPlugins0('editpage',this);
+        this.load=this._site.applyPlugins('editpage',this);
         this._pagePlugins=[
             ...corePlugins,
             ...await this._site.loadPlugins('blog_page'),
