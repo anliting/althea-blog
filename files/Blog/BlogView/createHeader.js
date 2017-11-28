@@ -5,7 +5,8 @@ import createNavigationBar from './createHeader/createNavigationBar.js'
 import {dom}from '/lib/core.static.js'
 function createHeader(blog,view){
     let blog_getData=blog._site.send('blog_getData')
-    let div=dom.div(
+    return dom.div(
+        {className:'header'},
         createTitle(),
         createTagline(),
         createNavigationBar(view),
@@ -13,21 +14,10 @@ function createHeader(blog,view){
         createTags(view),
         createIndex()
     )
-    div.className='header'
-    return div
     function createTitle(){
-        let div=dom.div()
-        div.className='title'
-        ;(async()=>{
-            let site=await blog._site
-            await site.load
-            div.appendChild(
-                createA(
-                    (await blog_getData).bannerTitle,
-                )
-            )
-        })()
-        return div
+        return dom.div({className:'title'},async n=>
+            createA((await blog_getData).bannerTitle)
+        )
         function createA(bannerTitle){
             let a=dom.a({href:''})
             a.onclick=e=>{
@@ -46,52 +36,45 @@ function createHeader(blog,view){
         }
     }
     function createTagline(){
-        let div=dom.div()
-        div.className='tagline'
-        ;(async()=>{
-            div.innerHTML=(await blog_getData).tagline
-        })()
-        return div
+        return dom.div({className:'tagline'},
+            async n=>({innerHTML:(await blog_getData).tagline})
+        )
     }
     function createSearchForTags(view){
-        let div=dom.div(
+        return dom.div(
+            {className:'searchForTags'},
             createSelectedTagsDiv(),
             view.input=createInput(blog,view),
             view.datalist_input_searchForTag
         )
-        div.className='searchForTags'
-        return div
         function createSelectedTagsDiv(){
-            let div=dom.div()
-            div.className='selectedTags'
-            setupSelectedTagsDiv(blog,div)
-            blog.on('statusChange',()=>{
-                div.innerHTML=''
-                setupSelectedTagsDiv(blog,div)
+            return dom.div({className:'selectedTags'},n=>{
+                setupSelectedTagsDiv(blog,n)
+                blog.on('statusChange',()=>{
+                    n.innerHTML=''
+                    setupSelectedTagsDiv(blog,n)
+                })
             })
-            return div
         }
     }
     function createTags(view){
-        let div=dom.div()
-        div.className='tags'
-        blog.on('statusChange',()=>{
-            div.innerHTML=''
-            if(document.activeElement==view.input)
-                view.setupSuggestedTags()
+        return dom.div({className:'tags'},n=>{
+            blog.on('statusChange',()=>{
+                n.innerHTML=''
+                if(document.activeElement==view.input)
+                    view.setupSuggestedTags()
+            })
+            view.tagsDiv=n
         })
-        view.tagsDiv=div
-        return div
     }
     function createIndex(){
-        let div=dom.div()
-        div.className='index'
-        checkSetupIndex(blog,div)
-        blog.on('statusChange',()=>{
-            div.innerHTML=''
-            checkSetupIndex(blog,div)
+        return dom.div({className:'index'},n=>{
+            checkSetupIndex(blog,n)
+            blog.on('statusChange',()=>{
+                n.innerHTML=''
+                checkSetupIndex(blog,n)
+            })
         })
-        return div
     }
 }
 export default createHeader
