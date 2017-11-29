@@ -1,4 +1,5 @@
-import { Site, dom, load } from '/lib/core.static.js';
+import { dom, load } from '/lib/core.static.js';
+import { Site } from '/plugins/blog/core.static.js';
 
 function mdcRaisedButton(name){
     return dom.button(
@@ -102,13 +103,43 @@ function createSiteNode(){
 function createCommentsNode(){
     return dom.div(
         {className:'shadow content'},
+        (async()=>{
+            let data=await this.send('blog_getComments');
+            return data.map(async id=>{
+                let data=await this.send({
+                    function:'blog_getComment',
+                    id,
+                    columns:[
+                        'id_page',
+                        'id_user_owner',
+                        'timestamp_insert'
+                    ]
+                });
+                let[
+                    user,
+                    page,
+                ]=await Promise.all([
+                    this.site.getUser(data.id_user_owner),
+                    this.site.getPage(data.id_page),
+                ]);
+                return dom.p(
+                    user.a,
+                    ' commented on ',
+                    page.a,
+                    ' at ',
+                    (new Date(data.timestamp_insert)).toLocaleString(),
+                    '.',
+                )
+            })
+        })()
     )
 }
 
-let site$1=new Site;
 function TagsPage(){
+}
+TagsPage.prototype.start=function(){
     this.mainDiv=dom.div(async()=>{
-        let data=await site$1.send('blog_getTagsWithCount');
+        let data=await this.send('blog_getTagsWithCount');
         return dom.table(
             {
                 className:'bordered padding4px',
@@ -145,10 +176,12 @@ function TagsPage(){
             return td
         }
     }
-}
+};
 
 function createTagsNode(){
     let tagsPage=new TagsPage;
+    tagsPage.send=doc=>this.send(doc);
+    tagsPage.start();
     return dom.div(
         {className:'shadow content'},
         tagsPage.mainDiv,
@@ -258,9 +291,13 @@ ControlPanel.style=style;
 let site=new Site;(async()=>{
     await load.material();
     let controlPanel=new ControlPanel;
+    controlPanel.site=site;
     controlPanel.send=site.send.bind(site);
     dom.head(dom.style(
         `
+            a:active,a:link,a:hover,a:visited{
+                color:blue;
+            }
             body{
                 margin:0;
                 overflow-y:scroll;

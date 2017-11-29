@@ -2,6 +2,7 @@ module.exports={
     blog_deleteComment:     require('./queryFunctions/deleteComment'),
     blog_editpage:          require('./queryFunctions/editpage'),
     blog_getComment:        require('./queryFunctions/getComment'),
+    blog_getComments:       require('./queryFunctions/getComments'),
     blog_getData:           require('./queryFunctions/getData'),
     blog_getDefinitionByPagemodule:
         require('./queryFunctions/getDefinitionByPagemodule'),

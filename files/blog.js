@@ -1,4 +1,4 @@
-import{Snapshot}from'/lib/core.static.js'
+import{Snapshot,hacker}from'/lib/core.static.js'
 import{Blog,Site}from'/plugins/blog/core.static.js'
 import setupAutoScroll from './blog/setupAutoScroll.js'
 let
@@ -9,7 +9,7 @@ if(
     localStorage.althea&&
     0<=String(localStorage.althea).split(' ').indexOf('h')
 )
-    setupApi(hacker)
+    setupApi()
 //setupProgress(main)
 function loadBlog(status){
     return new Blog(site,status)
@@ -67,10 +67,12 @@ async function setupProgress(a){
     v.free
 }
 async function setupApi(){
+    hacker.site=site
     hacker.blog=blog
     let
         snapshot=new Snapshot(window)
     console.log('js/blog.js:',snapshot.new)
+    window.hacker=hacker
 }
 function setupGetNextOnScrollEvent(){
     addEventListener('scroll',()=>{

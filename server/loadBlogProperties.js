@@ -3,6 +3,8 @@ module.exports=db=>{
         require('./loadBlogProperties/deleteComment')
     db.getComment=
         require('./loadBlogProperties/getComment')
+    db.getComments=
+        require('./loadBlogProperties/getComments')
     db.getDefinitionByPagemodule=
         require('./loadBlogProperties/getDefinitionByPagemodule')
     db.getTags=
