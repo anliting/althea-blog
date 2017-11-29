@@ -105,6 +105,7 @@ function createCommentsNode(){
         {className:'shadow content'},
         (async()=>{
             let data=await this.send('blog_getComments');
+            data.sort((a,b)=>b-a);
             return data.map(async id=>{
                 let data=await this.send({
                     function:'blog_getComment',
