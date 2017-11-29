@@ -19,8 +19,9 @@ let
             function:createTagsNode,
         },
     ]
-function ControlPanel(){
+function ControlPanel(io){
     TreeUi.apply(this,arguments)
+    this._io=io
     this._nodes={}
     this.node=dom.div({className:'controlPanel'},
         this._nodes.title=dom.h2(),

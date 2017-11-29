@@ -56,7 +56,7 @@ function createSiteNode(){
     return dom.div(
         (async()=>{
             let
-                data=await this.send('blog_getData'),
+                data=await this._io.getData(),
                 title=      mdcTextdfield('Title'),
                 description=mdcTextdfield('Description'),
                 bannerTitle=mdcTextdfieldTextarea('Banner Title (HTML)'),
@@ -86,10 +86,7 @@ function createSiteNode(){
                         data.tagline=tagline.input.value
                         data.footer=footer.input.value
                         data.og=og.input.checked
-                        await this.send({
-                            function:'blog_setData',
-                            data,
-                        })
+                        await this._io.setData(data)
                         alert('Applied.')
                     }})
                 ),

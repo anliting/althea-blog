@@ -4,12 +4,21 @@ import ControlPanel from    './controlPanel/ControlPanel.js'
 let site=new Site
 ;(async()=>{
     await load.material()
-    let controlPanel=new ControlPanel
-    controlPanel.site=site
-    controlPanel.send=site.send.bind(site)
+    let controlPanel=new ControlPanel({
+        getComment(doc){
+            doc.function='blog_getComment'
+            return site.send(doc)
+        },
+        getComments:()=>site.send('blog_getComments'),
+        getData:()=>site.send('blog_getData'),
+        getPage:site.getPage.bind(site),
+        getTagsWithCount:()=>site.send('blog_getTagsWithCount'),
+        getUser:site.getUser.bind(site),
+        setData:data=>site.send({function:'blog_setData',data}),
+    })
     dom.head(dom.style(
         `
-            a:active,a:link,a:hover,a:visited{
+            a:active,a:link,a:visited{
                 color:blue;
             }
             body{

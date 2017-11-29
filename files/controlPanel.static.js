@@ -58,7 +58,7 @@ function createSiteNode(){
     return dom.div(
         (async()=>{
             let
-                data=await this.send('blog_getData'),
+                data=await this._io.getData(),
                 title=      mdcTextdfield('Title'),
                 description=mdcTextdfield('Description'),
                 bannerTitle=mdcTextdfieldTextarea('Banner Title (HTML)'),
@@ -88,10 +88,7 @@ function createSiteNode(){
                         data.tagline=tagline.input.value;
                         data.footer=footer.input.value;
                         data.og=og.input.checked;
-                        await this.send({
-                            function:'blog_setData',
-                            data,
-                        });
+                        await this._io.setData(data);
                         alert('Applied.');
                     }})
                 ),
@@ -104,11 +101,10 @@ function createCommentsNode(){
     return dom.div(
         {className:'shadow content'},
         (async()=>{
-            let data=await this.send('blog_getComments');
+            let data=await this._io.getComments();
             data.sort((a,b)=>b-a);
             return data.map(async id=>{
-                let data=await this.send({
-                    function:'blog_getComment',
+                let data=await this._io.getComment({
                     id,
                     columns:[
                         'id_page',
@@ -120,8 +116,8 @@ function createCommentsNode(){
                     user,
                     page,
                 ]=await Promise.all([
-                    this.site.getUser(data.id_user_owner),
-                    this.site.getPage(data.id_page),
+                    this._io.getUser(data.id_user_owner),
+                    this._io.getPage(data.id_page),
                 ]);
                 return dom.p(
                     user.a,
@@ -136,11 +132,10 @@ function createCommentsNode(){
     )
 }
 
-function TagsPage(){
-}
-TagsPage.prototype.start=function(){
+function TagsPage(io){
+    this._io=io;
     this.mainDiv=dom.div(async()=>{
-        let data=await this.send('blog_getTagsWithCount');
+        let data=await this._io.getTagsWithCount();
         return dom.table(
             {
                 className:'bordered padding4px',
@@ -177,12 +172,12 @@ TagsPage.prototype.start=function(){
             return td
         }
     }
-};
+}
 
 function createTagsNode(){
-    let tagsPage=new TagsPage;
-    tagsPage.send=doc=>this.send(doc);
-    tagsPage.start();
+    let tagsPage=new TagsPage({
+        getTagsWithCount:this._io.getTagsWithCount,
+    });
     return dom.div(
         {className:'shadow content'},
         tagsPage.mainDiv,
@@ -254,8 +249,9 @@ let root=[
             function:createTagsNode,
         },
     ];
-function ControlPanel(){
+function ControlPanel(io){
     TreeUi.apply(this,arguments);
+    this._io=io;
     this._nodes={};
     this.node=dom.div({className:'controlPanel'},
         this._nodes.title=dom.h2(),
@@ -291,12 +287,21 @@ ControlPanel.style=style;
 
 let site=new Site;(async()=>{
     await load.material();
-    let controlPanel=new ControlPanel;
-    controlPanel.site=site;
-    controlPanel.send=site.send.bind(site);
+    let controlPanel=new ControlPanel({
+        getComment(doc){
+            doc.function='blog_getComment';
+            return site.send(doc)
+        },
+        getComments:()=>site.send('blog_getComments'),
+        getData:()=>site.send('blog_getData'),
+        getPage:site.getPage.bind(site),
+        getTagsWithCount:()=>site.send('blog_getTagsWithCount'),
+        getUser:site.getUser.bind(site),
+        setData:data=>site.send({function:'blog_setData',data}),
+    });
     dom.head(dom.style(
         `
-            a:active,a:link,a:hover,a:visited{
+            a:active,a:link,a:visited{
                 color:blue;
             }
             body{

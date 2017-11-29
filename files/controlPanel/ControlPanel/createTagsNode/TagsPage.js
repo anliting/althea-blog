@@ -1,9 +1,8 @@
 import{dom}from '/lib/core.static.js'
-function TagsPage(){
-}
-TagsPage.prototype.start=function(){
+function TagsPage(io){
+    this._io=io
     this.mainDiv=dom.div(async()=>{
-        let data=await this.send('blog_getTagsWithCount')
+        let data=await this._io.getTagsWithCount()
         return dom.table(
             {
                 className:'bordered padding4px',

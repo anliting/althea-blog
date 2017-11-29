@@ -31,7 +31,7 @@ function Blog(site,status){
                 this.addPagePlugin(p)
             )
         })(),
-		load.materialIcon(),
+        load.materialIcon(),
     ])
 }
 Object.setPrototypeOf(Blog.prototype,EventEmmiter.prototype)
