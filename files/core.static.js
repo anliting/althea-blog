@@ -405,6 +405,15 @@ Site$1.prototype.getPageversion=async function(id){
         new Pageversion(this,id)
     )
 };
+Site$1.prototype.path=Object.setPrototypeOf({
+    blog:{
+        page:p=>p,
+        root:'.',
+        tag:a=>`tags/${a.map(encodeURIComponent).join('/')}`,
+    },
+    editpage:p=>`${p}/edit`,
+    newpage:'newpage',
+},Site.prototype.path);
 
 var site = new Site$1
 

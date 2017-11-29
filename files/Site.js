@@ -26,4 +26,13 @@ Site.prototype.getPageversion=async function(id){
         new Pageversion(this,id)
     )
 }
+Site.prototype.path=Object.setPrototypeOf({
+    blog:{
+        page:p=>p,
+        root:'.',
+        tag:a=>`tags/${a.map(encodeURIComponent).join('/')}`,
+    },
+    editpage:p=>`${p}/edit`,
+    newpage:'newpage',
+},RawSite.prototype.path)
 export default Site
