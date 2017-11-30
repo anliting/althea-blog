@@ -40,7 +40,7 @@ function ControlPanel(io){
                             }),
                         },
                         o.title,
-                        dom.a({
+                        dom.span({
                             className:`
                                 mdc-list-item__end-detail
                                 material-icons
