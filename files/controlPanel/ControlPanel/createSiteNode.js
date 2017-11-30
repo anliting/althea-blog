@@ -25,15 +25,17 @@ function mdcSwitch(name){
 }
 function mdcTextdfield(name){
     let node,input
-    node=dom.label(
+    node=dom.div(
         dom.span(n=>{n.style.color='#888'},`${name}: `),
-        {className:`
-            mdc-textfield
-            mdc-textfield--fullwidth
-        `},
-        input=dom.input({className:'mdc-textfield__input',}),
-        dom.div({className:'mdc-textfield__bottom-line'}),
-        n=>mdc.textfield.MDCTextfield.attachTo(n),
+        dom.div(
+            {className:`
+                mdc-textfield
+                mdc-textfield--fullwidth
+            `},
+            input=dom.input({className:'mdc-textfield__input',}),
+            dom.div({className:'mdc-textfield__bottom-line'}),
+            n=>mdc.textfield.MDCTextfield.attachTo(n),
+        )
     )
     return{node,input}
 }

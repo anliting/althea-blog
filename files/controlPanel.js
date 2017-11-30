@@ -25,7 +25,6 @@ let site=new Site
                 margin:0;
                 overflow-y:scroll;
                 background-color:#eee;
-                font-family:sans-serif;
             }
             body>.controlPanel{
                 max-width:600px;

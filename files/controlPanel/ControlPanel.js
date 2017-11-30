@@ -23,7 +23,7 @@ function ControlPanel(io){
     TreeUi.apply(this,arguments)
     this._io=io
     this._nodes={}
-    this.node=dom.div({className:'controlPanel'},
+    this.node=dom.div({className:'controlPanel mdc-typography'},
         this._nodes.title=dom.h2(),
     )
     this.in({

@@ -27,15 +27,17 @@ function mdcSwitch(name){
 }
 function mdcTextdfield(name){
     let node,input;
-    node=dom.label(
+    node=dom.div(
         dom.span(n=>{n.style.color='#888';},`${name}: `),
-        {className:`
-            mdc-textfield
-            mdc-textfield--fullwidth
-        `},
-        input=dom.input({className:'mdc-textfield__input',}),
-        dom.div({className:'mdc-textfield__bottom-line'}),
-        n=>mdc.textfield.MDCTextfield.attachTo(n),
+        dom.div(
+            {className:`
+                mdc-textfield
+                mdc-textfield--fullwidth
+            `},
+            input=dom.input({className:'mdc-textfield__input',}),
+            dom.div({className:'mdc-textfield__bottom-line'}),
+            n=>mdc.textfield.MDCTextfield.attachTo(n),
+        )
     );
     return{node,input}
 }
@@ -253,7 +255,7 @@ function ControlPanel(io){
     TreeUi.apply(this,arguments);
     this._io=io;
     this._nodes={};
-    this.node=dom.div({className:'controlPanel'},
+    this.node=dom.div({className:'controlPanel mdc-typography'},
         this._nodes.title=dom.h2(),
     );
     this.in({
@@ -308,7 +310,6 @@ let site=new Site;(async()=>{
                 margin:0;
                 overflow-y:scroll;
                 background-color:#eee;
-                font-family:sans-serif;
             }
             body>.controlPanel{
                 max-width:600px;
