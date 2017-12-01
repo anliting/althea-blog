@@ -364,10 +364,7 @@ function Pagemodule0(){
 Object.setPrototypeOf(Pagemodule0.prototype,AltheaObject.prototype);
 Pagemodule0.prototype._loader='blog_getPagemoduleInfo';
 Object.defineProperty(Pagemodule0.prototype,'definitions',{get(){
-    return this._site.send({
-        function:'getDefinitionByPagemodule',
-        id:this.id,
-    })
+    return this._io.getDefinitionByPagemodule(id)
 }});
 
 function Pageversion(){
@@ -389,20 +386,34 @@ function Site$1(){
 }
 Object.setPrototypeOf(Site$1.prototype,Site.prototype);
 Site$1.prototype.getComment=async function(id){
-    return new Comment(this,id)
+    return new Comment({
+        send:this.send.bind(this),
+    },id)
 };
 Site$1.prototype.getPage=async function(id){
     // cache is disabled because of the comment feature
-    return new Page(this,id)
+    return new Page({
+        send:this.send.bind(this),
+        getPageversion:this.getPageversion.bind(this),
+    },id)
 };
 Site$1.prototype.getPagemodule=async function(id){
     return this._pagemodules[id]||(this._pagemodules[id]=
-        new Pagemodule0(this,id)
+        new Pagemodule0({
+            send:this.send.bind(this),
+            getDefinitionByPagemodule:id=>
+                this.send({
+                    function:'getDefinitionByPagemodule',
+                    id,
+                })
+        },id)
     )
 };
 Site$1.prototype.getPageversion=async function(id){
     return this._pageversions[id]||(this._pageversions[id]=
-        new Pageversion(this,id)
+        new Pageversion({
+            send:this.send.bind(this),
+        },id)
     )
 };
 Site$1.prototype.path=Object.setPrototypeOf({
@@ -648,7 +659,7 @@ Object.defineProperty(Page.prototype,'a',{get(){
 }});
 Object.defineProperty(Page.prototype,'lastversion',{async get(){
     await this.load('lastversionId');
-    return this._site.getPageversion(this.lastversionId)
+    return this._io.getPageversion(this.lastversionId)
 }});
 Page.BlogPage=BlogPage$1;
 
