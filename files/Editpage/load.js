@@ -31,7 +31,10 @@ function load(){
             ...await this._site.loadPlugins('blog_page'),
         ]
         // start set up image uploader
-        let imageUploader=new ImageUploader(this._site)
+        let imageUploader=new ImageUploader({
+            send:this._site.send.bind(this._site),
+            post:this._site.post.bind(this._site),
+        })
         let fileButton=dom.createFileButton('Image')
         fileButton.on('file',async a=>{
             fileButton.n.disabled=true
