@@ -1,15 +1,9 @@
 import {dom}from '/lib/core.static.js'
-import Pagemodule from '../../../Pagemodule.js'
 function update(editpage,data){
     let textarea_content=editpage._nodes.textarea_content
     data.pagemodules.map(async e=>{
-        let definitions=await e.definitions
-        editpage.pagemodules.push(new Pagemodule(
-            e.id,
-            e.priority,
-            e.name,
-            definitions
-        ))
+        await e.definitions
+        editpage.pagemodules.push(e)
     })
     /*document.getElementById(
         'input_ispublic_'+(

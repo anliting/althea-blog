@@ -1,18 +1,17 @@
-import Pagemodule from '../Pagemodule.js'
 async function loadPagemodules(blog){
-    let[
-        pagemodules,
-    ]=await Promise.all([
-        blog._site.send('blog_getPagemodules'),
-    ])
-    pagemodules.map(p=>
-        blog.pagemodules.push(new Pagemodule(
-            p.id,
-            p.priority,
-            p.name,
-            p.definitions
-        ))
-    )
+    let res=await blog._site.send('blog_getPagemodules0')
+    let pagemodules=await Promise.all(res.map(async id=>{
+        let pagemodule=await blog._site.getPagemodule(id)
+        await Promise.all([
+            pagemodule.load([
+                'priority',
+                'name',
+            ]),
+            pagemodule.definitions,
+        ])
+        return pagemodule
+    }))
+    blog.pagemodules.push(...pagemodules)
     return blog
 }
 export default loadPagemodules

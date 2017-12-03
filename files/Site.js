@@ -25,9 +25,9 @@ Site.prototype.getPagemodule=async function(id){
     return this._pagemodules[id]||(this._pagemodules[id]=
         new Pagemodule0({
             send:this.send.bind(this),
-            getDefinitionByPagemodule:id=>
+            getDefinitionByPagemodule:()=>
                 this.send({
-                    function:'getDefinitionByPagemodule',
+                    function:'blog_getDefinitionByPagemodule',
                     id,
                 })
         },id)

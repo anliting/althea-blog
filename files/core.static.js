@@ -1,71 +1,20 @@
 import { EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js';
 import { AltheaObject, EventEmmiter as EventEmmiter$1, ImageUploader, Site, arg, browser, dom, html, load, order } from '/lib/core.static.js';
 
-function Pagemodule(id,priority,name,definitions){
-    this.id=id;
-    this.priority=priority;
-    this.name=name;
-    this.definitions=definitions;
-}
-Pagemodule.prototype.compile=function(s){
-    this.definitions.map(d=>{
-        // data bug patch
-        s=s||'';
-        s=s.split(d.name).join(d.content);
-    });
-    s=s.replace(/\[encodeURIComponent\][\s\S]*?\[\/encodeURIComponent\]/g,s=>{
-        return encodeURIComponent(s.substring(
-            '[encodeURIComponent]'.length,
-            s.length-'[/encodeURIComponent]'.length
-        ))
-    }).replace(/\[nothing\][\s\S]*?\[\/nothing\]/g,s=>{
-        return ''
-    }).replace(
-        /\[ignorePluralSpaceCharacters\][\s\S]*?\[\/ignorePluralSpaceCharacters\]/g,
-        s=>{
-            return s.substring(
-                '[ignorePluralSpaceCharacters]'.length,
-                s.length-'[/ignorePluralSpaceCharacters]'.length
-            ).replace(/ {2,}/g,'')
-        }
-    ).replace(
-        /\[ignoreNewlineCharacters\][\s\S]*?\[\/ignoreNewlineCharacters\]/g,
-        s=>{
-            return s.substring(
-                '[ignoreNewlineCharacters]'.length,
-                s.length-'[/ignoreNewlineCharacters]'.length
-            ).replace(/\n/g,'')
-        }
-    ).replace(/\[htmlentities\][\s\S]*?\[\/htmlentities\]/g,s=>{
-        return html.encodeText(s.substring(14,s.length-15))
-    }).replace(/\[sp2nbsp\][\s\S]*?\[\/sp2nbsp\]/g,s=>{
-        return sp2nbsp(s.substring(9,s.length-10))
-    }).replace(/\[nl2br\][\s\S]*?\[\/nl2br\]/g,s=>{
-        return nl2br(s.substring(7,s.length-8))
-    });
-    return s
-    function sp2nbsp(s){
-        return s.split(' ').join('&nbsp;')
-    }
-    function nl2br(s){
-        return s.split('\r\n').join('<br>')
-    }
-};
-
 async function loadPagemodules(blog){
-    let[
-        pagemodules,
-    ]=await Promise.all([
-        blog._site.send('blog_getPagemodules'),
-    ]);
-    pagemodules.map(p=>
-        blog.pagemodules.push(new Pagemodule(
-            p.id,
-            p.priority,
-            p.name,
-            p.definitions
-        ))
-    );
+    let res=await blog._site.send('blog_getPagemodules0');
+    let pagemodules=await Promise.all(res.map(async id=>{
+        let pagemodule=await blog._site.getPagemodule(id);
+        await Promise.all([
+            pagemodule.load([
+                'priority',
+                'name',
+            ]),
+            pagemodule.definitions,
+        ]);
+        return pagemodule
+    }));
+    blog.pagemodules.push(...pagemodules);
     return blog
 }
 
@@ -364,8 +313,55 @@ function Pagemodule0(){
 Object.setPrototypeOf(Pagemodule0.prototype,AltheaObject.prototype);
 Pagemodule0.prototype._loader='blog_getPagemoduleInfo';
 Object.defineProperty(Pagemodule0.prototype,'definitions',{get(){
-    return this._io.getDefinitionByPagemodule(id)
+    return(async()=>{
+        return this.definitionsSync=
+            await this._io.getDefinitionByPagemodule()
+    })()
 }});
+Pagemodule0.prototype.compile=function(s){
+    this.definitionsSync.map(d=>{
+        // data bug patch
+        s=s||'';
+        s=s.split(d.name).join(d.content);
+    });
+    s=s.replace(/\[encodeURIComponent\][\s\S]*?\[\/encodeURIComponent\]/g,s=>{
+        return encodeURIComponent(s.substring(
+            '[encodeURIComponent]'.length,
+            s.length-'[/encodeURIComponent]'.length
+        ))
+    }).replace(/\[nothing\][\s\S]*?\[\/nothing\]/g,s=>{
+        return ''
+    }).replace(
+        /\[ignorePluralSpaceCharacters\][\s\S]*?\[\/ignorePluralSpaceCharacters\]/g,
+        s=>{
+            return s.substring(
+                '[ignorePluralSpaceCharacters]'.length,
+                s.length-'[/ignorePluralSpaceCharacters]'.length
+            ).replace(/ {2,}/g,'')
+        }
+    ).replace(
+        /\[ignoreNewlineCharacters\][\s\S]*?\[\/ignoreNewlineCharacters\]/g,
+        s=>{
+            return s.substring(
+                '[ignoreNewlineCharacters]'.length,
+                s.length-'[/ignoreNewlineCharacters]'.length
+            ).replace(/\n/g,'')
+        }
+    ).replace(/\[htmlentities\][\s\S]*?\[\/htmlentities\]/g,s=>{
+        return html.encodeText(s.substring(14,s.length-15))
+    }).replace(/\[sp2nbsp\][\s\S]*?\[\/sp2nbsp\]/g,s=>{
+        return sp2nbsp(s.substring(9,s.length-10))
+    }).replace(/\[nl2br\][\s\S]*?\[\/nl2br\]/g,s=>{
+        return nl2br(s.substring(7,s.length-8))
+    });
+    return s
+    function sp2nbsp(s){
+        return s.split(' ').join('&nbsp;')
+    }
+    function nl2br(s){
+        return s.split('\r\n').join('<br>')
+    }
+};
 
 function Pageversion(){
     AltheaObject.apply(this,arguments);
@@ -401,9 +397,9 @@ Site$1.prototype.getPagemodule=async function(id){
     return this._pagemodules[id]||(this._pagemodules[id]=
         new Pagemodule0({
             send:this.send.bind(this),
-            getDefinitionByPagemodule:id=>
+            getDefinitionByPagemodule:()=>
                 this.send({
-                    function:'getDefinitionByPagemodule',
+                    function:'blog_getDefinitionByPagemodule',
                     id,
                 })
         },id)
@@ -1812,13 +1808,8 @@ function setup$2(editpage,isMobile){
 function update(editpage,data){
     let textarea_content=editpage._nodes.textarea_content;
     data.pagemodules.map(async e=>{
-        let definitions=await e.definitions;
-        editpage.pagemodules.push(new Pagemodule(
-            e.id,
-            e.priority,
-            e.name,
-            definitions
-        ));
+        await e.definitions;
+        editpage.pagemodules.push(e);
     });
     /*document.getElementById(
         'input_ispublic_'+(
@@ -2031,15 +2022,9 @@ Editpage.style=style$1;
 
 var core = {
     Blog,
-    Comment,
     Editpage,
-    Page,
-    Pagemodule,
-    Pagemodule0,
-    Pageversion,
     Site: Site$1,
-    site,
 };
 
-export { Blog, Comment, Editpage, Page, Pagemodule, Pagemodule0, Pageversion, Site$1 as Site, site };
+export { Blog, Editpage, Site$1 as Site };
 export default core;
