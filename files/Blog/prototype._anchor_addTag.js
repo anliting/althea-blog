@@ -1,4 +1,3 @@
-import path from './path.js'
 import {dom}from '/lib/core.static.js'
 function anchor_addTag(tag){
     let
@@ -7,7 +6,7 @@ function anchor_addTag(tag){
     let
         a=dom.a(tag.name,{
             className:'addTag',
-            href:path.getHrefByTags(tagsToSelect),
+            href:this.path.getHrefByTags(tagsToSelect),
         })
     a.onclick=e=>{
         if(

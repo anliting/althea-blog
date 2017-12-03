@@ -1,7 +1,7 @@
-import path from '../path.js'
 function keydown(e){
     let
         blog=this.blog,
+        site=this.blog._site,
         view=this
     if(0<=[
         'INPUT',
@@ -82,7 +82,10 @@ function keydown(e){
             let x=currentPage()
             if(!x)
                 return
-            open(path.getHrefByPage(blog.pages[x.id]),'_blank').focus()
+            open(
+                site.path.getHrefByPage(blog.pages[x.id]),
+                '_blank'
+            ).focus()
         }else
             return false
         return true

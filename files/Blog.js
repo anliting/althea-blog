@@ -1,15 +1,16 @@
 import{EventEmmiter}from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js'
-import loadPagemodules from './Blog/loadPagemodules.js'
-import corePlugins from     './corePlugins.js'
-import _getNext from        './Blog/prototype._getNext.js'
-import _anchor_addTag from  './Blog/prototype._anchor_addTag.js'
-import BlogView from        './Blog/BlogView.js'
-import path from            './Blog/path.js'
-import{dom,load}from             '/lib/core.static.js'
+import loadPagemodules from     './Blog/loadPagemodules.js'
+import corePlugins from         './corePlugins.js'
+import _getNext from            './Blog/prototype._getNext.js'
+import _anchor_addTag from      './Blog/prototype._anchor_addTag.js'
+import BlogView from            './Blog/BlogView.js'
+import createPath from          './Blog/createPath.js'
+import{dom,load}from            '/lib/core.static.js'
 function Blog(site,status){
     EventEmmiter.call(this)
     this._site=site
     this._status=status
+    this.path=createPath(site)
     this.pages={}
     this.pagemodules=[]
     this.pages_loaded=[]
@@ -66,7 +67,6 @@ Object.defineProperty(Blog.prototype,'status',{get(){
     this.emit('statusChange')
     this._getNext()
 }})
-Blog.prototype.path=path
 Blog.newPageContentUi=function(
     getPagemodule,plugins,source,pagemoduleId
 ){

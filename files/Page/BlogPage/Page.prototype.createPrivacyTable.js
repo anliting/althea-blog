@@ -43,18 +43,18 @@ function createPrivacyTable(pageView){
             return a
         }
         function a_removepage(){
-            let a=dom.a()
-            a.className='functionbutton a_removepage'
-            a.href='javascript:'
-            a.onclick=()=>{
-                if(confirm('Remove?')){
-                    remove()
-                }
-            }
-            a.innerHTML='<i class=material-icons>remove</i>'
-            return a
+            return dom.a({
+                className:'functionbutton a_removepage',
+                href:'javascript:',
+                onclick:()=>{
+                    if(confirm('Remove?')){
+                        remove()
+                    }
+                },
+                innerHTML:'<i class=material-icons>remove</i>',
+            })
             function remove(){
-                site.send({
+                page.blog._site.send({
                     function:'blog_removePage',
                     page:page.id
                 })

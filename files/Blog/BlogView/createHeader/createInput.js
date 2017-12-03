@@ -1,4 +1,3 @@
-import path from '../../path.js'
 import {dom}from '/lib/core.static.js'
 function createInput(blog,view){
     let input=dom.input()
@@ -16,7 +15,7 @@ function createInput(blog,view){
             []
         tagsToSelect.push(tagToAdd)
         if(e.shiftKey)
-            open(path.getHrefByTags(
+            open(blog._site.path.getHrefByTags(
                 tagsToSelect
             ),'_blank').focus()
         else

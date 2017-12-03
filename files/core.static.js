@@ -422,7 +422,7 @@ Site$1.prototype.path=Object.setPrototypeOf({
     newpage:'newpage',
 },Site.prototype.path);
 
-var site = new Site$1
+new Site$1
 
 let str_show='<i class=material-icons>expand_more</i>';
 let str_hide='<i class=material-icons>expand_less</i>';
@@ -525,18 +525,18 @@ function createPrivacyTable(pageView){
             return a
         }
         function a_removepage(){
-            let a=dom.a();
-            a.className='functionbutton a_removepage';
-            a.href='javascript:';
-            a.onclick=()=>{
-                if(confirm('Remove?')){
-                    remove();
-                }
-            };
-            a.innerHTML='<i class=material-icons>remove</i>';
-            return a
+            return dom.a({
+                className:'functionbutton a_removepage',
+                href:'javascript:',
+                onclick:()=>{
+                    if(confirm('Remove?')){
+                        remove();
+                    }
+                },
+                innerHTML:'<i class=material-icons>remove</i>',
+            })
             function remove(){
-                site.send({
+                page.blog._site.send({
                     function:'blog_removePage',
                     page:page.id
                 });
@@ -746,25 +746,6 @@ async function _getNext(){
     this.getting--;
 }
 
-function calcPathByStatus(status){
-    if('pageId' in status)
-        return site.path.blog.page(status.pageId)
-    if('tagNames' in status)
-        return site.path.blog.tag(status.tagNames)
-    return site.path.blog.root
-}
-function getHrefByPage(page){
-    return site.path.blog.page(page.id)
-}
-function getHrefByTags(tags){
-    return site.path.blog.tag(tags)
-}
-var path = {
-    calcPathByStatus,
-    getHrefByPage,
-    getHrefByTags,
-};
-
 function anchor_addTag(tag){
     let
         tagsToSelect=(this.status.tagNames||[]).slice();
@@ -772,7 +753,7 @@ function anchor_addTag(tag){
     let
         a=dom.a(tag.name,{
             className:'addTag',
-            href:path.getHrefByTags(tagsToSelect),
+            href:this.path.getHrefByTags(tagsToSelect),
         });
     a.onclick=e=>{
         if(
@@ -877,7 +858,7 @@ function createInput(blog,view){
             [];
         tagsToSelect.push(tagToAdd);
         if(e.shiftKey)
-            open(path.getHrefByTags(
+            open(blog._site.path.getHrefByTags(
                 tagsToSelect
             ),'_blank').focus();
         else
@@ -1147,6 +1128,7 @@ function createHeader(blog,view){
 function keydown(e){
     let
         blog=this.blog,
+        site=this.blog._site,
         view=this;
     if(0<=[
         'INPUT',
@@ -1227,7 +1209,10 @@ function keydown(e){
             let x=currentPage();
             if(!x)
                 return
-            open(path.getHrefByPage(blog.pages[x.id]),'_blank').focus();
+            open(
+                site.path.getHrefByPage(blog.pages[x.id]),
+                '_blank'
+            ).focus();
         }else
             return false
         return true
@@ -1391,10 +1376,32 @@ BlogView.prototype.setupSuggestedTags=async function(){
     view.tagsDiv.style.display='';
 };
 
+var createPath = site=>{
+    function calcPathByStatus(status){
+        if('pageId' in status)
+            return site.path.blog.page(status.pageId)
+        if('tagNames' in status)
+            return site.path.blog.tag(status.tagNames)
+        return site.path.blog.root
+    }
+    function getHrefByPage(page){
+        return site.path.blog.page(page.id)
+    }
+    function getHrefByTags(tags){
+        return site.path.blog.tag(tags)
+    }
+    return{
+        calcPathByStatus,
+        getHrefByPage,
+        getHrefByTags,
+    }
+};
+
 function Blog(site,status){
     EventEmmiter.call(this);
     this._site=site;
     this._status=status;
+    this.path=createPath(site);
     this.pages={};
     this.pagemodules=[];
     this.pages_loaded=[];
@@ -1451,7 +1458,6 @@ Object.defineProperty(Blog.prototype,'status',{get(){
     this.emit('statusChange');
     this._getNext();
 }});
-Blog.prototype.path=path;
 Blog.newPageContentUi=function(
     getPagemodule,plugins,source,pagemoduleId
 ){
