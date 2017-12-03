@@ -6,7 +6,7 @@ module.exports={
     blog_getData:           require('./queryFunctions/getData'),
     blog_getDefinitionByPagemodule:
         require('./queryFunctions/getDefinitionByPagemodule'),
-    blog_getPagemodules0:   require('./queryFunctions/getPagemodules0'),
+    blog_getPagemodules:    require('./queryFunctions/getPagemodules'),
     blog_getSuggestedPages: require('./queryFunctions/getSuggestedPages'),
     blog_getSuggestedTags:  require('./queryFunctions/getSuggestedTags'),
     blog_getTags:           require('./queryFunctions/getTags'),

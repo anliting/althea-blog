@@ -15,7 +15,6 @@ Site.prototype.getComment=async function(id){
     },id)
 }
 Site.prototype.getPage=async function(id){
-    // cache is disabled because of the comment feature
     return new Page({
         send:this.send.bind(this),
         getPageversion:this.getPageversion.bind(this),

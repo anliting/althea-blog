@@ -2,7 +2,7 @@ import { EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122
 import { AltheaObject, EventEmmiter as EventEmmiter$1, ImageUploader, Site, arg, browser, dom, html, load, order } from '/lib/core.static.js';
 
 async function loadPagemodules(blog){
-    let res=await blog._site.send('blog_getPagemodules0');
+    let res=await blog._site.send('blog_getPagemodules');
     let pagemodules=await Promise.all(res.map(async id=>{
         let pagemodule=await blog._site.getPagemodule(id);
         await Promise.all([
@@ -498,30 +498,31 @@ BlogPage$1.prototype.h1_title=function(){
     }
 };
 BlogPage$1.prototype.createAuthorDiv=function(){
-    let div=dom.div();
-    div.style.textAlign='center';
-    div.style.display='none';
-    div.style.fontSize='1.5em'
-    ;(async()=>{
-        let site=await this.blog._site;
-        let u=await site.getUser(this.authorId);
+    return dom.div(async n=>{
+        n.style.textAlign='center';
+        n.style.display='none';
+        n.style.fontSize='1.5em';
+        let u=await this.blog._site.getUser(this.authorId);
         await u.load('nickname');
-        dom(div,u.nickname);
-    })();
-    return div
+        return u.nickname
+    })
 };
 BlogPage$1.prototype.createDateDiv=function(){
-    let
-        div=dom.div(),
-        date=new Date(this.datetime_lastmodified);
-    div.style.textAlign='center';
-    div.style.display='none';
-    div.style.fontSize='1.5em';
-    div.style.marginTop='0.67em';
-    div.style.marginBottom='2em';
-    div.textContent=
-        `${1900+date.getYear()}-${1+date.getMonth()}-${date.getDate()}`;
-    return div
+    let date=new Date(this.datetime_lastmodified);
+    return dom.div(
+        n=>{
+            dom(n.style,{
+                textAlign:'center',
+                display:'none',
+                fontSize:'1.5em',
+                marginTop:'0.67em',
+                marginBottom:'2em',
+            });
+        },
+        `${1900+date.getYear()}-${1+date.getMonth()}-${
+            date.getDate()
+        }`
+    )
 };
 
 function Page(){
@@ -1315,11 +1316,15 @@ Object.defineProperty(Blog.prototype,'_currentUser',{async get(){
     return(await this._site).currentUser
 }});
 Blog.prototype._getNext=_getNext;
-Object.defineProperty(Blog.prototype,'_loadPagemodules',{async get(){
-    return this._loadPagemodules_||(this._loadPagemodules_=
-        (await loadPagemodules)(this)
-    )
-}});
+Object.defineProperty(Blog.prototype,'_loadPagemodules',{
+    configurable:true,
+    get(){
+        Object.defineProperty(this,'_loadPagemodules',{
+            value:loadPagemodules(this)
+        });
+        return this._loadPagemodules
+    }
+});
 Blog.prototype._style=function(n){
     this._styles.push(n);
     this.emit('_style');
@@ -1989,7 +1994,6 @@ Site$1.prototype.getComment=async function(id){
     },id)
 };
 Site$1.prototype.getPage=async function(id){
-    // cache is disabled because of the comment feature
     return new Page({
         send:this.send.bind(this),
         getPageversion:this.getPageversion.bind(this),

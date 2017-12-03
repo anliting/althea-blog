@@ -1,5 +1,5 @@
 async function loadPagemodules(blog){
-    let res=await blog._site.send('blog_getPagemodules0')
+    let res=await blog._site.send('blog_getPagemodules')
     let pagemodules=await Promise.all(res.map(async id=>{
         let pagemodule=await blog._site.getPagemodule(id)
         await Promise.all([

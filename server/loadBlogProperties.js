@@ -13,8 +13,8 @@ module.exports=db=>{
         require('./loadBlogProperties/getTagsWithCount')
     db.getPage=
         require('./loadBlogProperties/getPage')
-    db.getPagemodules0=
-        require('./loadBlogProperties/getPagemodules0')
+    db.getPagemodules=
+        require('./loadBlogProperties/getPagemodules')
     db.getPageversion=
         require('./loadBlogProperties/getPageversion')
     db.getPagesByTags=

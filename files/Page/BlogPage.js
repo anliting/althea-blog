@@ -44,29 +44,30 @@ BlogPage.prototype.h1_title=function(){
     }
 }
 BlogPage.prototype.createAuthorDiv=function(){
-    let div=dom.div()
-    div.style.textAlign='center'
-    div.style.display='none'
-    div.style.fontSize='1.5em'
-    ;(async()=>{
-        let site=await this.blog._site
-        let u=await site.getUser(this.authorId)
+    return dom.div(async n=>{
+        n.style.textAlign='center'
+        n.style.display='none'
+        n.style.fontSize='1.5em'
+        let u=await this.blog._site.getUser(this.authorId)
         await u.load('nickname')
-        dom(div,u.nickname)
-    })()
-    return div
+        return u.nickname
+    })
 }
 BlogPage.prototype.createDateDiv=function(){
-    let
-        div=dom.div(),
-        date=new Date(this.datetime_lastmodified)
-    div.style.textAlign='center'
-    div.style.display='none'
-    div.style.fontSize='1.5em'
-    div.style.marginTop='0.67em'
-    div.style.marginBottom='2em'
-    div.textContent=
-        `${1900+date.getYear()}-${1+date.getMonth()}-${date.getDate()}`
-    return div
+    let date=new Date(this.datetime_lastmodified)
+    return dom.div(
+        n=>{
+            dom(n.style,{
+                textAlign:'center',
+                display:'none',
+                fontSize:'1.5em',
+                marginTop:'0.67em',
+                marginBottom:'2em',
+            })
+        },
+        `${1900+date.getYear()}-${1+date.getMonth()}-${
+            date.getDate()
+        }`
+    )
 }
 export default BlogPage

@@ -41,11 +41,15 @@ Object.defineProperty(Blog.prototype,'_currentUser',{async get(){
     return(await this._site).currentUser
 }})
 Blog.prototype._getNext=_getNext
-Object.defineProperty(Blog.prototype,'_loadPagemodules',{async get(){
-    return this._loadPagemodules_||(this._loadPagemodules_=
-        (await loadPagemodules)(this)
-    )
-}})
+Object.defineProperty(Blog.prototype,'_loadPagemodules',{
+    configurable:true,
+    get(){
+        Object.defineProperty(this,'_loadPagemodules',{
+            value:loadPagemodules(this)
+        })
+        return this._loadPagemodules
+    }
+})
 Blog.prototype._style=function(n){
     this._styles.push(n)
     this.emit('_style')
