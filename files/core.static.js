@@ -1909,18 +1909,18 @@ Editpage.prototype.changeEditor=function(id){
 };
 Editpage.style=style$1;
 
-function Pagemodule0(){
+function Pagemodule(){
     AltheaObject.apply(this,arguments);
 }
-Object.setPrototypeOf(Pagemodule0.prototype,AltheaObject.prototype);
-Pagemodule0.prototype._loader='blog_getPagemoduleInfo';
-Object.defineProperty(Pagemodule0.prototype,'definitions',{get(){
+Object.setPrototypeOf(Pagemodule.prototype,AltheaObject.prototype);
+Pagemodule.prototype._loader='blog_getPagemoduleInfo';
+Object.defineProperty(Pagemodule.prototype,'definitions',{get(){
     return(async()=>{
         return this.definitionsSync=
             await this._io.getDefinitionByPagemodule()
     })()
 }});
-Pagemodule0.prototype.compile=function(s){
+Pagemodule.prototype.compile=function(s){
     this.definitionsSync.map(d=>{
         // data bug patch
         s=s||'';
@@ -1997,7 +1997,7 @@ Site$1.prototype.getPage=async function(id){
 };
 Site$1.prototype.getPagemodule=async function(id){
     return this._pagemodules[id]||(this._pagemodules[id]=
-        new Pagemodule0({
+        new Pagemodule({
             send:this.send.bind(this),
             getDefinitionByPagemodule:()=>
                 this.send({

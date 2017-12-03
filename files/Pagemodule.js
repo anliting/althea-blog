@@ -1,16 +1,16 @@
 import{AltheaObject,html}from'/lib/core.static.js'
-function Pagemodule0(){
+function Pagemodule(){
     AltheaObject.apply(this,arguments)
 }
-Object.setPrototypeOf(Pagemodule0.prototype,AltheaObject.prototype)
-Pagemodule0.prototype._loader='blog_getPagemoduleInfo'
-Object.defineProperty(Pagemodule0.prototype,'definitions',{get(){
+Object.setPrototypeOf(Pagemodule.prototype,AltheaObject.prototype)
+Pagemodule.prototype._loader='blog_getPagemoduleInfo'
+Object.defineProperty(Pagemodule.prototype,'definitions',{get(){
     return(async()=>{
         return this.definitionsSync=
             await this._io.getDefinitionByPagemodule()
     })()
 }})
-Pagemodule0.prototype.compile=function(s){
+Pagemodule.prototype.compile=function(s){
     this.definitionsSync.map(d=>{
         // data bug patch
         s=s||''
@@ -54,4 +54,4 @@ Pagemodule0.prototype.compile=function(s){
         return s.split('\r\n').join('<br>')
     }
 }
-export default Pagemodule0
+export default Pagemodule

@@ -1,4 +1,4 @@
-import Pagemodule0 from './Pagemodule0.js'
+import Pagemodule from './Pagemodule.js'
 import Pageversion from './Pageversion.js'
 import Page from './Page.js'
 import Comment from './Comment.js'
@@ -23,7 +23,7 @@ Site.prototype.getPage=async function(id){
 }
 Site.prototype.getPagemodule=async function(id){
     return this._pagemodules[id]||(this._pagemodules[id]=
-        new Pagemodule0({
+        new Pagemodule({
             send:this.send.bind(this),
             getDefinitionByPagemodule:()=>
                 this.send({
