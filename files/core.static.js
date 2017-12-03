@@ -307,123 +307,6 @@ var view = {get(){
     return new PageView(this)
 }};
 
-function Pagemodule0(){
-    AltheaObject.apply(this,arguments);
-}
-Object.setPrototypeOf(Pagemodule0.prototype,AltheaObject.prototype);
-Pagemodule0.prototype._loader='blog_getPagemoduleInfo';
-Object.defineProperty(Pagemodule0.prototype,'definitions',{get(){
-    return(async()=>{
-        return this.definitionsSync=
-            await this._io.getDefinitionByPagemodule()
-    })()
-}});
-Pagemodule0.prototype.compile=function(s){
-    this.definitionsSync.map(d=>{
-        // data bug patch
-        s=s||'';
-        s=s.split(d.name).join(d.content);
-    });
-    s=s.replace(/\[encodeURIComponent\][\s\S]*?\[\/encodeURIComponent\]/g,s=>{
-        return encodeURIComponent(s.substring(
-            '[encodeURIComponent]'.length,
-            s.length-'[/encodeURIComponent]'.length
-        ))
-    }).replace(/\[nothing\][\s\S]*?\[\/nothing\]/g,s=>{
-        return ''
-    }).replace(
-        /\[ignorePluralSpaceCharacters\][\s\S]*?\[\/ignorePluralSpaceCharacters\]/g,
-        s=>{
-            return s.substring(
-                '[ignorePluralSpaceCharacters]'.length,
-                s.length-'[/ignorePluralSpaceCharacters]'.length
-            ).replace(/ {2,}/g,'')
-        }
-    ).replace(
-        /\[ignoreNewlineCharacters\][\s\S]*?\[\/ignoreNewlineCharacters\]/g,
-        s=>{
-            return s.substring(
-                '[ignoreNewlineCharacters]'.length,
-                s.length-'[/ignoreNewlineCharacters]'.length
-            ).replace(/\n/g,'')
-        }
-    ).replace(/\[htmlentities\][\s\S]*?\[\/htmlentities\]/g,s=>{
-        return html.encodeText(s.substring(14,s.length-15))
-    }).replace(/\[sp2nbsp\][\s\S]*?\[\/sp2nbsp\]/g,s=>{
-        return sp2nbsp(s.substring(9,s.length-10))
-    }).replace(/\[nl2br\][\s\S]*?\[\/nl2br\]/g,s=>{
-        return nl2br(s.substring(7,s.length-8))
-    });
-    return s
-    function sp2nbsp(s){
-        return s.split(' ').join('&nbsp;')
-    }
-    function nl2br(s){
-        return s.split('\r\n').join('<br>')
-    }
-};
-
-function Pageversion(){
-    AltheaObject.apply(this,arguments);
-}
-Object.setPrototypeOf(Pageversion.prototype,AltheaObject.prototype);
-Pageversion.prototype._loader='blog_getPageversion';
-
-function Comment(){
-    AltheaObject.apply(this,arguments);
-}
-Object.setPrototypeOf(Comment.prototype,AltheaObject.prototype);
-Comment.prototype._loader='blog_getComment';
-
-function Site$1(){
-    Site.call(this);
-    this._pagemodules={};
-    this._pageversions={};
-}
-Object.setPrototypeOf(Site$1.prototype,Site.prototype);
-Site$1.prototype.getComment=async function(id){
-    return new Comment({
-        send:this.send.bind(this),
-    },id)
-};
-Site$1.prototype.getPage=async function(id){
-    // cache is disabled because of the comment feature
-    return new Page({
-        send:this.send.bind(this),
-        getPageversion:this.getPageversion.bind(this),
-    },id)
-};
-Site$1.prototype.getPagemodule=async function(id){
-    return this._pagemodules[id]||(this._pagemodules[id]=
-        new Pagemodule0({
-            send:this.send.bind(this),
-            getDefinitionByPagemodule:()=>
-                this.send({
-                    function:'blog_getDefinitionByPagemodule',
-                    id,
-                })
-        },id)
-    )
-};
-Site$1.prototype.getPageversion=async function(id){
-    return this._pageversions[id]||(this._pageversions[id]=
-        new Pageversion({
-            send:this.send.bind(this),
-        },id)
-    )
-};
-Site$1.prototype.path=Object.setPrototypeOf({
-    blog:{
-        page:p=>p,
-        root:'.',
-        tag:a=>`tags/${a.map(encodeURIComponent).join('/')}`,
-    },
-    editpage:p=>`${p}/edit`,
-    newpage:'newpage',
-},Site.prototype.path);
-
-new Site$1
-
 let str_show='<i class=material-icons>expand_more</i>';
 let str_hide='<i class=material-icons>expand_less</i>';
 function createHideShowA(page,pageView){
@@ -2025,6 +1908,121 @@ Editpage.prototype.changeEditor=function(id){
     this.editors[this.currentEditor].come.call(this);
 };
 Editpage.style=style$1;
+
+function Pagemodule0(){
+    AltheaObject.apply(this,arguments);
+}
+Object.setPrototypeOf(Pagemodule0.prototype,AltheaObject.prototype);
+Pagemodule0.prototype._loader='blog_getPagemoduleInfo';
+Object.defineProperty(Pagemodule0.prototype,'definitions',{get(){
+    return(async()=>{
+        return this.definitionsSync=
+            await this._io.getDefinitionByPagemodule()
+    })()
+}});
+Pagemodule0.prototype.compile=function(s){
+    this.definitionsSync.map(d=>{
+        // data bug patch
+        s=s||'';
+        s=s.split(d.name).join(d.content);
+    });
+    s=s.replace(/\[encodeURIComponent\][\s\S]*?\[\/encodeURIComponent\]/g,s=>{
+        return encodeURIComponent(s.substring(
+            '[encodeURIComponent]'.length,
+            s.length-'[/encodeURIComponent]'.length
+        ))
+    }).replace(/\[nothing\][\s\S]*?\[\/nothing\]/g,s=>{
+        return ''
+    }).replace(
+        /\[ignorePluralSpaceCharacters\][\s\S]*?\[\/ignorePluralSpaceCharacters\]/g,
+        s=>{
+            return s.substring(
+                '[ignorePluralSpaceCharacters]'.length,
+                s.length-'[/ignorePluralSpaceCharacters]'.length
+            ).replace(/ {2,}/g,'')
+        }
+    ).replace(
+        /\[ignoreNewlineCharacters\][\s\S]*?\[\/ignoreNewlineCharacters\]/g,
+        s=>{
+            return s.substring(
+                '[ignoreNewlineCharacters]'.length,
+                s.length-'[/ignoreNewlineCharacters]'.length
+            ).replace(/\n/g,'')
+        }
+    ).replace(/\[htmlentities\][\s\S]*?\[\/htmlentities\]/g,s=>{
+        return html.encodeText(s.substring(14,s.length-15))
+    }).replace(/\[sp2nbsp\][\s\S]*?\[\/sp2nbsp\]/g,s=>{
+        return sp2nbsp(s.substring(9,s.length-10))
+    }).replace(/\[nl2br\][\s\S]*?\[\/nl2br\]/g,s=>{
+        return nl2br(s.substring(7,s.length-8))
+    });
+    return s
+    function sp2nbsp(s){
+        return s.split(' ').join('&nbsp;')
+    }
+    function nl2br(s){
+        return s.split('\r\n').join('<br>')
+    }
+};
+
+function Pageversion(){
+    AltheaObject.apply(this,arguments);
+}
+Object.setPrototypeOf(Pageversion.prototype,AltheaObject.prototype);
+Pageversion.prototype._loader='blog_getPageversion';
+
+function Comment(){
+    AltheaObject.apply(this,arguments);
+}
+Object.setPrototypeOf(Comment.prototype,AltheaObject.prototype);
+Comment.prototype._loader='blog_getComment';
+
+function Site$1(){
+    Site.call(this);
+    this._pagemodules={};
+    this._pageversions={};
+}
+Object.setPrototypeOf(Site$1.prototype,Site.prototype);
+Site$1.prototype.getComment=async function(id){
+    return new Comment({
+        send:this.send.bind(this),
+    },id)
+};
+Site$1.prototype.getPage=async function(id){
+    // cache is disabled because of the comment feature
+    return new Page({
+        send:this.send.bind(this),
+        getPageversion:this.getPageversion.bind(this),
+    },id)
+};
+Site$1.prototype.getPagemodule=async function(id){
+    return this._pagemodules[id]||(this._pagemodules[id]=
+        new Pagemodule0({
+            send:this.send.bind(this),
+            getDefinitionByPagemodule:()=>
+                this.send({
+                    function:'blog_getDefinitionByPagemodule',
+                    id,
+                })
+        },id)
+    )
+};
+Site$1.prototype.getPageversion=async function(id){
+    return this._pageversions[id]||(this._pageversions[id]=
+        new Pageversion({
+            send:this.send.bind(this),
+        },id)
+    )
+};
+Site$1.prototype.path=Object.setPrototypeOf({
+    blog:{
+        page:p=>p,
+        root:'.',
+        tag:a=>`tags/${a.map(encodeURIComponent).join('/')}`,
+    },
+    editpage:p=>`${p}/edit`,
+    newpage:'newpage',
+},Site.prototype.path);
 
 var core = {
     Blog,
