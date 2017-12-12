@@ -1,4 +1,4 @@
-import{EventEmmiter}from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js'
+import{EventEmmiter}from 'https://gitcdn.link/cdn/anliting/simple.js/55124630741399dd0fcbee2f0396642a428cdd24/src/simple.static.js'
 import commentForm from './PageView/commentForm.js'
 import commentDiv from './PageView/commentDiv.js'
 import {dom}from '/lib/core.static.js'

@@ -1,4 +1,4 @@
-import{EventEmmiter}from 'https://gitcdn.link/cdn/anliting/simple.js/3b5e122ded93bb9a5a7d5099ac645f1e1614a89b/src/simple.static.js'
+import{EventEmmiter}from 'https://gitcdn.link/cdn/anliting/simple.js/55124630741399dd0fcbee2f0396642a428cdd24/src/simple.static.js'
 import setup from './BlogPage/setup.js'
 import view from './BlogPage/Page.prototype.view.js'
 import createPrivacyTable from './BlogPage/Page.prototype.createPrivacyTable.js'

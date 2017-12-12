@@ -55,6 +55,11 @@ ${env.althea.loadModule(
     },
     {
         sharedWorker:1,
+        preloadModule:[
+            '/lib/core.static.js',
+            '/plugins/blog/core.static.js',
+            'https://gitcdn.link/cdn/anliting/simple.js/55124630741399dd0fcbee2f0396642a428cdd24/src/simple.static.js',
+        ]
     }
 )}
 `
