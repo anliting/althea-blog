@@ -1,13 +1,14 @@
-module.exports=async(db,args,env)=>{
+module.exports=async(db,opt,env)=>{
     if(!(
-        Number.isFinite(args.page)&&
-        typeof args.content=='string'
+        opt instanceof Object&&
+        typeof opt.page=='number'&&
+        typeof opt.content=='string'
     ))
         return
     await db.newComment(
         env.currentUser,
-        args.page,
-        args.content
+        opt.page,
+        opt.content
     )
     return{}
 }

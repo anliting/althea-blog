@@ -1,15 +1,16 @@
-module.exports=(db,args,env)=>{
+module.exports=(db,opt,env)=>{
     if(!(
-        typeof args.page=='number'&&
-        typeof args.pageversion=='number'&&
-        typeof args.pages_loaded=='object'&&
-        typeof args.tags_selected=='object'
+        opt instanceof Object&&
+        typeof opt.page=='number'&&
+        typeof opt.pageversion=='number'&&
+        typeof opt.pages_loaded=='object'&&
+        typeof opt.tags_selected=='object'
     ))
         return
     return db.selectPages(
         env.currentUser,
-        args.tags_selected,
-        args.pages_loaded,
-        args.page
+        opt.tags_selected,
+        opt.pages_loaded,
+        opt.page
     )
 }

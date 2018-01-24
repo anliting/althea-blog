@@ -1,8 +1,8 @@
-module.exports=(db,args,env)=>{
+module.exports=(db,opt,env)=>{
     if(!(
-        typeof args.id=='number'&&
-        Number.isFinite(args.id)
+        opt instanceof Object&&
+        typeof opt.id=='number'
     ))
         return
-    return db.getDefinitionByPagemodule(args.id)
+    return db.getDefinitionByPagemodule(opt.id)
 }

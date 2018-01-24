@@ -2,8 +2,7 @@ module.exports=async(db,opt,env)=>{
     let type=env.althea.lib.anliting.type
     let cu=env.currentUser
     if(!(
-        typeof opt=='object'&&
-        opt&&
+        opt instanceof Object&&
         typeof opt.id_page=='number'&&
         typeof opt.ispublic=='boolean'&&
         typeof opt.id_pagemodule=='number'&&

@@ -1,5 +1,9 @@
 module.exports=async function(db,opt,env,althea){
     let data=JSON.parse(await althea.getData())
+    if(!(
+        opt instanceof Object
+    ))
+        return
     if(!('title' in data))
         data.title=''
     if(!('description' in data))

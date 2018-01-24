@@ -1,10 +1,11 @@
-module.exports=async(db,args,env)=>{
+module.exports=async(db,opt,env)=>{
     let cu=env.currentUser
     if(!(
-        Number.isFinite(args.page)&&
+        opt instanceof Object&&
+        typeof opt.page=='number'&&
         cu.isadmin
     ))
         return
-    await db.removePage(args.page)
+    await db.removePage(opt.page)
     return null
 }

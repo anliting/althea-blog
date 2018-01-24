@@ -1,9 +1,10 @@
-module.exports=(db,args,env)=>{
+module.exports=(db,opt,env)=>{
     if(!(
-        args.tags instanceof Array
+        opt instanceof Object&&
+        opt.tags instanceof Array
     ))
         return
-    return getTags(db,env.currentUser,args.tags)
+    return getTags(db,env.currentUser,opt.tags)
 }
 async function getTags(db,cu,tags){
     let rows=await db.selectTags(cu,tags)

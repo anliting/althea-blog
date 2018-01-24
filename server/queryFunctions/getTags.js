@@ -1,4 +1,4 @@
-module.exports=(db,args,env)=>{
+module.exports=(db,opt,env)=>{
     if(!env.currentUser.isadmin)
         return
     return db.getTags()

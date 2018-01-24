@@ -1,4 +1,4 @@
-module.exports=(db,args,env)=>{
+module.exports=(db,opt,env)=>{
     let cu=env.currentUser
     if(!cu.isadmin)
         return

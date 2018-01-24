@@ -1,7 +1,6 @@
 module.exports=async(db,opt,env)=>{
     if(!(
-        typeof opt=='object'&&
-        opt&&
+        opt instanceof Object&&
         typeof opt.id=='number'&&
         env.currentUser.isadmin
     ))
