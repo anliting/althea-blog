@@ -1,38 +1,40 @@
-module.exports=async(db,args,env)=>{
+module.exports=async(db,opt,env)=>{
     let type=env.althea.lib.anliting.type
     let cu=env.currentUser
     if(!(
-        Number.isFinite(args.id_page)&&
-        typeof args.ispublic=='boolean'&&
-        Number.isFinite(args.id_pagemodule)&&
-        typeof args.title=='string'&&
-        typeof args.content=='string'&&
-        type.isArray(type.isStringValue)(args.tags)&&
+        typeof opt=='object'&&
+        opt&&
+        typeof opt.id_page=='number'&&
+        typeof opt.ispublic=='boolean'&&
+        typeof opt.id_pagemodule=='number'&&
+        typeof opt.title=='string'&&
+        typeof opt.content=='string'&&
+        type.isArray(type.isStringValue)(opt.tags)&&
         cu.isadmin
     ))
         return
-    if(args.id_page==0){
+    if(opt.id_page==0){
         let page=await db.newPage(
-            args.ispublic,
+            opt.ispublic,
             cu.id,
-            args.id_pagemodule,
-            args.title,
-            args.content,
-            args.tags,
-            args.pagenames
+            opt.id_pagemodule,
+            opt.title,
+            opt.content,
+            opt.tags,
+            opt.pagenames
         )
         return page.id
     }else{
         await db.newPageversionToPage(
-            args.ispublic,
+            opt.ispublic,
             cu.id,
-            args.id_pagemodule,
-            args.title,
-            args.content,
-            args.tags,
-            args.pagenames,
-            args.id_page
+            opt.id_pagemodule,
+            opt.title,
+            opt.content,
+            opt.tags,
+            opt.pagenames,
+            opt.id_page
         )
-        return args.id_page
+        return opt.id_page
     }
 }

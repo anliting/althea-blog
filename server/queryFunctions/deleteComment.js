@@ -1,9 +1,11 @@
-module.exports=async(db,args,env)=>{
+module.exports=async(db,opt,env)=>{
     if(!(
-        Number.isFinite(args.id)&&
+        typeof opt=='object'&&
+        opt&&
+        typeof opt.id=='number'&&
         env.currentUser.isadmin
     ))
         return
-    await db.deleteComment(args.id)
+    await db.deleteComment(opt.id)
     return null
 }
