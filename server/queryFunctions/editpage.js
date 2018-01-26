@@ -1,17 +1,14 @@
 module.exports=async(db,opt,env)=>{
     let type=env.althea.lib.anliting.type
     let cu=env.currentUser
-    if(!(
-        opt instanceof Object&&
-        typeof opt.id_page=='number'&&
-        typeof opt.ispublic=='boolean'&&
-        typeof opt.id_pagemodule=='number'&&
-        typeof opt.title=='string'&&
-        typeof opt.content=='string'&&
-        type.isArray(type.isStringValue)(opt.tags)&&
-        cu.isadmin
-    ))
-        return
+    opt instanceof Object&&
+    typeof opt.id_page=='number'&&
+    typeof opt.ispublic=='boolean'&&
+    typeof opt.id_pagemodule=='number'&&
+    typeof opt.title=='string'&&
+    typeof opt.content=='string'&&
+    type.isArray(type.isStringValue)(opt.tags)&&
+    cu.isadmin||0()
     if(opt.id_page==0){
         let page=await db.newPage(
             opt.ispublic,

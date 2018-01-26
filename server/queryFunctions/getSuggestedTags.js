@@ -1,9 +1,6 @@
 module.exports=(db,opt,env)=>{
-    if(!(
-        opt instanceof Object&&
-        opt.tags instanceof Array
-    ))
-        return
+    opt instanceof Object&&
+    opt.tags instanceof Array||0()
     return getTags(db,env.currentUser,opt.tags)
 }
 async function getTags(db,cu,tags){

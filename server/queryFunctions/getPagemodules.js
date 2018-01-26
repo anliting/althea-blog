@@ -1,3 +1,2 @@
-module.exports=(db,opt,env)=>{
-    return db.getPagemodules()
-}
+module.exports=(db,opt,env)=>
+    db.getPagemodules()

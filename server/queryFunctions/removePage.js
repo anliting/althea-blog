@@ -1,11 +1,7 @@
 module.exports=async(db,opt,env)=>{
-    let cu=env.currentUser
-    if(!(
-        opt instanceof Object&&
-        typeof opt.page=='number'&&
-        cu.isadmin
-    ))
-        return
+    opt instanceof Object&&
+    typeof opt.page=='number'&&
+    env.currentUser.isadmin||0()
     await db.removePage(opt.page)
     return null
 }

@@ -1,5 +1,4 @@
 module.exports=(db,opt,env)=>{
-    if(!env.currentUser.isadmin)
-        return
+    env.currentUser.isadmin||0()
     return db.getTags()
 }

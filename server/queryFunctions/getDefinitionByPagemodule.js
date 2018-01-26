@@ -1,8 +1,5 @@
 module.exports=(db,opt,env)=>{
-    if(!(
-        opt instanceof Object&&
-        typeof opt.id=='number'
-    ))
-        return
+    opt instanceof Object&&
+    typeof opt.id=='number'||0()
     return db.getDefinitionByPagemodule(opt.id)
 }

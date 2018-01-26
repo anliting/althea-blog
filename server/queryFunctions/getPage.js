@@ -1,18 +1,12 @@
 module.exports=async(db,opt,env)=>{
     let type=env.althea.lib.anliting.type
-    if(!(
-        opt instanceof Object&&
-        typeof opt.id=='number'&&
-        type.isArray(type.isStringValue)(opt.columns)
-    ))
-        return
+    opt instanceof Object&&
+    typeof opt.id=='number'&&
+    type.isArray(type.isStringValue)(opt.columns)||0()
     let page=await db.getPage(opt.id)
-    if(!(
-        page&&
-        !page.data.isremoved&&
-        (page.data.ispublic||env.currentUser.isadmin)
-    ))
-        return
+    page&&
+    !page.data.isremoved&&
+    (page.data.ispublic||env.currentUser.isadmin)||0()
     let res={}
     if(0<=opt.columns.indexOf('author'))
         res.author=page.data.id_user_author

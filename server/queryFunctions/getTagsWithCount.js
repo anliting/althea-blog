@@ -1,6 +1,4 @@
 module.exports=(db,opt,env)=>{
-    let cu=env.currentUser
-    if(!cu.isadmin)
-        return
+    env.currentUser.isadmin||0()
     return db.getTagsWithCount()
 }

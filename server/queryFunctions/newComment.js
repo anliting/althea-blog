@@ -1,10 +1,7 @@
 module.exports=async(db,opt,env)=>{
-    if(!(
-        opt instanceof Object&&
-        typeof opt.page=='number'&&
-        typeof opt.content=='string'
-    ))
-        return
+    opt instanceof Object&&
+    typeof opt.page=='number'&&
+    typeof opt.content=='string'||0()
     await db.newComment(
         env.currentUser,
         opt.page,
