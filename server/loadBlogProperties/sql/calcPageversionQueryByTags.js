@@ -1,4 +1,4 @@
-let mysql=require('mysql')
+let mysql=require('mysql2/promise')
 module.exports=calcPageversionQueryByTags
 function calcPageversionQueryByTags(tags){
 /*
