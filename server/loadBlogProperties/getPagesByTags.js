@@ -1,5 +1,5 @@
 let
-    mysql=require('mysql2/promise')
+    mysql=require('mysql2')
 module.exports=getPagesByTags
 function getPagesByTags(cu,tags){
     return this.query(`
