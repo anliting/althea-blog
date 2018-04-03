@@ -1,5 +1,5 @@
-import { EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/55124630741399dd0fcbee2f0396642a428cdd24/src/simple.static.js';
-import { AltheaObject, EventEmmiter as EventEmmiter$1, ImageUploader, Site, arg, browser, dom, html, load, order } from '/lib/core.static.js';
+import { dom, html, order, AltheaObject, load, arg, browser, ImageUploader, EventEmmiter, Site } from '/lib/core.static.js';
+import { EventEmmiter as EventEmmiter$1 } from 'https://gitcdn.link/cdn/anliting/simple.js/55124630741399dd0fcbee2f0396642a428cdd24/src/simple.static.js';
 
 async function loadPagemodules(blog){
     let res=await blog._site.send('blog_getPagemodules');
@@ -85,7 +85,7 @@ function tableofcontents_all(e){
 var corePlugins = [
     star_all,
     tableofcontents_all,
-];
+]
 
 function setup(){
     let
@@ -138,7 +138,7 @@ var commentForm = page=>{
         page.blog.status=page.blog.status;
     };
     return form
-};
+}
 
 var commentDiv = (page,comment)=>{
     let div=dom.div();
@@ -192,15 +192,15 @@ var commentDiv = (page,comment)=>{
         };
         return a
     }
-};
+}
 
 function PageView(page){
-    EventEmmiter.call(this);
+    EventEmmiter$1.call(this);
     this.domElement=createDiv(this,page);
 }
-Object.setPrototypeOf(PageView.prototype,EventEmmiter.prototype);
+Object.setPrototypeOf(PageView.prototype,EventEmmiter$1.prototype);
 function createDiv(pageView,page){
-    let
+    let 
         div=dom.div();
     pageView.hide=!page.ispublic&&!page.blog.status.pageId;
     div.className='post';
@@ -273,7 +273,6 @@ function div_facebooklike(page){
     div.setAttribute('data-share','true');
     return div
 }
-
 /*
     // derived from
     let str_pages_derived_from='Derived from: '
@@ -305,10 +304,11 @@ function div_facebooklike(page){
 
 var view = {get(){
     return new PageView(this)
-}};
+}}
 
-let str_show='<i class=material-icons>expand_more</i>';
-let str_hide='<i class=material-icons>expand_less</i>';
+let
+    str_show='<i class=material-icons>expand_more</i>',
+    str_hide='<i class=material-icons>expand_less</i>';
 function createHideShowA(page,pageView){
     let a_hideshow=dom.a({
         className:'a_hideshow functionbutton',
@@ -457,8 +457,8 @@ function createPrivacyTable(pageView){
     }
 }
 
-function BlogPage$1(blog,id,ispublic,title,id_pagemodule){
-    EventEmmiter.call(this);
+function BlogPage(blog,id,ispublic,title,id_pagemodule){
+    EventEmmiter$1.call(this);
     this.blog=blog;
     this.id=id;
     this.ispublic=ispublic;
@@ -466,16 +466,16 @@ function BlogPage$1(blog,id,ispublic,title,id_pagemodule){
     this.id_pagemodule=id_pagemodule;
     setup.call(this);
 }
-Object.setPrototypeOf(BlogPage$1.prototype,EventEmmiter.prototype);
-Object.defineProperty(BlogPage$1.prototype,'view',view);
-BlogPage$1.prototype.createPrivacyTable=createPrivacyTable;
-BlogPage$1.prototype.getHref=function(){
+Object.setPrototypeOf(BlogPage.prototype,EventEmmiter$1.prototype);
+Object.defineProperty(BlogPage.prototype,'view',view);
+BlogPage.prototype.createPrivacyTable=createPrivacyTable;
+BlogPage.prototype.getHref=function(){
     return this.preferredPagename?
         this.preferredPagename
     :
         this.id
 };
-BlogPage$1.prototype.h1_title=function(){
+BlogPage.prototype.h1_title=function(){
     let page=this;
     let h1_title=dom.h1(a_h1_title());
     h1_title.style.textAlign='center';
@@ -497,7 +497,7 @@ BlogPage$1.prototype.h1_title=function(){
         return a
     }
 };
-BlogPage$1.prototype.createAuthorDiv=function(){
+BlogPage.prototype.createAuthorDiv=function(){
     return dom.div(async n=>{
         n.style.textAlign='center';
         n.style.display='none';
@@ -507,7 +507,7 @@ BlogPage$1.prototype.createAuthorDiv=function(){
         return u.nickname
     })
 };
-BlogPage$1.prototype.createDateDiv=function(){
+BlogPage.prototype.createDateDiv=function(){
     let date=new Date(this.datetime_lastmodified);
     return dom.div(
         n=>{
@@ -541,9 +541,10 @@ Object.defineProperty(Page.prototype,'lastversion',{async get(){
     await this.load('lastversionId');
     return this._io.getPageversion(this.lastversionId)
 }});
-Page.BlogPage=BlogPage$1;
+Page.BlogPage=BlogPage;
 
-let BlogPage=   Page.BlogPage;
+let
+    BlogPage$1=   Page.BlogPage;
 async function update_to_content(process,pages){
     let site=await this._site;
     pages=await Promise.all(pages.map(async p=>{
@@ -572,7 +573,7 @@ async function update_to_content(process,pages){
                 pageVersion:vals[1],
             }
         })();
-        page=new BlogPage(
+        page=new BlogPage$1(
             this,
             res.page.id,
             res.pageVersion.public,
@@ -810,7 +811,7 @@ var event = {
         n.addEventListener('blur',l);
         n.addEventListener('mousedown',onmousedown);
     }
-};
+}
 
 function userA(blog,div,u){
     let a=dom.a(u.username,{href:'javascript:'});
@@ -886,7 +887,7 @@ function createNavigationBar(view){
         return dom.a('About',{href:'about'})
     }
     function perUser(site,func){
-        (async()=>func(await site.currentUser))();
+(async()=>func(await site.currentUser))();
         site.on('userChange',
             async()=>func(await site.currentUser)
         );
@@ -950,8 +951,7 @@ function createHeader(blog,view){
             createA((await blog_getData).bannerTitle)
         )
         function createA(bannerTitle){
-            let a=dom.a({href:''});
-            a.onclick=e=>{
+            return dom.a({href:'',innerHTML:bannerTitle,onclick(e){
                 if(
                     e.which!=1||
                     e.ctrlKey||
@@ -961,9 +961,7 @@ function createHeader(blog,view){
                 e.preventDefault();
                 e.stopPropagation();
                 blog.status={};
-            };
-            a.textContent=bannerTitle;
-            return a
+            }})
         }
     }
     function createTagline(){
@@ -1046,7 +1044,7 @@ function keydown(e){
         }else if(e.keyCode==72){ // h
             blog.status={};
         }else if(e.keyCode==76){ // l
-            (async()=>{
+(async()=>{
                 let[
                     user,
                     site,
@@ -1084,7 +1082,7 @@ function keydown(e){
                 '_blank'
             ).focus();
         }else if(e.keyCode==72){ // H
-            (async()=>{
+(async()=>{
                 let user=await blog._currentUser;
                 await user.load('username');
                 blog.emit('location','home/'+user.username);
@@ -1198,7 +1196,7 @@ body{
 .a_removepage{
     float:left;
 }
-`;
+`
 
 function createContents(blog){
     let div=dom.div({className:'contents'});
@@ -1279,10 +1277,10 @@ var createPath = site=>{
         getHrefByPage,
         getHrefByTags,
     }
-};
+}
 
 function Blog(site,status){
-    EventEmmiter.call(this);
+    EventEmmiter$1.call(this);
     this._site=site;
     this._status=status;
     this.path=createPath(site);
@@ -1303,14 +1301,14 @@ function Blog(site,status){
     this.load=Promise.all([
         site.applyPlugins('blog',this),
         (async()=>{
-            (await site.loadPlugins('blog_page')).forEach(p=>
+(await site.loadPlugins('blog_page')).forEach(p=>
                 this.addPagePlugin(p)
             );
         })(),
         load.materialIcon(),
     ]);
 }
-Object.setPrototypeOf(Blog.prototype,EventEmmiter.prototype);
+Object.setPrototypeOf(Blog.prototype,EventEmmiter$1.prototype);
 Blog.prototype._anchor_addTag=anchor_addTag;
 Object.defineProperty(Blog.prototype,'_currentUser',{async get(){
     return(await this._site).currentUser
@@ -1398,9 +1396,9 @@ var editors = {
             this._nodes.div_preview.style.display='none';
         },
     },
-};
+}
 
-var setup_form = function(){
+function setup_form(){
     let
         editpage=this,
         button_save=this._nodes.button_save,
@@ -1433,7 +1431,7 @@ var setup_form = function(){
     input_newname.addEventListener('keypress',e=>{
         editpage.setOfNames.onkeypress(e);
     });
-};
+}
 
 async function submit(){
     this.changeEditor('html');
@@ -1528,9 +1526,9 @@ span.tag{
 span.name{
     float:left;
 }
-`;
+`
 
-var createNodes = function(){
+function createNodes(){
     this._nodes={};
     this._nodes.main=dom.div({className:'main'},
         this._nodes.table_content=dom.table(
@@ -1620,7 +1618,7 @@ var createNodes = function(){
         ),
         this._nodes.tags=dom.datalist({id:this._datalistId}),
     );
-};
+}
 
 function SetForm(span_tags,input){
     this.tags=[];
@@ -1687,7 +1685,7 @@ SetForm.prototype.onkeypress=function(e){
     this.addTag(name);
 };
 
-function setup$2(editpage,isMobile){
+function setup$1(editpage,isMobile){
     let main=editpage._nodes.main;
     editpage.textarea_content=editpage._nodes.textarea_content;
     onbeforeunload=()=>{
@@ -1814,7 +1812,7 @@ async function getData(editpage){
 async function initialize(editpage){
     editpage.isMobile=browser.isMobile;
     document.title=!editpage.id?'New Page':'Edit Page';
-    setup$2(editpage,editpage.isMobile);
+    setup$1(editpage,editpage.isMobile);
     let res=await Promise.all([
         getData(editpage),
         editpage._site.send('blog_getTags'),
@@ -1891,7 +1889,7 @@ function load$1(){
 }
 
 function Editpage(site,environment){
-    EventEmmiter$1.call(this);
+    EventEmmiter.call(this);
     this.blog=Blog;
     this.id=environment.id_page||0;
     this._site=site;
@@ -1900,7 +1898,7 @@ function Editpage(site,environment){
     this.node=this._nodes.main;
     load$1.call(this);
 }
-Object.setPrototypeOf(Editpage.prototype,EventEmmiter$1.prototype);
+Object.setPrototypeOf(Editpage.prototype,EventEmmiter.prototype);
 Object.defineProperty(Editpage.prototype,'currentUser',{get(){
     return this._site.currentUser
 }});
@@ -2032,7 +2030,7 @@ var core = {
     Blog,
     Editpage,
     Site: Site$1,
-};
+}
 
-export { Blog, Editpage, Site$1 as Site };
 export default core;
+export { Blog, Editpage, Site$1 as Site };

@@ -19,8 +19,7 @@ function createHeader(blog,view){
             createA((await blog_getData).bannerTitle)
         )
         function createA(bannerTitle){
-            let a=dom.a({href:''})
-            a.onclick=e=>{
+            return dom.a({href:'',innerHTML:bannerTitle,onclick(e){
                 if(
                     e.which!=1||
                     e.ctrlKey||
@@ -30,9 +29,7 @@ function createHeader(blog,view){
                 e.preventDefault()
                 e.stopPropagation()
                 blog.status={}
-            }
-            a.textContent=bannerTitle
-            return a
+            }})
         }
     }
     function createTagline(){

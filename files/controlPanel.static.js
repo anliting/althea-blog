@@ -201,7 +201,7 @@ var style = `
     margin-left:16px;
     cursor:default;
 }
-`;
+`
 
 function TreeUi(){
     this.array=[];
@@ -237,7 +237,8 @@ TreeUi.prototype.out=function(){
         this._apply(this.array[this.array.length-1]);
 };
 
-let root=[
+let
+    root=[
         {
             title:'Site',
             function:createSiteNode,
@@ -287,7 +288,8 @@ function ControlPanel(io){
 Object.setPrototypeOf(ControlPanel.prototype,TreeUi.prototype);
 ControlPanel.style=style;
 
-let site=new Site;(async()=>{
+let site=new Site
+;(async()=>{
     await load.material();
     let controlPanel=new ControlPanel({
         getComment(doc){
