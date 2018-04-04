@@ -1,5 +1,5 @@
+import rollup from 'rollup'
 let
-    rollup=require('rollup'),
     skip=[
         '/lib/core.static.js',
         '/plugins/blog/core.static.js',
