@@ -1,4 +1,3 @@
-module.exports=calcContent
 function calcContent(env){
     return`
 <!doctype html>
@@ -16,3 +15,4 @@ ${env.althea.loadModule(
 )}
     `
 }
+export default calcContent
