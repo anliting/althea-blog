@@ -1,12 +1,11 @@
-let
-    edges=                  require('./server/edges'),
-    queryFunctions=         require('./server/queryFunctions'),
-    loadBlogProperties=     require('./server/loadBlogProperties'),
-    blog=                   require('./server/blog'),
-    editpage=               require('./server/editpage'),
-    controlPanel=           require('./server/controlPanel'),
-    checkIfIsPageRequest=   require('./server/checkIfIsPageRequest')
-module.exports=async althea=>{
+import edges from                   './server/edges'
+import queryFunctions from          './server/queryFunctions'
+import loadBlogProperties from      './server/loadBlogProperties'
+import blog from                    './server/blog'
+import editpage from                './server/editpage'
+import controlPanel from            './server/controlPanel'
+import checkIfIsPageRequest from    './server/checkIfIsPageRequest'
+export default async althea=>{
     await althea.updateDatabase(edges)
     let db=Object.create(althea.database)
     loadBlogProperties(db)

@@ -1,4 +1,4 @@
-module.exports=async function(db,opt,env,althea){
+export default async function(db,opt,env,althea){
     let data=JSON.parse(await althea.getData())
     opt instanceof Object||0()
     if(!('title' in data))

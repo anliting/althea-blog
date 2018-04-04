@@ -1,4 +1,4 @@
-module.exports=(db,opt,env)=>{
+export default(db,opt,env)=>{
     opt instanceof Object&&
     typeof opt.page=='number'&&
     typeof opt.pageversion=='number'&&

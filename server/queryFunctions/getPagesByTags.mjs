@@ -1,4 +1,4 @@
-module.exports=(db,opt,env)=>{
+export default(db,opt,env)=>{
     let type=env.althea.lib.anliting.type
     let cu=env.currentUser
     opt instanceof Object&&

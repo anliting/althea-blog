@@ -1,4 +1,4 @@
-module.exports=async(db,opt,env)=>{
+export default async(db,opt,env)=>{
     let type=env.althea.lib.anliting.type
     opt instanceof Object&&
     typeof opt.id=='number'&&

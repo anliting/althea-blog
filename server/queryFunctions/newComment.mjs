@@ -1,4 +1,4 @@
-module.exports=async(db,opt,env)=>{
+export default async(db,opt,env)=>{
     opt instanceof Object&&
     typeof opt.page=='number'&&
     typeof opt.content=='string'||0()
