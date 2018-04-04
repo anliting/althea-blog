@@ -1,11 +1,7 @@
-let
-    calcPageversionQueryByTags=
-        require('./sql/calcPageversionQueryByTags'),
-    whereQuery_pageversions_permitted=
-        require('./sql/whereQuery_pageversions_permitted'),
-    whereQuery_pages_permitted=
-        require('./sql/whereQuery_pages_permitted')
-module.exports=selectPages
+import calcPageversionQueryByTags from './sql/calcPageversionQueryByTags'
+import whereQuery_pageversions_permitted from
+    './sql/whereQuery_pageversions_permitted'
+import whereQuery_pages_permitted from './sql/whereQuery_pages_permitted'
 function selectPages(currentUser,tags_selected,pages_loaded,pageId){
     return this.query0(`
         select
@@ -51,3 +47,4 @@ function selectPages(currentUser,tags_selected,pages_loaded,pageId){
         limit 32
     `).then(rows=>rows.map(row=>row.id))
 }
+export default selectPages

@@ -1,5 +1,5 @@
-let Page=require('./Page')
-module.exports=async function(id){
+import Page from './Page'
+export defualt async function(id){
     let[
         page,
         pagenames,

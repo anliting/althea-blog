@@ -1,6 +1,4 @@
-let
-    mysql=require('mysql2')
-module.exports=getPagesByTags
+import mysql from 'mysql2'
 function getPagesByTags(cu,tags){
     return this.query(`
         select id
@@ -44,3 +42,4 @@ function taggedPageversions(tags){
         }
     `
 }
+export default getPagesByTags

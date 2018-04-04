@@ -1,6 +1,5 @@
-let
-    Pageversion=require('./Pageversion')
-module.exports=async function(id){
+import Pageversion from './Pageversion'
+export default async function(id){
     let[
         res,
         tags

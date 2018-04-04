@@ -1,11 +1,7 @@
-let
-    whereQuery_pageversions_permitted=
-        require('./sql/whereQuery_pageversions_permitted'),
-    whereQuery_pages_permitted=
-        require('./sql/whereQuery_pages_permitted'),
-    calcPageversionQueryByTags=
-        require('./sql/calcPageversionQueryByTags')
-module.exports=selectTags
+import whereQuery_pageversions_permitted from
+    './sql/whereQuery_pageversions_permitted'
+import whereQuery_pages_permitted from './sql/whereQuery_pages_permitted'
+import calcPageversionQueryByTags from './sql/calcPageversionQueryByTags'
 function selectTags(cu,tags){
     return this.query0(`
         select
@@ -35,3 +31,4 @@ function selectTags(cu,tags){
         group by tagname
     `)
 }
+export default selectTags

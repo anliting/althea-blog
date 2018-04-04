@@ -1,4 +1,3 @@
-module.exports=newComment
 function newComment(cu,page,content){
     return this.transactionDo(async cn=>{
         await assertPageExists(cn,page)
@@ -28,3 +27,4 @@ function insertComment(cn,id_user_owner,id_page,content){
         content,
     })
 }
+export default newComment

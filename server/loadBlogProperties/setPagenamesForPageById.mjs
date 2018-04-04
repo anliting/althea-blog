@@ -1,4 +1,4 @@
-module.exports=function(pagenames,id_page){
+export default function(pagenames,id_page){
     return this.query(`
         delete from blog_pagename where ?
     `,{

@@ -1,5 +1,5 @@
-let Comment=require('./Comment')
-module.exports=async function(id){
+import Comment from './Comment'
+export default async function(id){
     let row=await this.query0(`
         select
             timestamp_insert,

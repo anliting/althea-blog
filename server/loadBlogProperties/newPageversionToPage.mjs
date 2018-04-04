@@ -1,4 +1,4 @@
-module.exports=function(
+export default function(
     ispublic,
     id_user_author,
     id_pagemodule,

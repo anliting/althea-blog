@@ -1,7 +1,15 @@
-let
-    setLastVersionOfPage=
-        require('./newPage/setLastVersionOfPage')
-module.exports=async function(
+import setLastVersionOfPage from './newPage/setLastVersionOfPage'
+function insertPage(db,ispublic,id_user_author){
+    return db.query0(`
+        insert into blog_page
+        set ?
+    `,{
+        isremoved:0,
+        ispublic,
+        id_user_author,
+    }).then(a=>a.insertId)
+}
+export default async function(
     ispublic,
     id_user_author,
     id_pagemodule,
@@ -24,14 +32,4 @@ module.exports=async function(
         this.setPagenamesForPageById(pagenames,id),
     ])
     return{id}
-}
-function insertPage(db,ispublic,id_user_author){
-    return db.query0(`
-        insert into blog_page
-        set ?
-    `,{
-        isremoved:0,
-        ispublic,
-        id_user_author,
-    }).then(a=>a.insertId)
 }

@@ -1,4 +1,4 @@
-module.exports=async function(id){
+export default async function(id){
     let rows=await this.query0(`
         select
             level,
