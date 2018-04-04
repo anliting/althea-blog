@@ -15,7 +15,7 @@ async function pagemodule(db){
             name='Default'
     `)
 }
-module.exports={
+export default{
     0:async db=>{
         await Promise.all([
             db.query(`

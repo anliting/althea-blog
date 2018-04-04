@@ -23,7 +23,7 @@ async function get(db,env){
         content:calcContent(env),
     }
 }
-module.exports=(db,env)=>{
+export default(db,env)=>{
     if(!env.althea.allowOrigin(env.envVars,env.request.headers.origin))
         return 403
     if(env.request.method=='GET')

@@ -1,7 +1,5 @@
-let
-    entities=   require('entities'),
-    url=        require('url')
-module.exports=calcContent
+import entities from 'entities'
+import url from 'url'
 async function calcContent(althea,env,lastversion_page){
     let data=JSON.parse(await althea.getData())
     if(!('title' in data))
@@ -82,3 +80,4 @@ function og(env,data,title,url_request){
 <meta property=og:description content='${entities.encodeHTML(ogDescription)}'>
 `
 }
+export default calcContent

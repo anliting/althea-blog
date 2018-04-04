@@ -1,4 +1,4 @@
-module.exports=async(db,env,path)=>{
+export default async(db,env,path)=>{
     let type=env.althea.lib.anliting.type
     /*
         1: no
