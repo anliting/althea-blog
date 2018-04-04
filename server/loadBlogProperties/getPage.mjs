@@ -1,5 +1,5 @@
 import Page from './Page'
-export defualt async function(id){
+export default async function(id){
     let[
         page,
         pagenames,

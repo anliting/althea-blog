@@ -1,4 +1,3 @@
-module.exports=setLastVersionOfPage
 function setLastVersionOfPage(db,id_lastversion,id){
     return db.query(`
         update blog_page
@@ -9,3 +8,4 @@ function setLastVersionOfPage(db,id_lastversion,id){
         {id},
     ])
 }
+export default setLastVersionOfPage

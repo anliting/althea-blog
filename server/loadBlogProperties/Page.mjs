@@ -1,4 +1,3 @@
-module.exports=Page
 function Page(db,data){
     this.db=db
     this.id=data.id
@@ -13,3 +12,4 @@ Page.prototype.getComments=function(){
         id_page:this.id
     }).then(rows=>rows.map(row=>row.id))
 }
+export default Page

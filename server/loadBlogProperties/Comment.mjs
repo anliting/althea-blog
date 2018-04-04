@@ -1,4 +1,3 @@
-module.exports=Comment
 function Comment(
     id,
     timestamp_insert,
@@ -12,3 +11,4 @@ function Comment(
     this.id_user_owner=id_user_owner
     this.content=content
 }
+export default Comment

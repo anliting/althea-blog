@@ -1,5 +1,4 @@
-let mysql=require('mysql2')
-module.exports=calcPageversionQueryByTags
+import mysql from 'mysql2'
 function calcPageversionQueryByTags(tags){
 /*
 Generates a query that select pageversions by selected tags.
@@ -23,3 +22,4 @@ Generates a query that select pageversions by selected tags.
         from (${output})
     `
 }
+export default calcPageversionQueryByTags

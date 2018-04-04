@@ -1,27 +1,3 @@
-export default function(
-    ispublic,
-    id_page,
-    id_user_author,
-    id_pagemodule,
-    title,
-    content,
-    tags
-){
-    return insertPageversion(
-        this,
-        ispublic,
-        id_page,
-        id_user_author,
-        id_pagemodule,
-        title,
-        content
-    ).then(res=>{
-        let id=res
-        return Promise.all(
-            tags.map(e=>insertTag(this,id,e))
-        ).then(()=>({id}))
-    })
-}
 function insertPageversion(
     db,
     ispublic,
@@ -48,5 +24,29 @@ function insertTag(db,id_pageversion,tagname){
     `,{
         id_pageversion,
         tagname,
+    })
+}
+export default function(
+    ispublic,
+    id_page,
+    id_user_author,
+    id_pagemodule,
+    title,
+    content,
+    tags
+){
+    return insertPageversion(
+        this,
+        ispublic,
+        id_page,
+        id_user_author,
+        id_pagemodule,
+        title,
+        content
+    ).then(res=>{
+        let id=res
+        return Promise.all(
+            tags.map(e=>insertTag(this,id,e))
+        ).then(()=>({id}))
     })
 }

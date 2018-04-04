@@ -1,5 +1,4 @@
-let mysql=require('mysql2')
-module.exports=whereQuery_pages_permitted
+import mysql from 'mysql2'
 function whereQuery_pages_permitted(cu){
     return mysql.format(`
         (!isremoved&&(ispublic||?))
@@ -7,3 +6,4 @@ function whereQuery_pages_permitted(cu){
         id_user_author:cu.id
     })
 }
+export default whereQuery_pages_permitted
