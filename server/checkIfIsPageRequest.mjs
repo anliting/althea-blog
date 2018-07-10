@@ -35,10 +35,11 @@ export default async(db,env,path)=>{
     await Promise.all(promises)
     let dataOfPage=dataOfPageById||dataOfPageByPagename
     if(dataOfPage){
-        if(
-            !dataOfPage.ispublic&&
-            dataOfPage.id_user_author!==currentUser.id
-        )
+        if(!(
+            dataOfPage.ispublic||
+            dataOfPage.id_user_author===currentUser.id||
+            currentUser.isadmin
+        ))
             return {status:2}
         env.id_page=dataOfPage.id
         if(path.length<3)
