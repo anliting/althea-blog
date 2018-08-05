@@ -1,11 +1,11 @@
-import {dom}from '/lib/core.static.js'
+import {doe}from '/lib/core.static.js'
 function setupSelectedTagsDiv(blog,div){
     if(!('tagNames' in blog.status))
         return
     blog.status.tagNames.map((t,i)=>{
         div.appendChild(span())
         function span(){
-            let span=dom.span(
+            let span=doe.span(
                 t+' ',
                 a(),{
                     id:'span_tag_'+t,
@@ -16,7 +16,7 @@ function setupSelectedTagsDiv(blog,div){
             return span
         }
         function a(){
-            let anchor=dom.a('-')
+            let anchor=doe.a('-')
             let tagsToSelect=(blog.status.tagNames||[]).slice()
             tagsToSelect.splice(i,1)
             anchor.href='javascript:'

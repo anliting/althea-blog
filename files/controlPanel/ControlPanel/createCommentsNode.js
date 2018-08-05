@@ -1,11 +1,11 @@
-import{dom}from'/lib/core.static.js'
+import{doe}from'/lib/core.static.js'
 function createCommentsNode(){
-    return dom.div(
+    return doe.div(
         {className:'shadow content'},
-        (async()=>{
+        (async n=>{
             let data=await this._io.getComments()
             data.sort((a,b)=>b-a)
-            return data.map(async id=>{
+            doe(n,data.map(async id=>{
                 let data=await this._io.getComment({
                     id,
                     columns:[
@@ -21,7 +21,7 @@ function createCommentsNode(){
                     this._io.getUser(data.id_user_owner),
                     this._io.getPage(data.id_page),
                 ])
-                return dom.p(
+                return doe.p(
                     user.a,
                     ' commented on ',
                     page.a,
@@ -29,7 +29,7 @@ function createCommentsNode(){
                     (new Date(data.timestamp_insert)).toLocaleString(),
                     '.',
                 )
-            })
+            }))
         })()
     )
 }

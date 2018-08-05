@@ -1,27 +1,27 @@
-import{arg,dom}from'/lib/core.static.js'
+import{arg,doe}from'/lib/core.static.js'
 export default function(){
     this._nodes={}
-    this._nodes.main=dom.div({className:'main'},
-        this._nodes.table_content=dom.table(
-            dom.tr(dom.td(
-                this._nodes.select_id_pagemodule=dom.select(
-                    dom.option(
+    this._nodes.main=doe.div({className:'main'},
+        this._nodes.table_content=doe.table(
+            doe.tr(doe.td(
+                this._nodes.select_id_pagemodule=doe.select(
+                    doe.option(
                         {value:0},
                         'No Pagemodule',
                     ),
                 ),' ',
-                this._nodes.select_privacy=dom.select(
-                    dom.option({value:0},'Hidden'),
-                    dom.option({value:1},'Private'),
-                    dom.option({value:2},'Unlisted'),
-                    dom.option({value:3},'Public'),
+                this._nodes.select_privacy=doe.select(
+                    doe.option({value:0},'Hidden'),
+                    doe.option({value:1},'Private'),
+                    doe.option({value:2},'Unlisted'),
+                    doe.option({value:3},'Public'),
                 ),' ',
-                this._nodes.button_save=dom.button('Save'),' ',
-                this._nodes.button_submit=dom.button('Submit'),' ',
+                this._nodes.button_save=doe.button('Save'),' ',
+                this._nodes.button_submit=doe.button('Submit'),' ',
             )),
-            dom.tr(dom.td(
-                this._nodes.span_tags=dom.span(),
-                this._nodes.input_newtag=dom.input({
+            doe.tr(doe.td(
+                this._nodes.span_tags=doe.span(),
+                this._nodes.input_newtag=doe.input({
                     className:'setFormInput',
                     type:'text',
                     placeholder:'Tag ...',
@@ -30,41 +30,41 @@ export default function(){
                     n.setAttribute('list',this._datalistId)
                 }),
             )),
-            dom.tr(dom.td(
-                this._nodes.span_names=dom.span(),
-                this._nodes.input_newname=dom.input({
+            doe.tr(doe.td(
+                this._nodes.span_names=doe.span(),
+                this._nodes.input_newname=doe.input({
                     className:'setFormInput',
                     type:'text',
                     placeholder:'Name ...',
                     disabled:true,
                 }),
             )),
-            dom.tr(dom.td(
-                this._nodes.input_title=dom.input({
+            doe.tr(doe.td(
+                this._nodes.input_title=doe.input({
                     className:'title',
                     type:'text',
                     placeholder:'Title',
                     disabled:true,
                 }),
             )),
-            dom.tr(dom.td(
-                dom.button(
+            doe.tr(doe.td(
+                doe.button(
                     {onclick:e=>{
                         e.preventDefault()
                         this.changeEditor('html')
                     }},
                     'HTML'
                 ),' ',
-                arg.h&&[
-                    dom.button(
+                ...(arg.h?[
+                    doe.button(
                         {onclick:e=>{
                             e.preventDefault()
                             this.changeEditor('htmleditor')
                         }},
                         'WYSIWYG'
                     ),' ',
-                ],
-                dom.button(
+                ]:[]),
+                doe.button(
                     {onclick:e=>{
                         e.preventDefault()
                         this.changeEditor('preview')
@@ -72,21 +72,23 @@ export default function(){
                     'Preview'
                 ),
             )),
-            dom.tr(dom.td({className:'contentTc'},
-                this._nodes.div_textarea_content=dom.div(
+            doe.tr(doe.td({className:'contentTc'},
+                this._nodes.div_textarea_content=doe.div(
                     {className:'content'},
-                    this._nodes.textarea_content=dom.textarea({disabled:true}),
+                    this._nodes.textarea_content=doe.textarea({
+                        disabled:true
+                    }),
                 ),
-                this._nodes.div_htmleditor=dom.div(
+                this._nodes.div_htmleditor=doe.div(
                     {className:'htmleditor'},
                     n=>{n.style.display='none'}
                 ),
-                this._nodes.div_preview=dom.div(
+                this._nodes.div_preview=doe.div(
                     {className:'preview'},
                     n=>{n.style.display='none'}
                 ),
             )),
         ),
-        this._nodes.tags=dom.datalist({id:this._datalistId}),
+        this._nodes.tags=doe.datalist({id:this._datalistId}),
     )
 }

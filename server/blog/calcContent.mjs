@@ -43,7 +43,7 @@ ${data.og?og(env,data,title,url_request):''}
 <link rel=icon href=images/icon.png>
 <link rel=modulepreload href='/lib/core.static.js'>
 <link rel=modulepreload href='/plugins/blog/core.static.js'>
-<link rel=modulepreload href='https://gitcdn.link/cdn/anliting/simple.js/55124630741399dd0fcbee2f0396642a428cdd24/src/simple.static.js'>
+<link rel=modulepreload href='https://gitcdn.link/cdn/anliting/simple.js/d76165db0cfc5b4c71786bf5a5f2e51503943294/src/simple.static.js'>
 <body>
 ${env.althea.loadModule(
     //'plugins/blog/blog.js',
@@ -56,11 +56,6 @@ ${env.althea.loadModule(
     },
     {
         sharedWorker:1,
-        /*preloadModule:[
-            '/lib/core.static.js',
-            '/plugins/blog/core.static.js',
-            'https://gitcdn.link/cdn/anliting/simple.js/55124630741399dd0fcbee2f0396642a428cdd24/src/simple.static.js',
-        ]*/
     }
 )}
 `

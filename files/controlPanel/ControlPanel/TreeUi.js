@@ -1,12 +1,12 @@
-import{dom}from'/lib/core.static.js'
+import{doe}from'/lib/core.static.js'
 function TreeUi(){
     this.array=[]
 }
 TreeUi.prototype._apply=function(e){
-    dom(this._nodes.title,
+    doe(this._nodes.title,
         {innerHTML:'',},
-        1<this.array.length&&[
-            dom.span(
+        ...(1<this.array.length?[
+            doe.span(
                 {
                     className:`material-icons`,
                     onclick:()=>this.out()
@@ -16,7 +16,7 @@ TreeUi.prototype._apply=function(e){
                 },
                 'keyboard_backspace',
             ),
-        ],
+        ]:[]),
         e.title,
     )
     this.node.appendChild(e.node)

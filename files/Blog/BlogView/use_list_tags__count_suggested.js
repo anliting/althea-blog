@@ -1,11 +1,11 @@
-import {dom}from '/lib/core.static.js'
+import {doe}from '/lib/core.static.js'
 function use_list_tags__count_suggested(blogView,list,div){
     list.sort((a,b)=>
         a.name.localeCompare(b.name)
     )
     blogView.datalist_input_searchForTag.innerHTML=''
     list.map(e=>{
-        let o=dom.option({value:e.name})
+        let o=doe.option({value:e.name})
         blogView.datalist_input_searchForTag.appendChild(o)
     })
     let tagsToSelect=(blogView.blog.status.tagNames||[]).slice()
@@ -18,10 +18,10 @@ function use_list_tags__count_suggested(blogView,list,div){
     })
     div.appendChild(div_clearboth())
     function ul(){
-        return dom.ul(ul=>{ul.style.float='left'})
+        return doe.ul(ul=>{ul.style.float='left'})
     }
     function li(t){
-        return dom.li(a(t))
+        return doe.li(a(t))
     }
     function a(t){
         tagsToSelect.push(t.name)
@@ -33,7 +33,7 @@ function use_list_tags__count_suggested(blogView,list,div){
         return a
     }
     function div_clearboth(){
-        return dom.div(div=>{div.style.clear='both'})
+        return doe.div(div=>{div.style.clear='both'})
     }
 }
 export default use_list_tags__count_suggested

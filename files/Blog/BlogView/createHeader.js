@@ -2,10 +2,10 @@ import checkSetupIndex from './createHeader/checkSetupIndex.js'
 import createInput from './createHeader/createInput.js'
 import setupSelectedTagsDiv from './createHeader/setupSelectedTagsDiv.js'
 import createNavigationBar from './createHeader/createNavigationBar.js'
-import {dom}from '/lib/core.static.js'
+import {doe}from '/lib/core.static.js'
 function createHeader(blog,view){
     let blog_getData=blog._site.send('blog_getData')
-    return dom.div(
+    return doe.div(
         {className:'header'},
         createTitle(),
         createTagline(),
@@ -15,11 +15,11 @@ function createHeader(blog,view){
         createIndex()
     )
     function createTitle(){
-        return dom.div({className:'title'},async n=>
+        return doe.div({className:'title'},async n=>
             createA((await blog_getData).bannerTitle)
         )
         function createA(bannerTitle){
-            return dom.a({href:'',innerHTML:bannerTitle,onclick(e){
+            return doe.a({href:'',innerHTML:bannerTitle,onclick(e){
                 if(
                     e.which!=1||
                     e.ctrlKey||
@@ -33,19 +33,19 @@ function createHeader(blog,view){
         }
     }
     function createTagline(){
-        return dom.div({className:'tagline'},
+        return doe.div({className:'tagline'},
             async n=>({innerHTML:(await blog_getData).tagline})
         )
     }
     function createSearchForTags(view){
-        return dom.div(
+        return doe.div(
             {className:'searchForTags'},
             createSelectedTagsDiv(),
             view.input=createInput(blog,view),
             view.datalist_input_searchForTag
         )
         function createSelectedTagsDiv(){
-            return dom.div({className:'selectedTags'},n=>{
+            return doe.div({className:'selectedTags'},n=>{
                 setupSelectedTagsDiv(blog,n)
                 blog.on('statusChange',()=>{
                     n.innerHTML=''
@@ -55,7 +55,7 @@ function createHeader(blog,view){
         }
     }
     function createTags(view){
-        return dom.div({className:'tags'},n=>{
+        return doe.div({className:'tags'},n=>{
             blog.on('statusChange',()=>{
                 n.innerHTML=''
                 if(document.activeElement==view.input)
@@ -65,7 +65,7 @@ function createHeader(blog,view){
         })
     }
     function createIndex(){
-        return dom.div({className:'index'},n=>{
+        return doe.div({className:'index'},n=>{
             checkSetupIndex(blog,n)
             blog.on('statusChange',()=>{
                 n.innerHTML=''

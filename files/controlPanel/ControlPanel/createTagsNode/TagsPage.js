@@ -1,9 +1,9 @@
-import{dom}from '/lib/core.static.js'
+import{doe}from '/lib/core.static.js'
 function TagsPage(io){
     this._io=io
-    this.mainDiv=dom.div(async()=>{
+    this.mainDiv=doe.div(async()=>{
         let data=await this._io.getTagsWithCount()
-        return dom.table(
+        return doe.table(
             {
                 className:'bordered padding4px',
                 innerHTML:`
@@ -22,19 +22,19 @@ function TagsPage(io){
         )
     })
     function tr_tag(tag){
-        return dom.tr(td_name(),td_count())
+        return doe.tr(td_name(),td_count())
         function td_name(){
-            let td=dom.td(a_name())
+            let td=doe.td(a_name())
             td.style.fontFamily='Monospace'
             return td
         }
         function a_name(){
-            let a=dom.a(tag.tagname)
+            let a=doe.a(tag.tagname)
             a.href='/tags/'+encodeURIComponent(tag.tagname)
             return a
         }
         function td_count(){
-            let td=dom.td(tag.count)
+            let td=doe.td(tag.count)
             td.style.textAlign='right'
             return td
         }

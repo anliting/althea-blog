@@ -1,8 +1,8 @@
-import {dom,order}from '/lib/core.static.js'
+import {doe,order}from '/lib/core.static.js'
 function privacyTd(page){
-    return dom.td(span_privacy())
+    return doe.td(span_privacy())
     function span_privacy(){
-        let span=dom.span(span=>{span.style.fontStyle='italic'})
+        let span=doe.span(span=>{span.style.fontStyle='italic'})
         let a=[
             (async()=>{
                 let site=await page.blog._site
@@ -23,7 +23,7 @@ function privacyTd(page){
         )
         return span
         function dateSpan(){
-            let span=dom.span(
+            let span=doe.span(
                 dateToString(new Date(page.timestamp_insert))
             )
             span.title=`Last modified: ${
@@ -32,7 +32,7 @@ function privacyTd(page){
             return span
         }
         function privateSpan(){
-            return dom.span('private')
+            return doe.span('private')
         }
         function dateToString(d){
             return`${d.getFullYear()}-${1+d.getMonth()}-${

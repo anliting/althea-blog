@@ -1,5 +1,6 @@
 import{
     ImageUploader,
+    doe,
     dom,
     load as coreLoad,
 }from'/lib/core.static.js'
@@ -51,10 +52,10 @@ function load(){
             createUploadImageTr()
         )
         function createUploadImageTr(){
-            return dom.tr(createUploadImageTd())
+            return doe.tr(createUploadImageTd())
         }
         function createUploadImageTd(){
-            return dom.td(fileButton.n)
+            return doe.td(fileButton.n)
         }
         // end set up image uploader
         initialize(this)

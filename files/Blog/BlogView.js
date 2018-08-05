@@ -4,9 +4,9 @@ import install_datalist_tags_suggested from './BlogView/install_datalist_tags_su
 import use_list_tags__count_suggested from './BlogView/use_list_tags__count_suggested.js'
 import initialize_tags_suggested from './BlogView/initialize_tags_suggested.js'
 import style from './BlogView/style.js'
-import {dom}from '/lib/core.static.js'
+import {doe}from '/lib/core.static.js'
 function createContents(blog){
-    let div=dom.div({className:'contents'})
+    let div=doe.div({className:'contents'})
     blog.on('pageLoad',page=>{
         div.appendChild(page.view.domElement)
     })
@@ -16,17 +16,17 @@ function createContents(blog){
     return div
 }
 function createFooter(view){
-    return dom.div({className:'footer'},async div=>{
+    return doe.div({className:'footer'},async div=>{
         div.innerHTML=(await view.blog._site.send('blog_getData')).footer
     })
 }
 function BlogView(blog){
     this.blog=blog
-    this.div=dom.div()
+    this.div=doe.div()
     this.div.className='blog'
     install_datalist_tags_suggested(this)
     {
-        let s=dom.style()
+        let s=doe.style()
         let u=()=>
             this.blog._styles.map(n=>
                 s.appendChild(n)

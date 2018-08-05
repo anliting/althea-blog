@@ -1,6 +1,6 @@
-import {dom}from '/lib/core.static.js'
+import {doe}from '/lib/core.static.js'
 function createInput(blog,view){
-    let input=dom.input()
+    let input=doe.input()
     input.setAttribute('list',view.datalist_input_searchForTag.id)
     input.addEventListener('keydown',e=>{
         if(e.keyCode!=13)

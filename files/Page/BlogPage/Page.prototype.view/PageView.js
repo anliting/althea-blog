@@ -1,7 +1,7 @@
-import{EventEmmiter}from 'https://gitcdn.link/cdn/anliting/simple.js/55124630741399dd0fcbee2f0396642a428cdd24/src/simple.static.js'
+import{EventEmmiter}from 'https://gitcdn.link/cdn/anliting/simple.js/d76165db0cfc5b4c71786bf5a5f2e51503943294/src/simple.static.js'
 import commentForm from './PageView/commentForm.js'
 import commentDiv from './PageView/commentDiv.js'
-import {dom}from '/lib/core.static.js'
+import {doe}from '/lib/core.static.js'
 function PageView(page){
     EventEmmiter.call(this)
     this.domElement=createDiv(this,page)
@@ -9,7 +9,7 @@ function PageView(page){
 Object.setPrototypeOf(PageView.prototype,EventEmmiter.prototype)
 function createDiv(pageView,page){
     let
-        div=dom.div(),
+        div=doe.div(),
         isfirst
     pageView.hide=!page.ispublic&&!page.blog.status.pageId
     div.className='post'
@@ -53,7 +53,7 @@ function createDiv(pageView,page){
 }
 function div_blog_content(pageView,page){
     let
-        div=dom.div({
+        div=doe.div({
             id:'blog_content_'+page.id,
             innerHTML:
                 page.id_pagemodule?
@@ -72,7 +72,7 @@ function div_blog_content(pageView,page){
     return div
 }
 function div_facebooklike(page){
-    let div=dom.div({className:'fb-like'})
+    let div=doe.div({className:'fb-like'})
     div.setAttribute(
         'data-href','https://anliting.com/'+page.id
     )

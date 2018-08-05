@@ -1,8 +1,8 @@
-import {dom}from '/lib/core.static.js'
+import {doe}from '/lib/core.static.js'
 export default page=>{
-    let form=dom.form(
+    let form=doe.form(
         page.textarea_comment__form_comment,
-        dom.br(),
+        doe.br(),
         page.input_submit__form_comment
     )
     form.className='form_newcomment'

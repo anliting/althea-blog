@@ -1,4 +1,4 @@
-import{dom}from'/lib/core.static.js'
+import{doe}from'/lib/core.static.js'
 //import{Editpage,Site}from'/plugins/blog/core.js'
 import{Editpage,Site}from'/plugins/blog/core.static.js'
 let
@@ -7,8 +7,8 @@ let
 site.on('userChange',()=>
     location='/'
 )
-dom.head(dom.style(Editpage.style))
+doe.head(doe.style(Editpage.style))
 ;(async()=>{
     await editpage.load
-    dom.body(editpage.node)
+    doe.body(editpage.node)
 })()

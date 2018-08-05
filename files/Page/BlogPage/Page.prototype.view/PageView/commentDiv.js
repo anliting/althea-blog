@@ -1,6 +1,6 @@
-import {dom,html}from '/lib/core.static.js'
+import {doe,html}from '/lib/core.static.js'
 export default(page,comment)=>{
-    let div=dom.div()
+    let div=doe.div()
     div.className='comments'
     ;(async()=>{
         comment=await comment
@@ -38,7 +38,7 @@ export default(page,comment)=>{
     })()
     return div
     function deleteA(id){
-        let a=dom.a('delete',{href:'javascript:'})
+        let a=doe.a('delete',{href:'javascript:'})
         a.onclick=async e=>{
             e.preventDefault()
             e.stopPropagation()

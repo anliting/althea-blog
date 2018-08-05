@@ -1,4 +1,4 @@
-import {dom}from '/lib/core.static.js'
+import {doe}from '/lib/core.static.js'
 async function checkSetupIndex(blog,div){
     if(!blog.status.tagNames)
         return
@@ -26,11 +26,11 @@ async function checkSetupIndex(blog,div){
     }
     a.sort((a,b)=>a.title.localeCompare(b.title))
     chunks(a,12).map(a=>{
-        let ul=dom.ul()
+        let ul=doe.ul()
         ul.style.float='left'
         for(let p of a){
             let
-                li=dom.li(),
+                li=doe.li(),
                 a=p.page.a
             if(!p.public)
                 a.style.color='black'
@@ -54,7 +54,7 @@ async function checkSetupIndex(blog,div){
     })
     div.appendChild(createClearBothDiv())
     function createClearBothDiv(){
-        return dom.div(n=>{n.style.clear='both'})
+        return doe.div(n=>{n.style.clear='both'})
     }
     async function getPagesByTags(){
         return(await blog._site).send({

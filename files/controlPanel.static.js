@@ -1,8 +1,8 @@
-import { dom, load } from '/lib/core.static.js';
+import { doe, load } from '/lib/core.static.js';
 import { Site } from '/plugins/blog/core.static.js';
 
 function mdcRaisedButton(name){
-    return dom.button(
+    return doe.button(
         {className:'mdc-button mdc-button--raised'},
         name,
         n=>mdc.ripple.MDCRipple.attachTo(n),
@@ -10,15 +10,15 @@ function mdcRaisedButton(name){
 }
 function mdcSwitch(name){
     let node,input;
-    node=dom.label(
-        dom.span(
+    node=doe.label(
+        doe.span(
             {className:`mdc-switch`,},
-            input=dom.input({
+            input=doe.input({
                 type:'checkbox',
                 className:'mdc-switch__native-control',
             }),
-            dom.div({className:`mdc-switch__background`},
-                dom.div({className:`mdc-switch__knob`}),
+            doe.div({className:`mdc-switch__background`},
+                doe.div({className:`mdc-switch__knob`}),
             ),
         ),
         ` ${name}`,
@@ -27,15 +27,15 @@ function mdcSwitch(name){
 }
 function mdcTextdfield(name){
     let node,input;
-    node=dom.div(
-        dom.span(n=>{n.style.color='#888';},`${name}: `),
-        dom.div(
+    node=doe.div(
+        doe.span(n=>{n.style.color='#888';},`${name}: `),
+        doe.div(
             {className:`
                 mdc-textfield
                 mdc-textfield--fullwidth
             `},
-            input=dom.input({className:'mdc-textfield__input',}),
-            dom.div({className:'mdc-textfield__bottom-line'}),
+            input=doe.input({className:'mdc-textfield__input',}),
+            doe.div({className:'mdc-textfield__bottom-line'}),
             n=>mdc.textfield.MDCTextfield.attachTo(n),
         )
     );
@@ -43,21 +43,21 @@ function mdcTextdfield(name){
 }
 function mdcTextdfieldTextarea(name){
     let node,input;
-    node=dom.label(
-        dom.span(n=>{n.style.color='#888';},`${name}: `),
-        dom.span(
+    node=doe.label(
+        doe.span(n=>{n.style.color='#888';},`${name}: `),
+        doe.span(
             {className:`
                 mdc-textfield
                 mdc-textfield--fullwidth
                 mdc-textfield--textarea
             `,},
-            input=dom.textarea({className:'mdc-textfield__input',rows:8}),
+            input=doe.textarea({className:'mdc-textfield__input',rows:8}),
         ),
     );
     return{node,input}
 }
 function createSiteNode(){
-    return dom.div(
+    return doe.div(
         (async()=>{
             let
                 data=await this._io.getData(),
@@ -74,16 +74,16 @@ function createSiteNode(){
             tagline.input.value=data.tagline;
             footer.input.value=data.footer;
             og.input.checked=data.og;
-            return dom.div(
+            return doe.div(
                 {className:'shadow content'},
-                dom.p(title.node),
-                dom.p(description.node),
-                dom.p(bannerTitle.node),
-                dom.p(tagline.node),
-                dom.p(footer.node),
-                dom.p(og.node),
-                dom.p(
-                    dom(apply,{onclick:async()=>{
+                doe.p(title.node),
+                doe.p(description.node),
+                doe.p(bannerTitle.node),
+                doe.p(tagline.node),
+                doe.p(footer.node),
+                doe.p(og.node),
+                doe.p(
+                    doe(apply,{onclick:async()=>{
                         data.title=title.input.value;
                         data.description=description.input.value;
                         data.bannerTitle=bannerTitle.input.value;
@@ -100,12 +100,12 @@ function createSiteNode(){
 }
 
 function createCommentsNode(){
-    return dom.div(
+    return doe.div(
         {className:'shadow content'},
-        (async()=>{
+        (async n=>{
             let data=await this._io.getComments();
             data.sort((a,b)=>b-a);
-            return data.map(async id=>{
+            doe(n,data.map(async id=>{
                 let data=await this._io.getComment({
                     id,
                     columns:[
@@ -121,7 +121,7 @@ function createCommentsNode(){
                     this._io.getUser(data.id_user_owner),
                     this._io.getPage(data.id_page),
                 ]);
-                return dom.p(
+                return doe.p(
                     user.a,
                     ' commented on ',
                     page.a,
@@ -129,16 +129,16 @@ function createCommentsNode(){
                     (new Date(data.timestamp_insert)).toLocaleString(),
                     '.',
                 )
-            })
+            }));
         })()
     )
 }
 
 function TagsPage(io){
     this._io=io;
-    this.mainDiv=dom.div(async()=>{
+    this.mainDiv=doe.div(async()=>{
         let data=await this._io.getTagsWithCount();
-        return dom.table(
+        return doe.table(
             {
                 className:'bordered padding4px',
                 innerHTML:`
@@ -157,19 +157,19 @@ function TagsPage(io){
         )
     });
     function tr_tag(tag){
-        return dom.tr(td_name(),td_count())
+        return doe.tr(td_name(),td_count())
         function td_name(){
-            let td=dom.td(a_name());
+            let td=doe.td(a_name());
             td.style.fontFamily='Monospace';
             return td
         }
         function a_name(){
-            let a=dom.a(tag.tagname);
+            let a=doe.a(tag.tagname);
             a.href='/tags/'+encodeURIComponent(tag.tagname);
             return a
         }
         function td_count(){
-            let td=dom.td(tag.count);
+            let td=doe.td(tag.count);
             td.style.textAlign='right';
             return td
         }
@@ -180,7 +180,7 @@ function createTagsNode(){
     let tagsPage=new TagsPage({
         getTagsWithCount:this._io.getTagsWithCount,
     });
-    return dom.div(
+    return doe.div(
         {className:'shadow content'},
         tagsPage.mainDiv,
     )
@@ -207,10 +207,10 @@ function TreeUi(){
     this.array=[];
 }
 TreeUi.prototype._apply=function(e){
-    dom(this._nodes.title,
+    doe(this._nodes.title,
         {innerHTML:'',},
-        1<this.array.length&&[
-            dom.span(
+        ...(1<this.array.length?[
+            doe.span(
                 {
                     className:`material-icons`,
                     onclick:()=>this.out()
@@ -220,7 +220,7 @@ TreeUi.prototype._apply=function(e){
                 },
                 'keyboard_backspace',
             ),
-        ],
+        ]:[]),
         e.title,
     );
     this.node.appendChild(e.node);
@@ -256,15 +256,15 @@ function ControlPanel(io){
     TreeUi.apply(this,arguments);
     this._io=io;
     this._nodes={};
-    this.node=dom.div({className:'controlPanel mdc-typography'},
-        this._nodes.title=dom.h2(),
+    this.node=doe.div({className:'controlPanel mdc-typography'},
+        this._nodes.title=doe.h2(),
     );
     this.in({
         title:'Blog Control Panel',
-        node:dom.div({className:'shadow'},
-            dom.ul({className:'mdc-list'},
-                root.map(o=>
-                    dom.li(
+        node:doe.div({className:'shadow'},
+            doe.ul({className:'mdc-list'},
+                ...root.map(o=>
+                    doe.li(
                         {
                             className:'mdc-list-item',
                             onclick:()=>this.in({
@@ -273,7 +273,7 @@ function ControlPanel(io){
                             }),
                         },
                         o.title,
-                        dom.span({
+                        doe.span({
                             className:`
                                 mdc-list-item__end-detail
                                 material-icons
@@ -303,7 +303,7 @@ let site=new Site
         getUser:site.getUser.bind(site),
         setData:data=>site.send({function:'blog_setData',data}),
     });
-    dom.head(dom.style(
+    doe.head(doe.style(
         `
             a:active,a:link,a:visited{
                 color:blue;
@@ -320,7 +320,7 @@ let site=new Site
         `,
         ControlPanel.style,
     ));
-    dom.body(
-        dom(controlPanel.node)
+    doe.body(
+        doe(controlPanel.node)
     );
 })();

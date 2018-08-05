@@ -1,5 +1,5 @@
-import { dom, html, order, AltheaObject, load, arg, browser, ImageUploader, EventEmmiter, Site } from '/lib/core.static.js';
-import { EventEmmiter as EventEmmiter$1 } from 'https://gitcdn.link/cdn/anliting/simple.js/55124630741399dd0fcbee2f0396642a428cdd24/src/simple.static.js';
+import { doe, html, order, AltheaObject, load, arg, browser, ImageUploader, dom, EventEmmiter as EventEmmiter$1, Site } from '/lib/core.static.js';
+import { EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/d76165db0cfc5b4c71786bf5a5f2e51503943294/src/simple.static.js';
 
 async function loadPagemodules(blog){
     let res=await blog._site.send('blog_getPagemodules');
@@ -52,17 +52,17 @@ function tableofcontents(e){
             v=v.parentNode;
         if(s[s.length-1]<r){
             s.push(r);
-            v.appendChild(dom.ul());
+            v.appendChild(doe.ul());
             v=v.lastChild;
         }
         v.appendChild(li(p));
         v=v.lastChild;
     }
     function li(p){
-        return dom.li(a_href(p))
+        return doe.li(a_href(p))
     }
     function a_href(p){
-        return dom.a({
+        return doe.a({
             innerHTML:p.innerHTML,
             href:location.href+'#'+p.id,
         })
@@ -92,14 +92,14 @@ function setup(){
         page=this,
         a_comment,
         textarea_comment__form_comment;
-    a_comment=dom.a();
+    a_comment=doe.a();
     a_comment.className='a_comment functionbutton';
     a_comment.href='javascript:';
     a_comment.innerHTML='<i class=material-icons>comment</i>';
     a_comment.onclick=()=>{
         textarea_comment__form_comment.focus();
     };
-    textarea_comment__form_comment=dom.textarea();
+    textarea_comment__form_comment=doe.textarea();
     textarea_comment__form_comment.className='textarea_comment';
     textarea_comment__form_comment.name='content';
     textarea_comment__form_comment.placeholder='Comment ...';
@@ -110,7 +110,7 @@ function setup(){
     this.textarea_comment__form_comment=textarea_comment__form_comment;
     this.input_submit__form_comment=input_submit__form_comment();
     function input_submit__form_comment(){
-        let input_submit__form_comment=dom.input();
+        let input_submit__form_comment=doe.input();
         input_submit__form_comment.className='input_comment_submit';
         input_submit__form_comment.type='submit';
         input_submit__form_comment.value='Submit';
@@ -120,9 +120,9 @@ function setup(){
 }
 
 var commentForm = page=>{
-    let form=dom.form(
+    let form=doe.form(
         page.textarea_comment__form_comment,
-        dom.br(),
+        doe.br(),
         page.input_submit__form_comment
     );
     form.className='form_newcomment';
@@ -141,7 +141,7 @@ var commentForm = page=>{
 }
 
 var commentDiv = (page,comment)=>{
-    let div=dom.div();
+    let div=doe.div();
     div.className='comments'
     ;(async()=>{
         comment=await comment;
@@ -179,7 +179,7 @@ var commentDiv = (page,comment)=>{
     })();
     return div
     function deleteA(id){
-        let a=dom.a('delete',{href:'javascript:'});
+        let a=doe.a('delete',{href:'javascript:'});
         a.onclick=async e=>{
             e.preventDefault();
             e.stopPropagation();
@@ -195,13 +195,13 @@ var commentDiv = (page,comment)=>{
 }
 
 function PageView(page){
-    EventEmmiter$1.call(this);
+    EventEmmiter.call(this);
     this.domElement=createDiv(this,page);
 }
-Object.setPrototypeOf(PageView.prototype,EventEmmiter$1.prototype);
+Object.setPrototypeOf(PageView.prototype,EventEmmiter.prototype);
 function createDiv(pageView,page){
     let 
-        div=dom.div();
+        div=doe.div();
     pageView.hide=!page.ispublic&&!page.blog.status.pageId;
     div.className='post';
     page.div=div;
@@ -244,7 +244,7 @@ function createDiv(pageView,page){
 }
 function div_blog_content(pageView,page){
     let
-        div=dom.div({
+        div=doe.div({
             id:'blog_content_'+page.id,
             innerHTML:
                 page.id_pagemodule?
@@ -263,7 +263,7 @@ function div_blog_content(pageView,page){
     return div
 }
 function div_facebooklike(page){
-    let div=dom.div({className:'fb-like'});
+    let div=doe.div({className:'fb-like'});
     div.setAttribute(
         'data-href','https://anliting.com/'+page.id
     );
@@ -310,7 +310,7 @@ let
     str_show='<i class=material-icons>expand_more</i>',
     str_hide='<i class=material-icons>expand_less</i>';
 function createHideShowA(page,pageView){
-    let a_hideshow=dom.a({
+    let a_hideshow=doe.a({
         className:'a_hideshow functionbutton',
         href:'javascript:',
         innerHTML:pageView.hide?str_show:str_hide,
@@ -324,9 +324,9 @@ function createHideShowA(page,pageView){
 }
 
 function privacyTd(page){
-    return dom.td(span_privacy())
+    return doe.td(span_privacy())
     function span_privacy(){
-        let span=dom.span(span=>{span.style.fontStyle='italic';});
+        let span=doe.span(span=>{span.style.fontStyle='italic';});
         let a=[
             (async()=>{
                 let site=await page.blog._site;
@@ -347,7 +347,7 @@ function privacyTd(page){
         );
         return span
         function dateSpan(){
-            let span=dom.span(
+            let span=doe.span(
                 dateToString(new Date(page.timestamp_insert))
             );
             span.title=`Last modified: ${
@@ -356,7 +356,7 @@ function privacyTd(page){
             return span
         }
         function privateSpan(){
-            return dom.span('private')
+            return doe.span('private')
         }
         function dateToString(d){
             return`${d.getFullYear()}-${1+d.getMonth()}-${
@@ -371,7 +371,7 @@ function createPrivacyTable(pageView){
     let
         page=this,
         table_privacy;
-    table_privacy=dom.table(
+    table_privacy=doe.table(
         tr_privacy(page),
         tr_tags()
     );
@@ -379,13 +379,13 @@ function createPrivacyTable(pageView){
     table_privacy.style.marginBottom='20px';
     return table_privacy
     function tr_privacy(page){
-        return dom.tr(
+        return doe.tr(
             privacyTd(page),
             td_functions()
         )
     }
     function td_functions(){
-        let td=dom.td(
+        let td=doe.td(
             createHideShowA(page,pageView),
             page.a_comment
         );
@@ -401,14 +401,14 @@ function createPrivacyTable(pageView){
         })();
         return td
         function a_editpage(){
-            let a=dom.a();
+            let a=doe.a();
             a.className='a_editpage functionbutton';
             a.href=page.id+'/edit';
             a.innerHTML='<i class=material-icons>mode_edit</i>';
             return a
         }
         function a_removepage(){
-            return dom.a({
+            return doe.a({
                 className:'functionbutton a_removepage',
                 href:'javascript:',
                 onclick:()=>{
@@ -427,11 +427,11 @@ function createPrivacyTable(pageView){
         }
     }
     function tr_tags(){
-        return dom.tr(td())
+        return doe.tr(td())
     }
     function td(){
         let
-            td=dom.td(),
+            td=doe.td(),
             isFirst;
         if(page.tags.length){
             page.tags.sort();
@@ -458,7 +458,7 @@ function createPrivacyTable(pageView){
 }
 
 function BlogPage(blog,id,ispublic,title,id_pagemodule){
-    EventEmmiter$1.call(this);
+    EventEmmiter.call(this);
     this.blog=blog;
     this.id=id;
     this.ispublic=ispublic;
@@ -466,7 +466,7 @@ function BlogPage(blog,id,ispublic,title,id_pagemodule){
     this.id_pagemodule=id_pagemodule;
     setup.call(this);
 }
-Object.setPrototypeOf(BlogPage.prototype,EventEmmiter$1.prototype);
+Object.setPrototypeOf(BlogPage.prototype,EventEmmiter.prototype);
 Object.defineProperty(BlogPage.prototype,'view',view);
 BlogPage.prototype.createPrivacyTable=createPrivacyTable;
 BlogPage.prototype.getHref=function(){
@@ -477,11 +477,11 @@ BlogPage.prototype.getHref=function(){
 };
 BlogPage.prototype.h1_title=function(){
     let page=this;
-    let h1_title=dom.h1(a_h1_title());
+    let h1_title=doe.h1(a_h1_title());
     h1_title.style.textAlign='center';
     return h1_title
     function a_h1_title(){
-        let a=dom.a(page.title);
+        let a=doe.a(page.title);
         a.className='title';
         a.href=page.getHref();
         a.onclick=e=>{
@@ -498,20 +498,20 @@ BlogPage.prototype.h1_title=function(){
     }
 };
 BlogPage.prototype.createAuthorDiv=function(){
-    return dom.div(async n=>{
+    return doe.div(async n=>{
         n.style.textAlign='center';
         n.style.display='none';
         n.style.fontSize='1.5em';
         let u=await this.blog._site.getUser(this.authorId);
         await u.load('nickname');
-        return u.nickname
+        doe(n,u.nickname);
     })
 };
 BlogPage.prototype.createDateDiv=function(){
     let date=new Date(this.datetime_lastmodified);
-    return dom.div(
+    return doe.div(
         n=>{
-            dom(n.style,{
+            doe(n.style,{
                 textAlign:'center',
                 display:'none',
                 fontSize:'1.5em',
@@ -531,7 +531,7 @@ function Page(){
 Object.setPrototypeOf(Page.prototype,AltheaObject.prototype);
 Page.prototype._loader='blog_getPage';
 Object.defineProperty(Page.prototype,'a',{get(){
-    return dom.a({href:this.id},async a=>{
+    return doe.a({href:this.id},async a=>{
         let pv=await this.lastversion;
         await pv.load('title');
         a.textContent=pv.title||'Untitled';
@@ -636,7 +636,7 @@ function anchor_addTag(tag){
         tagsToSelect=(this.status.tagNames||[]).slice();
     tagsToSelect.push(tag.name);
     let
-        a=dom.a(tag.name,{
+        a=doe.a(tag.name,{
             className:'addTag',
             href:this.path.getHrefByTags(tagsToSelect),
         });
@@ -683,11 +683,11 @@ async function checkSetupIndex(blog,div){
     }
     a.sort((a,b)=>a.title.localeCompare(b.title));
     chunks(a,12).map(a=>{
-        let ul=dom.ul();
+        let ul=doe.ul();
         ul.style.float='left';
         for(let p of a){
             let
-                li=dom.li(),
+                li=doe.li(),
                 a=p.page.a;
             if(!p.public)
                 a.style.color='black';
@@ -711,7 +711,7 @@ async function checkSetupIndex(blog,div){
     });
     div.appendChild(createClearBothDiv());
     function createClearBothDiv(){
-        return dom.div(n=>{n.style.clear='both';})
+        return doe.div(n=>{n.style.clear='both';})
     }
     async function getPagesByTags(){
         return(await blog._site).send({
@@ -728,7 +728,7 @@ async function checkSetupIndex(blog,div){
 }
 
 function createInput(blog,view){
-    let input=dom.input();
+    let input=doe.input();
     input.setAttribute('list',view.datalist_input_searchForTag.id);
     input.addEventListener('keydown',e=>{
         if(e.keyCode!=13)
@@ -764,7 +764,7 @@ function setupSelectedTagsDiv(blog,div){
     blog.status.tagNames.map((t,i)=>{
         div.appendChild(span());
         function span(){
-            let span=dom.span(
+            let span=doe.span(
                 t+' ',
                 a(),{
                     id:'span_tag_'+t,
@@ -775,7 +775,7 @@ function setupSelectedTagsDiv(blog,div){
             return span
         }
         function a(){
-            let anchor=dom.a('-');
+            let anchor=doe.a('-');
             let tagsToSelect=(blog.status.tagNames||[]).slice();
             tagsToSelect.splice(i,1);
             anchor.href='javascript:';
@@ -814,19 +814,19 @@ var event = {
 }
 
 function userA(blog,div,u){
-    let a=dom.a(u.username,{href:'javascript:'});
+    let a=doe.a(u.username,{href:'javascript:'});
     a.onclick=e=>{
         e.preventDefault();
         e.stopPropagation();
         let n=userDiv(blog,u);
         event.onceClickOrBlurButNotMouseDown(n,()=>div.removeChild(n));
-        dom(div,n);
+        doe(div,n);
         n.focus();
     };
     return a
 }
 function userDiv(blog,u){
-    let div=dom.div(innerDiv(blog,u),{tabIndex:0});
+    let div=doe.div(innerDiv(blog,u),{tabIndex:0});
     div.style.position='relative';
     div.style.outline='none';
     div.style.height='0';
@@ -835,19 +835,19 @@ function userDiv(blog,u){
     return div
 }
 function innerDiv(blog,u){
-    return dom.div(
+    return doe.div(
         logoutA(blog),
-        dom.br(),
-        dom.a('Profile',{href:`user/${u.username}`}),
+        doe.br(),
+        doe.a('Profile',{href:`user/${u.username}`}),
         u.isadmin&&[
-            dom.br(),
-            dom.a('Drive',{href:`home/${u.username}`}),
-            dom.br(),
-            dom.a('Control Panel',{href:'control-panel'}),
-            dom.br(),
-            dom.a('Blog Control Panel',{href:'blog-control-panel'}),
-            dom.br(),
-            dom.a('New Page',{href:'newpage'}),
+            doe.br(),
+            doe.a('Drive',{href:`home/${u.username}`}),
+            doe.br(),
+            doe.a('Control Panel',{href:'control-panel'}),
+            doe.br(),
+            doe.a('Blog Control Panel',{href:'blog-control-panel'}),
+            doe.br(),
+            doe.a('New Page',{href:'newpage'}),
         ],n=>{
             n.style.margin='0 auto';
             n.style.backgroundColor='white';
@@ -856,7 +856,7 @@ function innerDiv(blog,u){
     )
 }
 function logoutA(blog){
-    let a=dom.a('Logout');
+    let a=doe.a('Logout');
     a.href='javascript:';
     a.onclick=async e=>{
         e.preventDefault()
@@ -868,7 +868,7 @@ function logoutA(blog){
 function createNavigationBar(view){
     let
         blog=view.blog,
-        div=dom.div({className:'navigationBar'},menuA()),
+        div=doe.div({className:'navigationBar'},menuA()),
         site=blog._site;
     perUser(site,async u=>{
         await u.load(['isAnonymous','username','isadmin']);
@@ -884,7 +884,7 @@ function createNavigationBar(view){
     });
     return div
     function aboutA(){
-        return dom.a('About',{href:'about'})
+        return doe.a('About',{href:'about'})
     }
     function perUser(site,func){
 (async()=>func(await site.currentUser))();
@@ -893,7 +893,7 @@ function createNavigationBar(view){
         );
     }
     function loginA(){
-        let a=dom.a('Login',{href:'javascript:'});
+        let a=doe.a('Login',{href:'javascript:'});
         a.onclick=async e=>{
             e.preventDefault();
             e.stopPropagation()
@@ -902,7 +902,7 @@ function createNavigationBar(view){
         return a
     }
     function menuA(){
-        let a=dom.a('Menu');
+        let a=doe.a('Menu');
         a.href='javascript:';
         a.onclick=e=>{
             e.preventDefault();
@@ -917,7 +917,7 @@ function createNavigationBar(view){
         return a
     }
     function menuDiv(){
-        let div=dom.div(innerDiv());
+        let div=doe.div(innerDiv());
         div.style.position='relative';
         div.style.height='0';
         div.style.width='100%';
@@ -926,7 +926,7 @@ function createNavigationBar(view){
         div.tabIndex=0;
         return div
         function innerDiv(){
-            let div=dom.div(aboutA());
+            let div=doe.div(aboutA());
             div.style.margin='0 auto';
             div.style.backgroundColor='white';
             div.style.border='1px solid lightgray';
@@ -937,7 +937,7 @@ function createNavigationBar(view){
 
 function createHeader(blog,view){
     let blog_getData=blog._site.send('blog_getData');
-    return dom.div(
+    return doe.div(
         {className:'header'},
         createTitle(),
         createTagline(),
@@ -947,11 +947,11 @@ function createHeader(blog,view){
         createIndex()
     )
     function createTitle(){
-        return dom.div({className:'title'},async n=>
+        return doe.div({className:'title'},async n=>
             createA((await blog_getData).bannerTitle)
         )
         function createA(bannerTitle){
-            return dom.a({href:'',innerHTML:bannerTitle,onclick(e){
+            return doe.a({href:'',innerHTML:bannerTitle,onclick(e){
                 if(
                     e.which!=1||
                     e.ctrlKey||
@@ -965,19 +965,19 @@ function createHeader(blog,view){
         }
     }
     function createTagline(){
-        return dom.div({className:'tagline'},
+        return doe.div({className:'tagline'},
             async n=>({innerHTML:(await blog_getData).tagline})
         )
     }
     function createSearchForTags(view){
-        return dom.div(
+        return doe.div(
             {className:'searchForTags'},
             createSelectedTagsDiv(),
             view.input=createInput(blog,view),
             view.datalist_input_searchForTag
         )
         function createSelectedTagsDiv(){
-            return dom.div({className:'selectedTags'},n=>{
+            return doe.div({className:'selectedTags'},n=>{
                 setupSelectedTagsDiv(blog,n);
                 blog.on('statusChange',()=>{
                     n.innerHTML='';
@@ -987,7 +987,7 @@ function createHeader(blog,view){
         }
     }
     function createTags(view){
-        return dom.div({className:'tags'},n=>{
+        return doe.div({className:'tags'},n=>{
             blog.on('statusChange',()=>{
                 n.innerHTML='';
                 if(document.activeElement==view.input)
@@ -997,7 +997,7 @@ function createHeader(blog,view){
         })
     }
     function createIndex(){
-        return dom.div({className:'index'},n=>{
+        return doe.div({className:'index'},n=>{
             checkSetupIndex(blog,n);
             blog.on('statusChange',()=>{
                 n.innerHTML='';
@@ -1126,7 +1126,7 @@ function randomId(length){
 }
 
 function install_datalist_tags_suggested(blogView){
-    blogView.datalist_input_searchForTag=dom.datalist();
+    blogView.datalist_input_searchForTag=doe.datalist();
     // known best solution
     blogView.datalist_input_searchForTag.id=randomId(16);
 }
@@ -1137,7 +1137,7 @@ function use_list_tags__count_suggested(blogView,list,div){
     );
     blogView.datalist_input_searchForTag.innerHTML='';
     list.map(e=>{
-        let o=dom.option({value:e.name});
+        let o=doe.option({value:e.name});
         blogView.datalist_input_searchForTag.appendChild(o);
     });
     let tagsToSelect=(blogView.blog.status.tagNames||[]).slice();
@@ -1150,10 +1150,10 @@ function use_list_tags__count_suggested(blogView,list,div){
     });
     div.appendChild(div_clearboth());
     function ul(){
-        return dom.ul(ul=>{ul.style.float='left';})
+        return doe.ul(ul=>{ul.style.float='left';})
     }
     function li(t){
-        return dom.li(a(t))
+        return doe.li(a(t))
     }
     function a(t){
         tagsToSelect.push(t.name);
@@ -1165,7 +1165,7 @@ function use_list_tags__count_suggested(blogView,list,div){
         return a
     }
     function div_clearboth(){
-        return dom.div(div=>{div.style.clear='both';})
+        return doe.div(div=>{div.style.clear='both';})
     }
 }
 
@@ -1199,7 +1199,7 @@ body{
 `
 
 function createContents(blog){
-    let div=dom.div({className:'contents'});
+    let div=doe.div({className:'contents'});
     blog.on('pageLoad',page=>{
         div.appendChild(page.view.domElement);
     });
@@ -1209,17 +1209,17 @@ function createContents(blog){
     return div
 }
 function createFooter(view){
-    return dom.div({className:'footer'},async div=>{
+    return doe.div({className:'footer'},async div=>{
         div.innerHTML=(await view.blog._site.send('blog_getData')).footer;
     })
 }
 function BlogView(blog){
     this.blog=blog;
-    this.div=dom.div();
+    this.div=doe.div();
     this.div.className='blog';
     install_datalist_tags_suggested(this);
     {
-        let s=dom.style();
+        let s=doe.style();
         let u=()=>
             this.blog._styles.map(n=>
                 s.appendChild(n)
@@ -1280,7 +1280,7 @@ var createPath = site=>{
 }
 
 function Blog(site,status){
-    EventEmmiter$1.call(this);
+    EventEmmiter.call(this);
     this._site=site;
     this._status=status;
     this.path=createPath(site);
@@ -1308,7 +1308,7 @@ function Blog(site,status){
         load.materialIcon(),
     ]);
 }
-Object.setPrototypeOf(Blog.prototype,EventEmmiter$1.prototype);
+Object.setPrototypeOf(Blog.prototype,EventEmmiter.prototype);
 Blog.prototype._anchor_addTag=anchor_addTag;
 Object.defineProperty(Blog.prototype,'_currentUser',{async get(){
     return(await this._site).currentUser
@@ -1351,7 +1351,7 @@ Blog.newPageContentUi=function(
         let pagemodule=getPagemodule(pagemoduleId);
         source=pagemodule.compile(source);
     }
-    let n=dom.div({innerHTML:source});
+    let n=doe.div({innerHTML:source});
     plugins.map(f=>f(n));
     return n
 };
@@ -1383,7 +1383,7 @@ var editors = {
         come(){
             this._nodes.div_preview.style.display='';
             this._nodes.div_preview.innerHTML='';
-            dom(
+            doe(
                 this._nodes.div_preview,
                 this.blog.newPageContentUi(
                     id=>this.pagemodules[id-1],
@@ -1530,27 +1530,27 @@ span.name{
 
 function createNodes(){
     this._nodes={};
-    this._nodes.main=dom.div({className:'main'},
-        this._nodes.table_content=dom.table(
-            dom.tr(dom.td(
-                this._nodes.select_id_pagemodule=dom.select(
-                    dom.option(
+    this._nodes.main=doe.div({className:'main'},
+        this._nodes.table_content=doe.table(
+            doe.tr(doe.td(
+                this._nodes.select_id_pagemodule=doe.select(
+                    doe.option(
                         {value:0},
                         'No Pagemodule',
                     ),
                 ),' ',
-                this._nodes.select_privacy=dom.select(
-                    dom.option({value:0},'Hidden'),
-                    dom.option({value:1},'Private'),
-                    dom.option({value:2},'Unlisted'),
-                    dom.option({value:3},'Public'),
+                this._nodes.select_privacy=doe.select(
+                    doe.option({value:0},'Hidden'),
+                    doe.option({value:1},'Private'),
+                    doe.option({value:2},'Unlisted'),
+                    doe.option({value:3},'Public'),
                 ),' ',
-                this._nodes.button_save=dom.button('Save'),' ',
-                this._nodes.button_submit=dom.button('Submit'),' ',
+                this._nodes.button_save=doe.button('Save'),' ',
+                this._nodes.button_submit=doe.button('Submit'),' ',
             )),
-            dom.tr(dom.td(
-                this._nodes.span_tags=dom.span(),
-                this._nodes.input_newtag=dom.input({
+            doe.tr(doe.td(
+                this._nodes.span_tags=doe.span(),
+                this._nodes.input_newtag=doe.input({
                     className:'setFormInput',
                     type:'text',
                     placeholder:'Tag ...',
@@ -1559,41 +1559,41 @@ function createNodes(){
                     n.setAttribute('list',this._datalistId);
                 }),
             )),
-            dom.tr(dom.td(
-                this._nodes.span_names=dom.span(),
-                this._nodes.input_newname=dom.input({
+            doe.tr(doe.td(
+                this._nodes.span_names=doe.span(),
+                this._nodes.input_newname=doe.input({
                     className:'setFormInput',
                     type:'text',
                     placeholder:'Name ...',
                     disabled:true,
                 }),
             )),
-            dom.tr(dom.td(
-                this._nodes.input_title=dom.input({
+            doe.tr(doe.td(
+                this._nodes.input_title=doe.input({
                     className:'title',
                     type:'text',
                     placeholder:'Title',
                     disabled:true,
                 }),
             )),
-            dom.tr(dom.td(
-                dom.button(
+            doe.tr(doe.td(
+                doe.button(
                     {onclick:e=>{
                         e.preventDefault();
                         this.changeEditor('html');
                     }},
                     'HTML'
                 ),' ',
-                arg.h&&[
-                    dom.button(
+                ...(arg.h?[
+                    doe.button(
                         {onclick:e=>{
                             e.preventDefault();
                             this.changeEditor('htmleditor');
                         }},
                         'WYSIWYG'
                     ),' ',
-                ],
-                dom.button(
+                ]:[]),
+                doe.button(
                     {onclick:e=>{
                         e.preventDefault();
                         this.changeEditor('preview');
@@ -1601,22 +1601,24 @@ function createNodes(){
                     'Preview'
                 ),
             )),
-            dom.tr(dom.td({className:'contentTc'},
-                this._nodes.div_textarea_content=dom.div(
+            doe.tr(doe.td({className:'contentTc'},
+                this._nodes.div_textarea_content=doe.div(
                     {className:'content'},
-                    this._nodes.textarea_content=dom.textarea({disabled:true}),
+                    this._nodes.textarea_content=doe.textarea({
+                        disabled:true
+                    }),
                 ),
-                this._nodes.div_htmleditor=dom.div(
+                this._nodes.div_htmleditor=doe.div(
                     {className:'htmleditor'},
                     n=>{n.style.display='none';}
                 ),
-                this._nodes.div_preview=dom.div(
+                this._nodes.div_preview=doe.div(
                     {className:'preview'},
                     n=>{n.style.display='none';}
                 ),
             )),
         ),
-        this._nodes.tags=dom.datalist({id:this._datalistId}),
+        this._nodes.tags=doe.datalist({id:this._datalistId}),
     );
 }
 
@@ -1641,16 +1643,16 @@ SetForm.prototype.addTag=function(name){
     function Tag(name){
         let
             span_name,
-            span=dom.span(
+            span=doe.span(
                 {className:'tag'},
-                span_name=dom.span({innerHTML:name}),
+                span_name=doe.span({innerHTML:name}),
                 ' ',
                 a(),
             );
         this.body=span;
         this.name=name;
         function a(){
-            return dom.a({
+            return doe.a({
                 href:'javascript:',
                 onclick(){
                     let id=setForm.tagIdInTagsByName[name];
@@ -1717,8 +1719,7 @@ function update(editpage,data){
         a.priority-b.priority
     );
     data.pagemodules.map(e=>{
-        let option=dom.option(e.name);
-        option.value=e.id;
+        let option=doe.option(e.name,{value:e.id});
         if(editpage.id&&e.id==data.lastversion_page.id_pagemodule)
             option.selected='selected';
         editpage._nodes.select_id_pagemodule.appendChild(
@@ -1732,7 +1733,7 @@ function update(editpage,data){
         editpage.setOfNames.addTag(e);
     });
     data.tags.map(e=>{
-        let option=dom.option({value:e});
+        let option=doe.option({value:e});
         editpage._nodes.tags.appendChild(
             option
         );
@@ -1878,10 +1879,10 @@ function load$1(){
             createUploadImageTr()
         );
         function createUploadImageTr(){
-            return dom.tr(createUploadImageTd())
+            return doe.tr(createUploadImageTd())
         }
         function createUploadImageTd(){
-            return dom.td(fileButton.n)
+            return doe.td(fileButton.n)
         }
         // end set up image uploader
         initialize(this);
@@ -1889,7 +1890,7 @@ function load$1(){
 }
 
 function Editpage(site,environment){
-    EventEmmiter.call(this);
+    EventEmmiter$1.call(this);
     this.blog=Blog;
     this.id=environment.id_page||0;
     this._site=site;
@@ -1898,7 +1899,7 @@ function Editpage(site,environment){
     this.node=this._nodes.main;
     load$1.call(this);
 }
-Object.setPrototypeOf(Editpage.prototype,EventEmmiter.prototype);
+Object.setPrototypeOf(Editpage.prototype,EventEmmiter$1.prototype);
 Object.defineProperty(Editpage.prototype,'currentUser',{get(){
     return this._site.currentUser
 }});

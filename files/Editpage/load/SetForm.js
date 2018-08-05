@@ -1,4 +1,4 @@
-import{dom}from '/lib/core.static.js'
+import{doe}from '/lib/core.static.js'
 function SetForm(span_tags,input){
     this.tags=[]
     this.tagIdInTagsByName={}
@@ -20,16 +20,16 @@ SetForm.prototype.addTag=function(name){
     function Tag(name){
         let
             span_name,
-            span=dom.span(
+            span=doe.span(
                 {className:'tag'},
-                span_name=dom.span({innerHTML:name}),
+                span_name=doe.span({innerHTML:name}),
                 ' ',
                 a(),
             )
         this.body=span
         this.name=name
         function a(){
-            return dom.a({
+            return doe.a({
                 href:'javascript:',
                 onclick(){
                     let id=setForm.tagIdInTagsByName[name]

@@ -1,11 +1,11 @@
-import{EventEmmiter}from 'https://gitcdn.link/cdn/anliting/simple.js/55124630741399dd0fcbee2f0396642a428cdd24/src/simple.static.js'
+import{EventEmmiter}from 'https://gitcdn.link/cdn/anliting/simple.js/d76165db0cfc5b4c71786bf5a5f2e51503943294/src/simple.static.js'
 import loadPagemodules from     './Blog/loadPagemodules.js'
 import corePlugins from         './corePlugins.js'
 import _getNext from            './Blog/prototype._getNext.js'
 import _anchor_addTag from      './Blog/prototype._anchor_addTag.js'
 import BlogView from            './Blog/BlogView.js'
 import createPath from          './Blog/createPath.js'
-import{dom,load}from            '/lib/core.static.js'
+import{doe,load}from            '/lib/core.static.js'
 function Blog(site,status){
     EventEmmiter.call(this)
     this._site=site
@@ -78,7 +78,7 @@ Blog.newPageContentUi=function(
         let pagemodule=getPagemodule(pagemoduleId)
         source=pagemodule.compile(source)
     }
-    let n=dom.div({innerHTML:source})
+    let n=doe.div({innerHTML:source})
     plugins.map(f=>f(n))
     return n
 }

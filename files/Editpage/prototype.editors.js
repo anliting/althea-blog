@@ -1,4 +1,4 @@
-import{dom}from'/lib/core.static.js'
+import{doe}from'/lib/core.static.js'
 export default{
     html:{
         come(){
@@ -26,7 +26,7 @@ export default{
         come(){
             this._nodes.div_preview.style.display=''
             this._nodes.div_preview.innerHTML=''
-            dom(
+            doe(
                 this._nodes.div_preview,
                 this.blog.newPageContentUi(
                     id=>this.pagemodules[id-1],

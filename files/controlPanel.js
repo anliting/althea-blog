@@ -1,4 +1,4 @@
-import{dom,load}from        '/lib/core.static.js'
+import{doe,load}from        '/lib/core.static.js'
 import{Site}from            '/plugins/blog/core.static.js'
 import ControlPanel from    './controlPanel/ControlPanel.js'
 let site=new Site
@@ -16,7 +16,7 @@ let site=new Site
         getUser:site.getUser.bind(site),
         setData:data=>site.send({function:'blog_setData',data}),
     })
-    dom.head(dom.style(
+    doe.head(doe.style(
         `
             a:active,a:link,a:visited{
                 color:blue;
@@ -33,7 +33,7 @@ let site=new Site
         `,
         ControlPanel.style,
     ))
-    dom.body(
-        dom(controlPanel.node)
+    doe.body(
+        doe(controlPanel.node)
     )
 })()

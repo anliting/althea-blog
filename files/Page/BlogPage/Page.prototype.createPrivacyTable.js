@@ -1,11 +1,11 @@
 import createHideShowA from './Page.prototype.createPrivacyTable/createHideShowA.js'
 import privacyTd from './Page.prototype.createPrivacyTable/privacyTd.js'
-import {dom}from '/lib/core.static.js'
+import {doe}from '/lib/core.static.js'
 function createPrivacyTable(pageView){
     let
         page=this,
         table_privacy
-    table_privacy=dom.table(
+    table_privacy=doe.table(
         tr_privacy(page),
         tr_tags()
     )
@@ -13,13 +13,13 @@ function createPrivacyTable(pageView){
     table_privacy.style.marginBottom='20px'
     return table_privacy
     function tr_privacy(page){
-        return dom.tr(
+        return doe.tr(
             privacyTd(page),
             td_functions()
         )
     }
     function td_functions(){
-        let td=dom.td(
+        let td=doe.td(
             createHideShowA(page,pageView),
             page.a_comment
         )
@@ -35,14 +35,14 @@ function createPrivacyTable(pageView){
         })()
         return td
         function a_editpage(){
-            let a=dom.a()
+            let a=doe.a()
             a.className='a_editpage functionbutton'
             a.href=page.id+'/edit'
             a.innerHTML='<i class=material-icons>mode_edit</i>'
             return a
         }
         function a_removepage(){
-            return dom.a({
+            return doe.a({
                 className:'functionbutton a_removepage',
                 href:'javascript:',
                 onclick:()=>{
@@ -61,11 +61,11 @@ function createPrivacyTable(pageView){
         }
     }
     function tr_tags(){
-        return dom.tr(td())
+        return doe.tr(td())
     }
     function td(){
         let
-            td=dom.td(),
+            td=doe.td(),
             isFirst
         if(page.tags.length){
             page.tags.sort()

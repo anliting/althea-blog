@@ -1,4 +1,4 @@
-import{dom}from             '/lib/core.static.js'
+import{doe}from             '/lib/core.static.js'
 import createSiteNode from      './ControlPanel/createSiteNode.js'
 import createCommentsNode from  './ControlPanel/createCommentsNode.js'
 import createTagsNode from      './ControlPanel/createTagsNode.js'
@@ -23,15 +23,15 @@ function ControlPanel(io){
     TreeUi.apply(this,arguments)
     this._io=io
     this._nodes={}
-    this.node=dom.div({className:'controlPanel mdc-typography'},
-        this._nodes.title=dom.h2(),
+    this.node=doe.div({className:'controlPanel mdc-typography'},
+        this._nodes.title=doe.h2(),
     )
     this.in({
         title:'Blog Control Panel',
-        node:dom.div({className:'shadow'},
-            dom.ul({className:'mdc-list'},
-                root.map(o=>
-                    dom.li(
+        node:doe.div({className:'shadow'},
+            doe.ul({className:'mdc-list'},
+                ...root.map(o=>
+                    doe.li(
                         {
                             className:'mdc-list-item',
                             onclick:()=>this.in({
@@ -40,7 +40,7 @@ function ControlPanel(io){
                             }),
                         },
                         o.title,
-                        dom.span({
+                        doe.span({
                             className:`
                                 mdc-list-item__end-detail
                                 material-icons

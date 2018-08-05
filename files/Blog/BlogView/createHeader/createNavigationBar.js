@@ -1,10 +1,10 @@
 import event from './createNavigationBar/event.js'
 import userA from './createNavigationBar/userA.js'
-import {dom}from '/lib/core.static.js'
+import {doe}from '/lib/core.static.js'
 function createNavigationBar(view){
     let
         blog=view.blog,
-        div=dom.div({className:'navigationBar'},menuA()),
+        div=doe.div({className:'navigationBar'},menuA()),
         site=blog._site
     perUser(site,async u=>{
         await u.load(['isAnonymous','username','isadmin'])
@@ -20,7 +20,7 @@ function createNavigationBar(view){
     })
     return div
     function aboutA(){
-        return dom.a('About',{href:'about'})
+        return doe.a('About',{href:'about'})
     }
     function perUser(site,func){
         ;(async()=>func(await site.currentUser))()
@@ -29,7 +29,7 @@ function createNavigationBar(view){
         )
     }
     function loginA(){
-        let a=dom.a('Login',{href:'javascript:'})
+        let a=doe.a('Login',{href:'javascript:'})
         a.onclick=async e=>{
             e.preventDefault()
             e.stopPropagation()
@@ -38,7 +38,7 @@ function createNavigationBar(view){
         return a
     }
     function menuA(){
-        let a=dom.a('Menu')
+        let a=doe.a('Menu')
         a.href='javascript:'
         a.onclick=e=>{
             e.preventDefault()
@@ -53,7 +53,7 @@ function createNavigationBar(view){
         return a
     }
     function menuDiv(){
-        let div=dom.div(innerDiv())
+        let div=doe.div(innerDiv())
         div.style.position='relative'
         div.style.height='0'
         div.style.width='100%'
@@ -62,7 +62,7 @@ function createNavigationBar(view){
         div.tabIndex=0
         return div
         function innerDiv(){
-            let div=dom.div(aboutA())
+            let div=doe.div(aboutA())
             div.style.margin='0 auto'
             div.style.backgroundColor='white'
             div.style.border='1px solid lightgray'

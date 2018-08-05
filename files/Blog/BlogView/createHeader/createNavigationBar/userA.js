@@ -1,19 +1,19 @@
 import event from './event.js'
-import {dom}from '/lib/core.static.js'
+import {doe}from '/lib/core.static.js'
 function userA(blog,div,u){
-    let a=dom.a(u.username,{href:'javascript:'})
+    let a=doe.a(u.username,{href:'javascript:'})
     a.onclick=e=>{
         e.preventDefault()
         e.stopPropagation()
         let n=userDiv(blog,u)
         event.onceClickOrBlurButNotMouseDown(n,()=>div.removeChild(n))
-        dom(div,n)
+        doe(div,n)
         n.focus()
     }
     return a
 }
 function userDiv(blog,u){
-    let div=dom.div(innerDiv(blog,u),{tabIndex:0})
+    let div=doe.div(innerDiv(blog,u),{tabIndex:0})
     div.style.position='relative'
     div.style.outline='none'
     div.style.height='0'
@@ -22,19 +22,19 @@ function userDiv(blog,u){
     return div
 }
 function innerDiv(blog,u){
-    return dom.div(
+    return doe.div(
         logoutA(blog),
-        dom.br(),
-        dom.a('Profile',{href:`user/${u.username}`}),
+        doe.br(),
+        doe.a('Profile',{href:`user/${u.username}`}),
         u.isadmin&&[
-            dom.br(),
-            dom.a('Drive',{href:`home/${u.username}`}),
-            dom.br(),
-            dom.a('Control Panel',{href:'control-panel'}),
-            dom.br(),
-            dom.a('Blog Control Panel',{href:'blog-control-panel'}),
-            dom.br(),
-            dom.a('New Page',{href:'newpage'}),
+            doe.br(),
+            doe.a('Drive',{href:`home/${u.username}`}),
+            doe.br(),
+            doe.a('Control Panel',{href:'control-panel'}),
+            doe.br(),
+            doe.a('Blog Control Panel',{href:'blog-control-panel'}),
+            doe.br(),
+            doe.a('New Page',{href:'newpage'}),
         ],n=>{
             n.style.margin='0 auto'
             n.style.backgroundColor='white'
@@ -43,7 +43,7 @@ function innerDiv(blog,u){
     )
 }
 function logoutA(blog){
-    let a=dom.a('Logout')
+    let a=doe.a('Logout')
     a.href='javascript:'
     a.onclick=async e=>{
         e.preventDefault()
