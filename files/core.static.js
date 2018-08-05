@@ -948,7 +948,7 @@ function createHeader(blog,view){
     )
     function createTitle(){
         return doe.div({className:'title'},async n=>
-            createA((await blog_getData).bannerTitle)
+            doe(n,createA((await blog_getData).bannerTitle))
         )
         function createA(bannerTitle){
             return doe.a({href:'',innerHTML:bannerTitle,onclick(e){
