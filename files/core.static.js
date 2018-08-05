@@ -966,7 +966,9 @@ function createHeader(blog,view){
     }
     function createTagline(){
         return doe.div({className:'tagline'},
-            async n=>({innerHTML:(await blog_getData).tagline})
+            async n=>{
+                doe(n,{innerHTML:(await blog_getData).tagline});
+            }
         )
     }
     function createSearchForTags(view){
