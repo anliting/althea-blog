@@ -1,9 +1,9 @@
-import{doe}from '/lib/core.static.js'
+import{doe}from'/lib/core.static.js'
 function TagsPage(io){
     this._io=io
-    this.mainDiv=doe.div(async()=>{
+    this.mainDiv=doe.div(async n=>{
         let data=await this._io.getTagsWithCount()
-        return doe.table(
+        doe(n,doe.table(
             {
                 className:'bordered padding4px',
                 innerHTML:`
@@ -19,7 +19,7 @@ function TagsPage(io){
                 n.style.margin='0 auto'
             },
             data.map(tr_tag),
-        )
+        ))
     })
     function tr_tag(tag){
         return doe.tr(td_name(),td_count())

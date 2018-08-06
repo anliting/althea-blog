@@ -55,45 +55,43 @@ function mdcTextdfieldTextarea(name){
     return{node,input}
 }
 function createSiteNode(){
-    return doe.div(
-        (async()=>{
-            let
-                data=await this._io.getData(),
-                title=      mdcTextdfield('Title'),
-                description=mdcTextdfield('Description'),
-                bannerTitle=mdcTextdfieldTextarea('Banner Title (HTML)'),
-                tagline=    mdcTextdfieldTextarea('Tagline (HTML)'),
-                footer=     mdcTextdfieldTextarea('Footer (HTML)'),
-                og=         mdcSwitch('Use open graph.'),
-                apply=      mdcRaisedButton('Apply')
-            title.input.value=data.title
-            description.input.value=data.description
-            bannerTitle.input.value=data.bannerTitle
-            tagline.input.value=data.tagline
-            footer.input.value=data.footer
-            og.input.checked=data.og
-            return doe.div(
-                {className:'shadow content'},
-                doe.p(title.node),
-                doe.p(description.node),
-                doe.p(bannerTitle.node),
-                doe.p(tagline.node),
-                doe.p(footer.node),
-                doe.p(og.node),
-                doe.p(
-                    doe(apply,{onclick:async()=>{
-                        data.title=title.input.value
-                        data.description=description.input.value
-                        data.bannerTitle=bannerTitle.input.value
-                        data.tagline=tagline.input.value
-                        data.footer=footer.input.value
-                        data.og=og.input.checked
-                        await this._io.setData(data)
-                        alert('Applied.')
-                    }})
-                ),
-            )
-        })(),
-    )
+    return doe.div(async n=>{
+        let
+            data=await this._io.getData(),
+            title=      mdcTextdfield('Title'),
+            description=mdcTextdfield('Description'),
+            bannerTitle=mdcTextdfieldTextarea('Banner Title (HTML)'),
+            tagline=    mdcTextdfieldTextarea('Tagline (HTML)'),
+            footer=     mdcTextdfieldTextarea('Footer (HTML)'),
+            og=         mdcSwitch('Use open graph.'),
+            apply=      mdcRaisedButton('Apply')
+        title.input.value=data.title
+        description.input.value=data.description
+        bannerTitle.input.value=data.bannerTitle
+        tagline.input.value=data.tagline
+        footer.input.value=data.footer
+        og.input.checked=data.og
+        doe(n,doe.div(
+            {className:'shadow content'},
+            doe.p(title.node),
+            doe.p(description.node),
+            doe.p(bannerTitle.node),
+            doe.p(tagline.node),
+            doe.p(footer.node),
+            doe.p(og.node),
+            doe.p(
+                doe(apply,{onclick:async()=>{
+                    data.title=title.input.value
+                    data.description=description.input.value
+                    data.bannerTitle=bannerTitle.input.value
+                    data.tagline=tagline.input.value
+                    data.footer=footer.input.value
+                    data.og=og.input.checked
+                    await this._io.setData(data)
+                    alert('Applied.')
+                }})
+            ),
+        ))
+    })
 }
 export default createSiteNode

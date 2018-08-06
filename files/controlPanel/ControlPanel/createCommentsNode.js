@@ -5,7 +5,7 @@ function createCommentsNode(){
         (async n=>{
             let data=await this._io.getComments()
             data.sort((a,b)=>b-a)
-            doe(n,data.map(async id=>{
+            doe(n,...data.map(async id=>{
                 let data=await this._io.getComment({
                     id,
                     columns:[
