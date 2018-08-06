@@ -26,7 +26,7 @@ function innerDiv(blog,u){
         logoutA(blog),
         doe.br(),
         doe.a('Profile',{href:`user/${u.username}`}),
-        u.isadmin&&[
+        ...(u.isadmin?[
             doe.br(),
             doe.a('Drive',{href:`home/${u.username}`}),
             doe.br(),
@@ -35,7 +35,7 @@ function innerDiv(blog,u){
             doe.a('Blog Control Panel',{href:'blog-control-panel'}),
             doe.br(),
             doe.a('New Page',{href:'newpage'}),
-        ],n=>{
+        ]:[]),n=>{
             n.style.margin='0 auto'
             n.style.backgroundColor='white'
             n.style.border='1px solid lightgray'
