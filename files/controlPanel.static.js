@@ -23,7 +23,7 @@ function mdcSwitch(name){
         ),
         ` ${name}`,
     );
-    return{node,input}
+    return {node,input}
 }
 function mdcTextdfield(name){
     let node,input;
@@ -39,7 +39,7 @@ function mdcTextdfield(name){
             n=>mdc.textfield.MDCTextfield.attachTo(n),
         )
     );
-    return{node,input}
+    return {node,input}
 }
 function mdcTextdfieldTextarea(name){
     let node,input;
@@ -54,7 +54,7 @@ function mdcTextdfieldTextarea(name){
             input=doe.textarea({className:'mdc-textfield__input',rows:8}),
         ),
     );
-    return{node,input}
+    return {node,input}
 }
 function createSiteNode(){
     return doe.div(async n=>{
@@ -199,7 +199,7 @@ var style = `
     margin-left:16px;
     cursor:default;
 }
-`
+`;
 
 function TreeUi(){
     this.array=[];

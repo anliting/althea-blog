@@ -1,5 +1,5 @@
 import { doe, html, order, AltheaObject, load, arg, browser, ImageUploader, dom, EventEmmiter as EventEmmiter$1, Site } from '/lib/core.static.js';
-import { EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/d76165db0cfc5b4c71786bf5a5f2e51503943294/src/simple.static.js';
+import { EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/09b9cd311f438c07fd1ac0ead044aed97158faf3/src/simple.static.js';
 
 async function loadPagemodules(blog){
     let res=await blog._site.send('blog_getPagemodules');
@@ -85,7 +85,7 @@ function tableofcontents_all(e){
 var corePlugins = [
     star_all,
     tableofcontents_all,
-]
+];
 
 function setup(){
     let
@@ -138,7 +138,7 @@ var commentForm = page=>{
         page.blog.status=page.blog.status;
     };
     return form
-}
+};
 
 var commentDiv = (page,comment)=>{
     let div=doe.div();
@@ -192,7 +192,7 @@ var commentDiv = (page,comment)=>{
         };
         return a
     }
-}
+};
 
 function PageView(page){
     EventEmmiter.call(this);
@@ -304,7 +304,7 @@ function div_facebooklike(page){
 
 var view = {get(){
     return new PageView(this)
-}}
+}};
 
 let
     str_show='<i class=material-icons>expand_more</i>',
@@ -359,7 +359,7 @@ function privacyTd(page){
             return doe.span('private')
         }
         function dateToString(d){
-            return`${d.getFullYear()}-${1+d.getMonth()}-${
+            return `${d.getFullYear()}-${1+d.getMonth()}-${
                 d.getDate()
             }`
         }
@@ -568,7 +568,7 @@ async function update_to_content(process,pages){
                     ])
                 )(),
             ]);
-            return{
+            return {
                 page:vals[0],
                 pageVersion:vals[1],
             }
@@ -674,7 +674,7 @@ async function checkSetupIndex(blog,div){
                 'public',
                 'title'
             ]);
-            return{
+            return {
                 page,
                 public:pageversion.public,
                 title:pageversion.title,
@@ -714,7 +714,7 @@ async function checkSetupIndex(blog,div){
         return doe.div(n=>{n.style.clear='both';})
     }
     async function getPagesByTags(){
-        return(await blog._site).send({
+        return (await blog._site).send({
             function:'blog_getPagesByTags',
             tags:blog.status.tagNames
         })
@@ -811,7 +811,7 @@ var event = {
         n.addEventListener('blur',l);
         n.addEventListener('mousedown',onmousedown);
     }
-}
+};
 
 function userA(blog,div,u){
     let a=doe.a(u.username,{href:'javascript:'});
@@ -1198,7 +1198,7 @@ body{
 .a_removepage{
     float:left;
 }
-`
+`;
 
 function createContents(blog){
     let div=doe.div({className:'contents'});
@@ -1274,12 +1274,12 @@ var createPath = site=>{
     function getHrefByTags(tags){
         return site.path.blog.tag(tags)
     }
-    return{
+    return {
         calcPathByStatus,
         getHrefByPage,
         getHrefByTags,
     }
-}
+};
 
 function Blog(site,status){
     EventEmmiter.call(this);
@@ -1313,7 +1313,7 @@ function Blog(site,status){
 Object.setPrototypeOf(Blog.prototype,EventEmmiter.prototype);
 Blog.prototype._anchor_addTag=anchor_addTag;
 Object.defineProperty(Blog.prototype,'_currentUser',{async get(){
-    return(await this._site).currentUser
+    return (await this._site).currentUser
 }});
 Blog.prototype._getNext=_getNext;
 Object.defineProperty(Blog.prototype,'_loadPagemodules',{
@@ -1398,7 +1398,7 @@ var editors = {
             this._nodes.div_preview.style.display='none';
         },
     },
-}
+};
 
 function setup_form(){
     let
@@ -1448,7 +1448,7 @@ async function submit(){
         title:this._nodes.input_title.value,
         content:this.textarea_content.value,
     });
-    return{id}
+    return {id}
 }
 
 var style$1 = `html{
@@ -1528,7 +1528,7 @@ span.tag{
 span.name{
     float:left;
 }
-`
+`;
 
 function createNodes(){
     this._nodes={};
@@ -1693,7 +1693,7 @@ function setup$1(editpage,isMobile){
     let main=editpage._nodes.main;
     editpage.textarea_content=editpage._nodes.textarea_content;
     onbeforeunload=()=>{
-        return''
+        return ''
     };
     main.classList.add(!isMobile?'nonMobile':'mobile');
     editpage.setup_form();
@@ -1921,7 +1921,7 @@ function Pagemodule(){
 Object.setPrototypeOf(Pagemodule.prototype,AltheaObject.prototype);
 Pagemodule.prototype._loader='blog_getPagemoduleInfo';
 Object.defineProperty(Pagemodule.prototype,'definitions',{get(){
-    return(async()=>{
+    return (async()=>{
         return this.definitionsSync=
             await this._io.getDefinitionByPagemodule()
     })()
@@ -2033,7 +2033,7 @@ var core = {
     Blog,
     Editpage,
     Site: Site$1,
-}
+};
 
 export default core;
 export { Blog, Editpage, Site$1 as Site };
