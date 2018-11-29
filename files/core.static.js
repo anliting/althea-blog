@@ -1,5 +1,5 @@
-import { doe, html, order, AltheaObject, load, arg, browser, ImageUploader, dom, EventEmmiter as EventEmmiter$1, Site } from '/lib/core.static.js';
 import { EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/09b9cd311f438c07fd1ac0ead044aed97158faf3/src/simple.static.js';
+import { doe, html, order, AltheaObject, load, arg, browser, ImageUploader, dom, EventEmmiter as EventEmmiter$1, Site } from '/lib/core.static.js';
 
 async function loadPagemodules(blog){
     let res=await blog._site.send('blog_getPagemodules');
@@ -246,6 +246,7 @@ function div_blog_content(pageView,page){
     let
         div=doe.div({
             id:'blog_content_'+page.id,
+            className:'content',
             innerHTML:
                 page.id_pagemodule?
                     page.blog.pagemodules[

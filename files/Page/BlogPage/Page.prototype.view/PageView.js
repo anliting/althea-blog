@@ -55,6 +55,7 @@ function div_blog_content(pageView,page){
     let
         div=doe.div({
             id:'blog_content_'+page.id,
+            className:'content',
             innerHTML:
                 page.id_pagemodule?
                     page.blog.pagemodules[
