@@ -24,6 +24,7 @@ function insertComment(cn,id_user_owner,id_page,content){
     `,{
         id_page,
         id_user_owner,
+        ispermited:1,
         content,
     })
 }
