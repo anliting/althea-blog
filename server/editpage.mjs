@@ -1,4 +1,4 @@
-import calcContent from './editpage/calcContent'
+import calcContent from './editpage/calcContent.mjs'
 async function get(env){
     let u=await env.database.getCurrentUserByRequest(env.request)
     if(!u.isadmin)

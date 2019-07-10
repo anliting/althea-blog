@@ -1,7 +1,9 @@
-import calcPageversionQueryByTags from './sql/calcPageversionQueryByTags'
+import calcPageversionQueryByTags from
+    './sql/calcPageversionQueryByTags.mjs'
 import whereQuery_pageversions_permitted from
-    './sql/whereQuery_pageversions_permitted'
-import whereQuery_pages_permitted from './sql/whereQuery_pages_permitted'
+    './sql/whereQuery_pageversions_permitted.mjs'
+import whereQuery_pages_permitted from
+    './sql/whereQuery_pages_permitted.mjs'
 function selectPages(currentUser,tags_selected,pages_loaded,pageId){
     return this.query0(`
         select

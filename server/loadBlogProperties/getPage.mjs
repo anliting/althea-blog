@@ -1,4 +1,4 @@
-import Page from './Page'
+import Page from './Page.mjs'
 export default async function(id){
     let[
         page,

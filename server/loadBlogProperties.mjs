@@ -1,47 +1,47 @@
 import deleteComment from
-    './loadBlogProperties/deleteComment'
+    './loadBlogProperties/deleteComment.mjs'
 import getComment from
-    './loadBlogProperties/getComment'
+    './loadBlogProperties/getComment.mjs'
 import getComments from
-    './loadBlogProperties/getComments'
+    './loadBlogProperties/getComments.mjs'
 import getDefinitionByPagemodule from
-    './loadBlogProperties/getDefinitionByPagemodule'
+    './loadBlogProperties/getDefinitionByPagemodule.mjs'
 import getTags from
-    './loadBlogProperties/getTags'
+    './loadBlogProperties/getTags.mjs'
 import getTagsWithCount from
-    './loadBlogProperties/getTagsWithCount'
+    './loadBlogProperties/getTagsWithCount.mjs'
 import getPage from
-    './loadBlogProperties/getPage'
+    './loadBlogProperties/getPage.mjs'
 import getPagemodules from
-    './loadBlogProperties/getPagemodules'
+    './loadBlogProperties/getPagemodules.mjs'
 import getPageversion from
-    './loadBlogProperties/getPageversion'
+    './loadBlogProperties/getPageversion.mjs'
 import getPagesByTags from
-    './loadBlogProperties/getPagesByTags'
+    './loadBlogProperties/getPagesByTags.mjs'
 import getLastversionOfPage from
-    './loadBlogProperties/getLastversionOfPage'
+    './loadBlogProperties/getLastversionOfPage.mjs'
 import newComment from
-    './loadBlogProperties/newComment'
+    './loadBlogProperties/newComment.mjs'
 import newPage from
-    './loadBlogProperties/newPage'
+    './loadBlogProperties/newPage.mjs'
 import newPageversion from
-    './loadBlogProperties/newPageversion'
+    './loadBlogProperties/newPageversion.mjs'
 import newPageversionToPage from
-    './loadBlogProperties/newPageversionToPage'
+    './loadBlogProperties/newPageversionToPage.mjs'
 import selectPagemoduleDefinitions from
-    './loadBlogProperties/selectPagemoduleDefinitions'
+    './loadBlogProperties/selectPagemoduleDefinitions.mjs'
 import selectPagemoduleInfo from
-    './loadBlogProperties/selectPagemoduleInfo'
+    './loadBlogProperties/selectPagemoduleInfo.mjs'
 import selectPagemodules from
-    './loadBlogProperties/selectPagemodules'
+    './loadBlogProperties/selectPagemodules.mjs'
 import selectPages from
-    './loadBlogProperties/selectPages'
+    './loadBlogProperties/selectPages.mjs'
 import selectTags from
-    './loadBlogProperties/selectTags'
+    './loadBlogProperties/selectTags.mjs'
 import setPagenamesForPageById from
-    './loadBlogProperties/setPagenamesForPageById'
+    './loadBlogProperties/setPagenamesForPageById.mjs'
 import removePage from
-    './loadBlogProperties/removePage'
+    './loadBlogProperties/removePage.mjs'
 export default db=>Object.assign(db,{
     deleteComment,
     getComment,

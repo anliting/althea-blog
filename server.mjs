@@ -1,10 +1,10 @@
-import edges from                   './server/edges'
-import queryFunctions from          './server/queryFunctions'
-import loadBlogProperties from      './server/loadBlogProperties'
-import blog from                    './server/blog'
-import editpage from                './server/editpage'
-import controlPanel from            './server/controlPanel'
-import checkIfIsPageRequest from    './server/checkIfIsPageRequest'
+import edges from                   './server/edges.mjs'
+import queryFunctions from          './server/queryFunctions.mjs'
+import loadBlogProperties from      './server/loadBlogProperties.mjs'
+import blog from                    './server/blog.mjs'
+import editpage from                './server/editpage.mjs'
+import controlPanel from            './server/controlPanel.mjs'
+import checkIfIsPageRequest from    './server/checkIfIsPageRequest.mjs'
 export default async althea=>{
     await althea.updateDatabase(edges)
     let db=Object.create(althea.database)

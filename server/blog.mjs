@@ -1,4 +1,4 @@
-import calcContent from './blog/calcContent'
+import calcContent from './blog/calcContent.mjs'
 export default (althea,db,env)=>{
     if(!env.althea.allowOrigin(env.envVars,env.request.headers.origin))
         return 403

@@ -1,4 +1,4 @@
-import Comment from './Comment'
+import Comment from './Comment.mjs'
 export default async function(id){
     let row=await this.query0(`
         select

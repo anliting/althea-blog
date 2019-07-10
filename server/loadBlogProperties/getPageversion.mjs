@@ -1,4 +1,4 @@
-import Pageversion from './Pageversion'
+import Pageversion from './Pageversion.mjs'
 export default async function(id){
     let[
         res,

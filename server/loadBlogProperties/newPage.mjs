@@ -1,4 +1,4 @@
-import setLastVersionOfPage from './newPage/setLastVersionOfPage'
+import setLastVersionOfPage from './newPage/setLastVersionOfPage.mjs'
 function insertPage(db,ispublic,id_user_author){
     return db.query0(`
         insert into blog_page
