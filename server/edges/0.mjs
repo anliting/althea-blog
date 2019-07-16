@@ -9,11 +9,14 @@ async function pagemodule(db){
             primary key (id)
         )
     `)
-    db.query(`
-        insert into pagemodule set
-            priority=0,
-            name='Default'
-    `)
+    await db.query(`
+        insert into pagemodule set ?
+    `,{
+        priority:0,
+        name:'Default',
+        header:'',
+        footer:'',
+    })
 }
 export default async db=>{
     await Promise.all([
