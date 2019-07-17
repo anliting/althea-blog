@@ -43,7 +43,6 @@ ${data.og?og(env,data,title,url_request):''}
 <link rel=icon href=images/icon.png>
 <link rel=modulepreload href='/lib/core.static.js'>
 <link rel=modulepreload href='/plugins/blog/core.static.js'>
-<link rel=modulepreload href='https://gitcdn.link/cdn/anliting/simple.js/09b9cd311f438c07fd1ac0ead044aed97158faf3/src/simple.static.js'>
 <body>
 ${env.althea.loadModule(
     //'plugins/blog/blog.js',
