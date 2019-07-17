@@ -1,7 +1,6 @@
-import{EventEmmiter}from 'https://gitcdn.link/cdn/anliting/simple.js/09b9cd311f438c07fd1ac0ead044aed97158faf3/src/simple.static.js'
 import commentForm from './PageView/commentForm.js'
 import commentDiv from './PageView/commentDiv.js'
-import {doe}from '/lib/core.static.js'
+import{doe,EventEmmiter}from'/lib/core.static.js'
 function PageView(page){
     EventEmmiter.call(this)
     this.domElement=createDiv(this,page)

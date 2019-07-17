@@ -1,5 +1,5 @@
-import { Snapshot, hacker } from '/lib/core.static.js';
-import { Blog, Site } from '/plugins/blog/core.static.js';
+import { hacker, Snapshot } from '/lib/core.static.js';
+import { Site, Blog } from '/plugins/blog/core.static.js';
 
 function setupAutoScroll(blog){
     let

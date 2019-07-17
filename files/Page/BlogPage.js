@@ -1,8 +1,7 @@
-import{EventEmmiter}from 'https://gitcdn.link/cdn/anliting/simple.js/09b9cd311f438c07fd1ac0ead044aed97158faf3/src/simple.static.js'
 import setup from './BlogPage/setup.js'
 import view from './BlogPage/Page.prototype.view.js'
 import createPrivacyTable from './BlogPage/Page.prototype.createPrivacyTable.js'
-import {doe}from '/lib/core.static.js'
+import{doe,EventEmmiter}from '/lib/core.static.js'
 function BlogPage(blog,id,ispublic,title,id_pagemodule){
     EventEmmiter.call(this)
     this.blog=blog

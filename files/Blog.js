@@ -1,11 +1,10 @@
-import{EventEmmiter}from 'https://gitcdn.link/cdn/anliting/simple.js/09b9cd311f438c07fd1ac0ead044aed97158faf3/src/simple.static.js'
-import loadPagemodules from     './Blog/loadPagemodules.js'
-import corePlugins from         './corePlugins.js'
-import _getNext from            './Blog/prototype._getNext.js'
-import _anchor_addTag from      './Blog/prototype._anchor_addTag.js'
-import BlogView from            './Blog/BlogView.js'
-import createPath from          './Blog/createPath.js'
-import{doe,load}from            '/lib/core.static.js'
+import loadPagemodules from         './Blog/loadPagemodules.js'
+import corePlugins from             './corePlugins.js'
+import _getNext from                './Blog/prototype._getNext.js'
+import _anchor_addTag from          './Blog/prototype._anchor_addTag.js'
+import BlogView from                './Blog/BlogView.js'
+import createPath from              './Blog/createPath.js'
+import{doe,load,EventEmmiter}from   '/lib/core.static.js'
 function Blog(site,status){
     EventEmmiter.call(this)
     this._site=site

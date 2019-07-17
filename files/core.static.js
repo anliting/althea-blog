@@ -1,5 +1,4 @@
-import { EventEmmiter } from 'https://gitcdn.link/cdn/anliting/simple.js/09b9cd311f438c07fd1ac0ead044aed97158faf3/src/simple.static.js';
-import { doe, html, order, AltheaObject, load, arg, browser, ImageUploader, dom, EventEmmiter as EventEmmiter$1, Site } from '/lib/core.static.js';
+import { doe, html, EventEmmiter, order, AltheaObject, load as load$1, arg, browser, ImageUploader, dom, Site as Site$1 } from '/lib/core.static.js';
 
 async function loadPagemodules(blog){
     let res=await blog._site.send('blog_getPagemodules');
@@ -1308,7 +1307,7 @@ function Blog(site,status){
                 this.addPagePlugin(p)
             );
         })(),
-        load.materialIcon(),
+        load$1.materialIcon(),
     ]);
 }
 Object.setPrototypeOf(Blog.prototype,EventEmmiter.prototype);
@@ -1837,14 +1836,14 @@ async function initialize(editpage){
     update(editpage,data);
 }
 
-function load$1(){
+function load(){
     this.load=(async()=>{
         await Promise.all([
             (async()=>{
-                let module=await load.module();
+                let module=await load$1.module();
                 await module.scriptByPath('https://gitcdn.link/cdn/anliting/htmleditor/9f904627c0ab99c4527ceb3c54a61c5704e6ddec/htmleditor.js');
             })(),
-            load.materialIcon(),
+            load$1.materialIcon(),
         ]);
         this.pagemodules=[];
         this.setOfTags=new SetForm(
@@ -1893,16 +1892,16 @@ function load$1(){
 }
 
 function Editpage(site,environment){
-    EventEmmiter$1.call(this);
+    EventEmmiter.call(this);
     this.blog=Blog;
     this.id=environment.id_page||0;
     this._site=site;
     this._datalistId=Math.random().toString(36).substring(2);
     createNodes.call(this);
     this.node=this._nodes.main;
-    load$1.call(this);
+    load.call(this);
 }
-Object.setPrototypeOf(Editpage.prototype,EventEmmiter$1.prototype);
+Object.setPrototypeOf(Editpage.prototype,EventEmmiter.prototype);
 Object.defineProperty(Editpage.prototype,'currentUser',{get(){
     return this._site.currentUser
 }});
@@ -1984,24 +1983,24 @@ function Comment(){
 Object.setPrototypeOf(Comment.prototype,AltheaObject.prototype);
 Comment.prototype._loader='blog_getComment';
 
-function Site$1(){
-    Site.call(this);
+function Site(){
+    Site$1.call(this);
     this._pagemodules={};
     this._pageversions={};
 }
-Object.setPrototypeOf(Site$1.prototype,Site.prototype);
-Site$1.prototype.getComment=async function(id){
+Object.setPrototypeOf(Site.prototype,Site$1.prototype);
+Site.prototype.getComment=async function(id){
     return new Comment({
         send:this.send.bind(this),
     },id)
 };
-Site$1.prototype.getPage=async function(id){
+Site.prototype.getPage=async function(id){
     return new Page({
         send:this.send.bind(this),
         getPageversion:this.getPageversion.bind(this),
     },id)
 };
-Site$1.prototype.getPagemodule=async function(id){
+Site.prototype.getPagemodule=async function(id){
     return this._pagemodules[id]||(this._pagemodules[id]=
         new Pagemodule({
             send:this.send.bind(this),
@@ -2013,14 +2012,14 @@ Site$1.prototype.getPagemodule=async function(id){
         },id)
     )
 };
-Site$1.prototype.getPageversion=async function(id){
+Site.prototype.getPageversion=async function(id){
     return this._pageversions[id]||(this._pageversions[id]=
         new Pageversion({
             send:this.send.bind(this),
         },id)
     )
 };
-Site$1.prototype.path=Object.setPrototypeOf({
+Site.prototype.path=Object.setPrototypeOf({
     blog:{
         page:p=>p,
         root:'.',
@@ -2028,13 +2027,13 @@ Site$1.prototype.path=Object.setPrototypeOf({
     },
     editpage:p=>`${p}/edit`,
     newpage:'newpage',
-},Site.prototype.path);
+},Site$1.prototype.path);
 
 var core = {
     Blog,
     Editpage,
-    Site: Site$1,
+    Site,
 };
 
 export default core;
-export { Blog, Editpage, Site$1 as Site };
+export { Blog, Editpage, Site };
