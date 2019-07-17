@@ -11,8 +11,14 @@ function load(){
     this.load=(async()=>{
         await Promise.all([
             (async()=>{
-                let module=await coreLoad.module()
-                await module.scriptByPath('https://gitcdn.link/cdn/anliting/htmleditor/9f904627c0ab99c4527ceb3c54a61c5704e6ddec/htmleditor.js')
+                doe.body(
+                    doe.script({
+                        src:'https://gitcdn.link/cdn/anliting/htmleditor/9f904627c0ab99c4527ceb3c54a61c5704e6ddec/htmleditor.js',
+                        onload(){
+                            doe.body(1,this)
+                        }
+                    })
+                )
             })(),
             coreLoad.materialIcon(),
         ])

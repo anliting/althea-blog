@@ -258,7 +258,7 @@ function div_blog_content(pageView,page){
     div.style.display=pageView.hide?'none':'block';
     for(let s of div.getElementsByTagName('script'))
         if(s.type=='')
-            eval(`let module=anlitingModule;${s.innerHTML}`);
+            eval(s.innerHTML);
     page.blog.addPageDiv(div);
     return div
 }
@@ -1840,8 +1840,14 @@ function load(){
     this.load=(async()=>{
         await Promise.all([
             (async()=>{
-                let module=await load$1.module();
-                await module.scriptByPath('https://gitcdn.link/cdn/anliting/htmleditor/9f904627c0ab99c4527ceb3c54a61c5704e6ddec/htmleditor.js');
+                doe.body(
+                    doe.script({
+                        src:'https://gitcdn.link/cdn/anliting/htmleditor/9f904627c0ab99c4527ceb3c54a61c5704e6ddec/htmleditor.js',
+                        onload(){
+                            doe.body(1,this);
+                        }
+                    })
+                );
             })(),
             load$1.materialIcon(),
         ]);
