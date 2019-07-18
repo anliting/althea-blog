@@ -3,18 +3,15 @@ import{Blog,Site}from'/plugins/blog/core.static.js'
 import setupAutoScroll from './blog/setupAutoScroll.js'
 let
     site=new Site,
-    blog=new Blog(site,arg.status),
-    main=createMainThread()
+    blog=new Blog(site,arg.status)
+createMainThread()
 if(
     localStorage.althea&&
     0<=String(localStorage.althea).split(' ').indexOf('h')
 )
     setupApi()
-function createMainThread(){
-    createThisThread()
-    return createBlogThread()
-}
-async function createThisThread(){
+async function createMainThread(){
+    let view=blog.view
     history.replaceState(
         JSON.stringify(blog.status),
         ''
@@ -31,18 +28,15 @@ async function createThisThread(){
             return
         blog.status=JSON.parse(e.state)
     }
+    onkeydown=e=>
+        view.keydown(e)
     blog.on('location',p=>location=p)
-}
-async function createBlogThread(){
-    let view=blog.view
     await blog.load
     setupGetNextOnScrollEvent()
     setupAutoScroll(blog)
     doe.head(view.style)
     doe.body(view.div)
-    addEventListener('keydown',e=>
-        view.keydown(e)
-    )
+    view.div.focus()
 }
 async function setupApi(){
     hacker.site=site

@@ -1211,8 +1211,11 @@ function createFooter(view){
 }
 function BlogView(blog){
     this.blog=blog;
-    this.div=doe.div();
-    this.div.className='blog';
+    this.div=doe.div({className:'blog',tabIndex:-1,onkeydown:e=>{
+        e.preventDefault();
+        e.stopPropagation();
+        this.keydown(e);
+    }});
     install_datalist_tags_suggested(this);
     {
         let s=doe.style();
