@@ -3,7 +3,7 @@ import{Blog,Site}from'/plugins/blog/core.static.js'
 import setupAutoScroll from './blog/setupAutoScroll.js'
 let
     site=new Site,
-    blog=new Blog(site,status),
+    blog=new Blog(site,arg.status),
     main=createMainThread()
 if(
     localStorage.althea&&
@@ -20,10 +20,7 @@ async function createThisThread(){
         JSON.stringify(blog.status),
         ''
     )
-    let push=1
     blog.on('statusChange',()=>{
-        if(!push)
-            return
         history.pushState(
             JSON.stringify(blog.status),
             '',
@@ -33,9 +30,7 @@ async function createThisThread(){
     addEventListener('popstate',e=>{
         if(!e.state)
             return
-        push=0
         blog.status=JSON.parse(e.state)
-        push=1
     })
     blog.on('location',p=>location=p)
 }

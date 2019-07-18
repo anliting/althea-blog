@@ -134,7 +134,7 @@ var commentForm = page=>{
             page:page.id,
             content:page.textarea_comment__form_comment.value,
         });
-        page.blog.status=page.blog.status;
+        page.blog._setStatusEmit(page.blog.status);
     };
     return form
 };
@@ -187,7 +187,7 @@ var commentDiv = (page,comment)=>{
                 function:'blog_deleteComment',
                 id
             });
-            page.blog.status=page.blog.status;
+            page.blog._setStatusEmit(page.blog.status);
         };
         return a
     }
@@ -331,7 +331,9 @@ function privacyTd(page){
             (async()=>{
                 let site=await page.blog._site;
                 let u=await site.getUser(page.authorId);
-                doe(span,await u.a);
+                let a=await u.a;
+                doe(span,a);
+                return a
             })(),
             document.createTextNode(' '),
             dateSpan(),
@@ -484,7 +486,7 @@ BlogPage.prototype.h1_title=function(){
             )
                 return
             e.preventDefault();
-            page.blog.status={pageId:page.id};
+            page.blog._setStatusEmit({pageId:page.id});
         };
         return a
     }
@@ -608,7 +610,7 @@ async function _getNext(){
             status:this._status,
             continue:1
         };
-    this.once('statusChange',()=>
+    this.once('_statusChange',()=>
         process.continue=0
     );
     let data=await this._site.send({
@@ -641,9 +643,9 @@ function anchor_addTag(tag){
             return
         e.preventDefault();
         e.stopPropagation();
-        this.status={
+        this._setStatusEmit({
             tagNames:tagsToSelect.slice()
-        };
+        });
     };
     return a
 }
@@ -692,9 +694,9 @@ async function checkSetupIndex(blog,div){
                     return
                 e.preventDefault();
                 e.stopPropagation();
-                blog.status={
+                blog._setStatusEmit({
                     pageId:p.page.id
-                };
+                });
             });
             doe(ul,doe(li,a));
         }
@@ -738,7 +740,7 @@ function createInput(blog,view){
                 tagsToSelect
             ),'_blank').focus();
         else
-            blog.status={tagNames:tagsToSelect};
+            blog._setStatusEmit({tagNames:tagsToSelect});
     });
     input.addEventListener('focus',()=>{
         view.setupSuggestedTags();
@@ -773,9 +775,9 @@ function setupSelectedTagsDiv(blog,div){
             anchor.addEventListener('click',e=>{
                 e.preventDefault();
                 e.stopPropagation();
-                blog.status=tagsToSelect.length==0?{}:{
+                blog._setStatusEmit(tagsToSelect.length==0?{}:{
                     tagNames:tagsToSelect
-                };
+                });
             });
             return anchor
         }
@@ -951,7 +953,7 @@ function createHeader(blog,view){
                     return
                 e.preventDefault();
                 e.stopPropagation();
-                blog.status={};
+                blog._setStatusEmit({});
             }})
         }
     }
@@ -972,7 +974,7 @@ function createHeader(blog,view){
         function createSelectedTagsDiv(){
             return doe.div({className:'selectedTags'},n=>{
                 setupSelectedTagsDiv(blog,n);
-                blog.on('statusChange',()=>{
+                blog.on('_statusChange',()=>{
                     n.innerHTML='';
                     setupSelectedTagsDiv(blog,n);
                 });
@@ -981,7 +983,7 @@ function createHeader(blog,view){
     }
     function createTags(view){
         return doe.div({className:'tags'},n=>{
-            blog.on('statusChange',()=>{
+            blog.on('_statusChange',()=>{
                 n.innerHTML='';
                 if(document.activeElement==view.input)
                     view.setupSuggestedTags();
@@ -992,7 +994,7 @@ function createHeader(blog,view){
     function createIndex(){
         return doe.div({className:'index'},n=>{
             checkSetupIndex(blog,n);
-            blog.on('statusChange',()=>{
+            blog.on('_statusChange',()=>{
                 n.innerHTML='';
                 checkSetupIndex(blog,n);
             });
@@ -1035,7 +1037,7 @@ function keydown(e){
                     blog.emit('location',blog.pages[x.id].getHref()+'/edit');
             })();
         }else if(e.keyCode==72){ // h
-            blog.status={};
+            blog._setStatusEmit({});
         }else if(e.keyCode==76){ // l
 (async()=>{
                 let[
@@ -1054,9 +1056,9 @@ function keydown(e){
             let x=currentPage();
             if(!x)
                 return
-            blog.status={
+            blog._setStatusEmit({
                 pageId:x.id
-            };
+            });
         }else if(e.keyCode==84){ // t
             view.input.focus();
         }else{
@@ -1197,7 +1199,7 @@ function createContents(blog){
     blog.on('pageLoad',page=>{
         doe(div,page.view.domElement);
     });
-    blog.on('statusChange',()=>{
+    blog.on('_statusChange',()=>{
         div.innerHTML='';
     });
     return div
@@ -1285,7 +1287,7 @@ function Blog(site,status){
     this.pages_loaded=[];
     // refresh on userChange
     site.on('userChange',()=>{
-        this.status=this.status;
+        this._setStatusEmit(this.status);
     });
     // start page plugin
     this._pageDivs=[];
@@ -1319,6 +1321,10 @@ Object.defineProperty(Blog.prototype,'_loadPagemodules',{
         return this._loadPagemodules
     }
 });
+Blog.prototype._setStatusEmit=function(s){
+    this.status=s;
+    this.emit('statusChange');
+};
 Blog.prototype._style=function(n){
     this._styles.push(n);
     this.emit('_style');
@@ -1337,7 +1343,7 @@ Object.defineProperty(Blog.prototype,'status',{get(){
     this._status=val;
     this.pages={};
     this.pages_loaded=[];
-    this.emit('statusChange');
+    this.emit('_statusChange');
     this._getNext();
 }});
 

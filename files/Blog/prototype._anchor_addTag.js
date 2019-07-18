@@ -17,9 +17,9 @@ function anchor_addTag(tag){
             return
         e.preventDefault()
         e.stopPropagation()
-        this.status={
+        this._setStatusEmit({
             tagNames:tagsToSelect.slice()
-        }
+        })
     }
     return a
 }

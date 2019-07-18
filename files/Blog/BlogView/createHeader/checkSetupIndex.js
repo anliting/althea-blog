@@ -43,9 +43,9 @@ async function checkSetupIndex(blog,div){
                     return
                 e.preventDefault()
                 e.stopPropagation()
-                blog.status={
+                blog._setStatusEmit({
                     pageId:p.page.id
-                }
+                })
             })
             doe(ul,doe(li,a))
         }

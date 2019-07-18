@@ -28,7 +28,7 @@ function createHeader(blog,view){
                     return
                 e.preventDefault()
                 e.stopPropagation()
-                blog.status={}
+                blog._setStatusEmit({})
             }})
         }
     }
@@ -49,7 +49,7 @@ function createHeader(blog,view){
         function createSelectedTagsDiv(){
             return doe.div({className:'selectedTags'},n=>{
                 setupSelectedTagsDiv(blog,n)
-                blog.on('statusChange',()=>{
+                blog.on('_statusChange',()=>{
                     n.innerHTML=''
                     setupSelectedTagsDiv(blog,n)
                 })
@@ -58,7 +58,7 @@ function createHeader(blog,view){
     }
     function createTags(view){
         return doe.div({className:'tags'},n=>{
-            blog.on('statusChange',()=>{
+            blog.on('_statusChange',()=>{
                 n.innerHTML=''
                 if(document.activeElement==view.input)
                     view.setupSuggestedTags()
@@ -69,7 +69,7 @@ function createHeader(blog,view){
     function createIndex(){
         return doe.div({className:'index'},n=>{
             checkSetupIndex(blog,n)
-            blog.on('statusChange',()=>{
+            blog.on('_statusChange',()=>{
                 n.innerHTML=''
                 checkSetupIndex(blog,n)
             })

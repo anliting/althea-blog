@@ -15,7 +15,7 @@ function Blog(site,status){
     this.pages_loaded=[]
     // refresh on userChange
     site.on('userChange',()=>{
-        this.status=this.status
+        this._setStatusEmit(this.status)
     })
     // start page plugin
     this._pageDivs=[]
@@ -49,6 +49,10 @@ Object.defineProperty(Blog.prototype,'_loadPagemodules',{
         return this._loadPagemodules
     }
 })
+Blog.prototype._setStatusEmit=function(s){
+    this.status=s
+    this.emit('statusChange')
+}
 Blog.prototype._style=function(n){
     this._styles.push(n)
     this.emit('_style')
@@ -67,7 +71,7 @@ Object.defineProperty(Blog.prototype,'status',{get(){
     this._status=val
     this.pages={}
     this.pages_loaded=[]
-    this.emit('statusChange')
+    this.emit('_statusChange')
     this._getNext()
 }})
 export default Blog

@@ -1,4 +1,4 @@
-import {doe}from '/lib/core.static.js'
+import{doe}from'/lib/core.static.js'
 export default page=>{
     let form=doe.form(
         page.textarea_comment__form_comment,
@@ -15,7 +15,7 @@ export default page=>{
             page:page.id,
             content:page.textarea_comment__form_comment.value,
         })
-        page.blog.status=page.blog.status
+        page.blog._setStatusEmit(page.blog.status)
     }
     return form
 }

@@ -7,7 +7,9 @@ function privacyTd(page){
             (async()=>{
                 let site=await page.blog._site
                 let u=await site.getUser(page.authorId)
-                doe(span,await u.a)
+                let a=await u.a
+                doe(span,a)
+                return a
             })(),
             document.createTextNode(' '),
             dateSpan(),

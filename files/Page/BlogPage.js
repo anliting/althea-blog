@@ -37,7 +37,7 @@ BlogPage.prototype.h1_title=function(){
             )
                 return
             e.preventDefault()
-            page.blog.status={pageId:page.id}
+            page.blog._setStatusEmit({pageId:page.id})
         }
         return a
     }

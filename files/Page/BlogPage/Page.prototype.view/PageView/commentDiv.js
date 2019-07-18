@@ -47,7 +47,7 @@ export default(page,comment)=>{
                 function:'blog_deleteComment',
                 id
             })
-            page.blog.status=page.blog.status
+            page.blog._setStatusEmit(page.blog.status)
         }
         return a
     }

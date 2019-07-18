@@ -33,7 +33,7 @@ function keydown(e){
                     blog.emit('location',blog.pages[x.id].getHref()+'/edit')
             })()
         }else if(e.keyCode==72){ // h
-            blog.status={}
+            blog._setStatusEmit({})
         }else if(e.keyCode==76){ // l
             ;(async()=>{
                 let[
@@ -52,9 +52,9 @@ function keydown(e){
             let x=currentPage()
             if(!x)
                 return
-            blog.status={
+            blog._setStatusEmit({
                 pageId:x.id
-            }
+            })
         }else if(e.keyCode==84){ // t
             view.input.focus()
         }else{

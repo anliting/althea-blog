@@ -19,7 +19,7 @@ function createInput(blog,view){
                 tagsToSelect
             ),'_blank').focus()
         else
-            blog.status={tagNames:tagsToSelect}
+            blog._setStatusEmit({tagNames:tagsToSelect})
     })
     input.addEventListener('focus',()=>{
         view.setupSuggestedTags()

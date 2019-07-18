@@ -7,7 +7,7 @@ async function _getNext(){
             status:this._status,
             continue:1
         }
-    this.once('statusChange',()=>
+    this.once('_statusChange',()=>
         process.continue=0
     )
     let data=await this._site.send({

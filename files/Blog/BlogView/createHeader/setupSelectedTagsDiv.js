@@ -23,9 +23,9 @@ function setupSelectedTagsDiv(blog,div){
             anchor.addEventListener('click',e=>{
                 e.preventDefault()
                 e.stopPropagation()
-                blog.status=tagsToSelect.length==0?{}:{
+                blog._setStatusEmit(tagsToSelect.length==0?{}:{
                     tagNames:tagsToSelect
-                }
+                })
             })
             return anchor
         }

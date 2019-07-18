@@ -10,7 +10,7 @@ function createContents(blog){
     blog.on('pageLoad',page=>{
         doe(div,page.view.domElement)
     })
-    blog.on('statusChange',()=>{
+    blog.on('_statusChange',()=>{
         div.innerHTML=''
     })
     return div
