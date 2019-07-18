@@ -118,5 +118,6 @@ function setupAutoScroll(blog){
         clearTimeout(timeoutIdAutoScroll)
         isAutoScrollStarted=false
     }
+    return o
 }
 export default setupAutoScroll
