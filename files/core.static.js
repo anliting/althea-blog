@@ -51,10 +51,10 @@ function tableofcontents(e){
             v=v.parentNode;
         if(s[s.length-1]<r){
             s.push(r);
-            v.appendChild(doe.ul());
+            doe(v,doe.ul());
             v=v.lastChild;
         }
-        v.appendChild(li(p));
+        doe(v,li(p));
         v=v.lastChild;
     }
     function li(p){
@@ -174,7 +174,7 @@ var commentDiv = (page,comment)=>{
                 html.encodeText(comment.content)
             }</div>`;
         if(cu.isadmin)
-            div.appendChild(deleteA(comment.id));
+            doe(div,deleteA(comment.id));
     })();
     return div
     function deleteA(id){
@@ -216,14 +216,14 @@ function createDiv(pageView,page){
             pageView.hide=1;
         }
     });
-    div.appendChild(page.h1_title());
-    div.appendChild(page.div_author=    page.createAuthorDiv());
-    div.appendChild(page.div_date=      page.createDateDiv());
-    div.appendChild(
-        page.table_privacy=page.createPrivacyTable(pageView)
+    doe(div,
+        page.h1_title(),
+        page.div_author=    page.createAuthorDiv(),
+        page.div_date=      page.createDateDiv(),
+        page.table_privacy= page.createPrivacyTable(pageView),
+        contentDiv,
+        div_facebooklike(page),
     );
-    div.appendChild(contentDiv);
-    div.appendChild(div_facebooklike(page));
     page.blog.isFacebookLoaded&&FB.XFBML.parse(div)
     ;(async()=>{
         let site=await page.blog._site;
@@ -232,12 +232,12 @@ function createDiv(pageView,page){
         let comments=p.comments;
         await Promise.all(
             comments.map(comment=>
-                div.appendChild(
+                doe(div,
                     commentDiv(page,site.getComment(comment))
                 )
             )
         );
-        div.appendChild(commentForm(page));
+        doe(div,commentForm(page));
     })();
     return div
 }
@@ -331,7 +331,7 @@ function privacyTd(page){
             (async()=>{
                 let site=await page.blog._site;
                 let u=await site.getUser(page.authorId);
-                return span.appendChild(await u.a)
+                doe(span,await u.a);
             })(),
             document.createTextNode(' '),
             dateSpan(),
@@ -394,10 +394,8 @@ function createPrivacyTable(pageView){
         ;(async()=>{
             let u=await page.blog._currentUser;
             await u.load('isadmin');
-            if(u.isadmin){
-                td.appendChild(a_editpage());
-                td.appendChild(a_removepage());
-            }
+            if(u.isadmin)
+                doe(td,a_editpage(),a_removepage());
         })();
         return td
         function a_editpage(){
@@ -435,20 +433,14 @@ function createPrivacyTable(pageView){
             isFirst;
         if(page.tags.length){
             page.tags.sort();
-            td.appendChild(
-                document.createTextNode('Tagged: ')
-            );
+            doe(td,'Tagged: ');
             isFirst=true;
             page.tags.map(e=>{
                 if(isFirst)
                     isFirst=false;
                 else
-                    td.appendChild(
-                        document.createTextNode(', ')
-                    );
-                td.appendChild(
-                    page.blog._anchor_addTag({name:e})
-                );
+                    doe(td,', ');
+                doe(td,page.blog._anchor_addTag({name:e}));
             });
         }
         return td
@@ -704,12 +696,11 @@ async function checkSetupIndex(blog,div){
                     pageId:p.page.id
                 };
             });
-            li.appendChild(a);
-            ul.appendChild(li);
+            doe(ul,doe(li,a));
         }
-        div.appendChild(ul);
+        doe(div,ul);
     });
-    div.appendChild(createClearBothDiv());
+    doe(div,createClearBothDiv());
     function createClearBothDiv(){
         return doe.div(n=>{n.style.clear='both';})
     }
@@ -762,7 +753,7 @@ function setupSelectedTagsDiv(blog,div){
     if(!('tagNames' in blog.status))
         return
     blog.status.tagNames.map((t,i)=>{
-        div.appendChild(span());
+        doe(div,span());
         function span(){
             let span=doe.span(
                 t+' ',
@@ -873,10 +864,10 @@ function createNavigationBar(view){
     perUser(site,async u=>{
         await u.load(['isAnonymous','username','isadmin']);
         let a=u.isAnonymous?loginA():userA(blog,div,u);
-        div.appendChild(a);
+        doe(div,a);
         {
             let f=()=>{
-                div.removeChild(a);
+                doe(div,1,a);
                 site.off('userChange',f);
             };
             site.on('userChange',f);
@@ -911,7 +902,7 @@ function createNavigationBar(view){
             event.onceClickOrBlurButNotMouseDown(n,()=>
                 div.removeChild(n)
             );
-            div.appendChild(n);
+            doe(div,n);
             n.focus();
         };
         return a
@@ -1138,19 +1129,20 @@ function use_list_tags__count_suggested(blogView,list,div){
         a.name.localeCompare(b.name)
     );
     blogView.datalist_input_searchForTag.innerHTML='';
-    list.map(e=>{
-        let o=doe.option({value:e.name});
-        blogView.datalist_input_searchForTag.appendChild(o);
-    });
+    list.map(e=>
+        doe(blogView.datalist_input_searchForTag,
+            doe.option({value:e.name})
+        )
+    );
     let tagsToSelect=(blogView.blog.status.tagNames||[]).slice();
     list.map((t,i)=>{
         if(i%12==0)
-            div.appendChild(ul());
+            doe(div,ul());
         if((blogView.blog.status.tagNames||[]).indexOf(t.name)!==-1)
             return
-        div.lastChild.appendChild(li(t));
+        doe(div.lastChild,li(t));
     });
-    div.appendChild(div_clearboth());
+    doe(div,div_clearboth());
     function ul(){
         return doe.ul(ul=>{ul.style.float='left';})
     }
@@ -1203,7 +1195,7 @@ body{
 function createContents(blog){
     let div=doe.div({className:'contents'});
     blog.on('pageLoad',page=>{
-        div.appendChild(page.view.domElement);
+        doe(div,page.view.domElement);
     });
     blog.on('statusChange',()=>{
         div.innerHTML='';
@@ -1224,16 +1216,18 @@ function BlogView(blog){
         let s=doe.style();
         let u=()=>
             this.blog._styles.map(n=>
-                s.appendChild(n)
+                doe(s,n)
             );
         u();
         this.blog.on('_style',u);
-        this.style=Promise.resolve(s);
+        this.style=s;
         blog._style(document.createTextNode(style));
     }
-    this.div.appendChild(createHeader(blog,this));
-    this.div.appendChild(createContents(blog));
-    this.div.appendChild(createFooter(this));
+    doe(this.div,
+        createHeader(blog,this),
+        createContents(blog),
+        createFooter(this),
+    );
 }
 BlogView.prototype.hideSuggestedTags=function(){
     this.tagsDiv.style.display='none';
@@ -1641,7 +1635,7 @@ SetForm.prototype.addTag=function(name){
         tag=new Tag(name);
     setForm.tags.push(tag);
     setForm.tagIdInTagsByName[name]=setForm.tags.length-1;
-    setForm.span_tags.appendChild(tag.body);
+    doe(setForm.span_tags,tag.body);
     function Tag(name){
         let
             span_name,
@@ -1724,9 +1718,7 @@ function update(editpage,data){
         let option=doe.option(e.name,{value:e.id});
         if(editpage.id&&e.id==data.lastversion_page.id_pagemodule)
             option.selected='selected';
-        editpage._nodes.select_id_pagemodule.appendChild(
-            option
-        );
+        doe(editpage._nodes.select_id_pagemodule,option);
     });
     editpage.id&&data.lastversion_page.tags.map(e=>{
         editpage.setOfTags.addTag(e);
@@ -1735,10 +1727,7 @@ function update(editpage,data){
         editpage.setOfNames.addTag(e);
     });
     data.tags.map(e=>{
-        let option=doe.option({value:e});
-        editpage._nodes.tags.appendChild(
-            option
-        );
+        doe(editpage._nodes.tags,doe.option({value:e}));
     });
     if(editpage.id){
         editpage._nodes.input_title.value=
@@ -1883,9 +1872,7 @@ function load(){
             );
             fileButton.n.disabled=false;
         });
-        this._nodes.table_content.appendChild(
-            createUploadImageTr()
-        );
+        doe(this._nodes.table_content,createUploadImageTr());
         function createUploadImageTr(){
             return doe.tr(createUploadImageTd())
         }

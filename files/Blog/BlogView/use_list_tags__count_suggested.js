@@ -4,19 +4,20 @@ function use_list_tags__count_suggested(blogView,list,div){
         a.name.localeCompare(b.name)
     )
     blogView.datalist_input_searchForTag.innerHTML=''
-    list.map(e=>{
-        let o=doe.option({value:e.name})
-        blogView.datalist_input_searchForTag.appendChild(o)
-    })
+    list.map(e=>
+        doe(blogView.datalist_input_searchForTag,
+            doe.option({value:e.name})
+        )
+    )
     let tagsToSelect=(blogView.blog.status.tagNames||[]).slice()
     list.map((t,i)=>{
         if(i%12==0)
-            div.appendChild(ul())
+            doe(div,ul())
         if((blogView.blog.status.tagNames||[]).indexOf(t.name)!==-1)
             return
-        div.lastChild.appendChild(li(t))
+        doe(div.lastChild,li(t))
     })
-    div.appendChild(div_clearboth())
+    doe(div,div_clearboth())
     function ul(){
         return doe.ul(ul=>{ul.style.float='left'})
     }

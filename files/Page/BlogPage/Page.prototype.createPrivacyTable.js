@@ -28,10 +28,8 @@ function createPrivacyTable(pageView){
         ;(async()=>{
             let u=await page.blog._currentUser
             await u.load('isadmin')
-            if(u.isadmin){
-                td.appendChild(a_editpage())
-                td.appendChild(a_removepage())
-            }
+            if(u.isadmin)
+                doe(td,a_editpage(),a_removepage())
         })()
         return td
         function a_editpage(){
@@ -69,20 +67,14 @@ function createPrivacyTable(pageView){
             isFirst
         if(page.tags.length){
             page.tags.sort()
-            td.appendChild(
-                document.createTextNode('Tagged: ')
-            )
+            doe(td,'Tagged: ')
             isFirst=true
             page.tags.map(e=>{
                 if(isFirst)
                     isFirst=false
                 else
-                    td.appendChild(
-                        document.createTextNode(', ')
-                    )
-                td.appendChild(
-                    page.blog._anchor_addTag({name:e})
-                )
+                    doe(td,', ')
+                doe(td,page.blog._anchor_addTag({name:e}))
             })
         }
         return td

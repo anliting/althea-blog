@@ -8,7 +8,7 @@ import {doe}from '/lib/core.static.js'
 function createContents(blog){
     let div=doe.div({className:'contents'})
     blog.on('pageLoad',page=>{
-        div.appendChild(page.view.domElement)
+        doe(div,page.view.domElement)
     })
     blog.on('statusChange',()=>{
         div.innerHTML=''
@@ -29,16 +29,18 @@ function BlogView(blog){
         let s=doe.style()
         let u=()=>
             this.blog._styles.map(n=>
-                s.appendChild(n)
+                doe(s,n)
             )
         u()
         this.blog.on('_style',u)
-        this.style=Promise.resolve(s)
+        this.style=s
         blog._style(document.createTextNode(style))
     }
-    this.div.appendChild(createHeader(blog,this))
-    this.div.appendChild(createContents(blog))
-    this.div.appendChild(createFooter(this))
+    doe(this.div,
+        createHeader(blog,this),
+        createContents(blog),
+        createFooter(this),
+    )
 }
 BlogView.prototype.hideSuggestedTags=function(){
     this.tagsDiv.style.display='none'

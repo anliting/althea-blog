@@ -16,7 +16,7 @@ SetForm.prototype.addTag=function(name){
         tag=new Tag(name)
     setForm.tags.push(tag)
     setForm.tagIdInTagsByName[name]=setForm.tags.length-1
-    setForm.span_tags.appendChild(tag.body)
+    doe(setForm.span_tags,tag.body)
     function Tag(name){
         let
             span_name,

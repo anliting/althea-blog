@@ -34,7 +34,7 @@ export default(page,comment)=>{
                 html.encodeText(comment.content)
             }</div>`
         if(cu.isadmin)
-            div.appendChild(deleteA(comment.id))
+            doe(div,deleteA(comment.id))
     })()
     return div
     function deleteA(id){

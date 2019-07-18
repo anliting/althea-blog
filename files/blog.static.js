@@ -1,4 +1,4 @@
-import { hacker, Snapshot } from '/lib/core.static.js';
+import { doe, hacker, Snapshot } from '/lib/core.static.js';
 import { Site, Blog } from '/plugins/blog/core.static.js';
 
 function setupAutoScroll(blog){
@@ -168,11 +168,11 @@ async function createBlogThread(){
     await blog.load;
     setupGetNextOnScrollEvent();
     setupAutoScroll(blog);
-    document.body.appendChild(view.div);
+    doe.head(view.style);
+    doe.body(view.div);
     document.body.addEventListener('keydown',e=>
         view.keydown(e)
     );
-    document.head.appendChild(await view.style);
 }
 async function setupApi(){
     hacker.site=site;

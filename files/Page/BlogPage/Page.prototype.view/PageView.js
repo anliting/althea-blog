@@ -25,14 +25,14 @@ function createDiv(pageView,page){
             pageView.hide=1
         }
     })
-    div.appendChild(page.h1_title())
-    div.appendChild(page.div_author=    page.createAuthorDiv())
-    div.appendChild(page.div_date=      page.createDateDiv())
-    div.appendChild(
-        page.table_privacy=page.createPrivacyTable(pageView)
+    doe(div,
+        page.h1_title(),
+        page.div_author=    page.createAuthorDiv(),
+        page.div_date=      page.createDateDiv(),
+        page.table_privacy= page.createPrivacyTable(pageView),
+        contentDiv,
+        div_facebooklike(page),
     )
-    div.appendChild(contentDiv)
-    div.appendChild(div_facebooklike(page))
     page.blog.isFacebookLoaded&&FB.XFBML.parse(div)
     ;(async()=>{
         let site=await page.blog._site
@@ -41,12 +41,12 @@ function createDiv(pageView,page){
         let comments=p.comments
         await Promise.all(
             comments.map(comment=>
-                div.appendChild(
+                doe(div,
                     commentDiv(page,site.getComment(comment))
                 )
             )
         )
-        div.appendChild(commentForm(page))
+        doe(div,commentForm(page))
     })()
     return div
 }

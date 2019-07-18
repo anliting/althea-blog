@@ -54,9 +54,7 @@ function load(){
             )
             fileButton.n.disabled=false
         })
-        this._nodes.table_content.appendChild(
-            createUploadImageTr()
-        )
+        doe(this._nodes.table_content,createUploadImageTr())
         function createUploadImageTr(){
             return doe.tr(createUploadImageTd())
         }

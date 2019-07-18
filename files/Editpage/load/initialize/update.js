@@ -22,9 +22,7 @@ function update(editpage,data){
         let option=doe.option(e.name,{value:e.id})
         if(editpage.id&&e.id==data.lastversion_page.id_pagemodule)
             option.selected='selected'
-        editpage._nodes.select_id_pagemodule.appendChild(
-            option
-        )
+        doe(editpage._nodes.select_id_pagemodule,option)
     })
     editpage.id&&data.lastversion_page.tags.map(e=>{
         editpage.setOfTags.addTag(e)
@@ -33,10 +31,7 @@ function update(editpage,data){
         editpage.setOfNames.addTag(e)
     })
     data.tags.map(e=>{
-        let option=doe.option({value:e})
-        editpage._nodes.tags.appendChild(
-            option
-        )
+        doe(editpage._nodes.tags,doe.option({value:e}))
     })
     if(editpage.id){
         editpage._nodes.input_title.value=

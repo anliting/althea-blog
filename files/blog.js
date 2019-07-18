@@ -1,4 +1,4 @@
-import{Snapshot,hacker}from'/lib/core.static.js'
+import{Snapshot,hacker,doe}from'/lib/core.static.js'
 import{Blog,Site}from'/plugins/blog/core.static.js'
 import setupAutoScroll from './blog/setupAutoScroll.js'
 let
@@ -47,23 +47,23 @@ async function createBlogThread(){
     await blog.load
     setupGetNextOnScrollEvent()
     setupAutoScroll(blog)
-    document.body.appendChild(view.div)
+    doe.head(view.style)
+    doe.body(view.div)
     document.body.addEventListener('keydown',e=>
         view.keydown(e)
     )
-    document.head.appendChild(await view.style)
 }
 async function setupProgress(a){
     let p=new Progress(a),v=p.view
     let style=Object.assign(document.createElement('style'),{
         textContent:Progress.style
     })
-    document.head.appendChild(style)
-    document.body.appendChild(v.node)
+    doe.head(style)
+    doe.body(v.node)
     await p.complete
     await new Promise(rs=>setTimeout(rs,2*p._animationDelay))
-    document.head.removeChild(style)
-    document.body.removeChild(v.node)
+    doe.head(1,style)
+    doe.body(1,v.node)
     v.free
 }
 async function setupApi(){

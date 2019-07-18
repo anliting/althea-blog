@@ -9,10 +9,10 @@ function createNavigationBar(view){
     perUser(site,async u=>{
         await u.load(['isAnonymous','username','isadmin'])
         let a=u.isAnonymous?loginA():userA(blog,div,u)
-        div.appendChild(a)
+        doe(div,a)
         {
             let f=()=>{
-                div.removeChild(a)
+                doe(div,1,a)
                 site.off('userChange',f)
             }
             site.on('userChange',f)
@@ -47,7 +47,7 @@ function createNavigationBar(view){
             event.onceClickOrBlurButNotMouseDown(n,()=>
                 div.removeChild(n)
             )
-            div.appendChild(n)
+            doe(div,n)
             n.focus()
         }
         return a

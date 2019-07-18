@@ -19,7 +19,7 @@ TreeUi.prototype._apply=function(e){
         ]:[]),
         e.title,
     )
-    this.node.appendChild(e.node)
+    doe(this.node,e.node)
 }
 TreeUi.prototype.in=function(e){
     if(this.array.length)

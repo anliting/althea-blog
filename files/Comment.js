@@ -1,4 +1,4 @@
-import {AltheaObject}from '/lib/core.static.js'
+import{AltheaObject}from'/lib/core.static.js'
 function Comment(){
     AltheaObject.apply(this,arguments)
 }

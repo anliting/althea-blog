@@ -47,12 +47,11 @@ async function checkSetupIndex(blog,div){
                     pageId:p.page.id
                 }
             })
-            li.appendChild(a)
-            ul.appendChild(li)
+            doe(ul,doe(li,a))
         }
-        div.appendChild(ul)
+        doe(div,ul)
     })
-    div.appendChild(createClearBothDiv())
+    doe(div,createClearBothDiv())
     function createClearBothDiv(){
         return doe.div(n=>{n.style.clear='both'})
     }

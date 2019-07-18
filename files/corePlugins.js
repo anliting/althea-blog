@@ -33,10 +33,10 @@ function tableofcontents(e){
             v=v.parentNode
         if(s[s.length-1]<r){
             s.push(r)
-            v.appendChild(doe.ul())
+            doe(v,doe.ul())
             v=v.lastChild
         }
-        v.appendChild(li(p))
+        doe(v,li(p))
         v=v.lastChild
     }
     function li(p){

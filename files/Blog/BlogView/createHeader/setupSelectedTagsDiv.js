@@ -3,7 +3,7 @@ function setupSelectedTagsDiv(blog,div){
     if(!('tagNames' in blog.status))
         return
     blog.status.tagNames.map((t,i)=>{
-        div.appendChild(span())
+        doe(div,span())
         function span(){
             let span=doe.span(
                 t+' ',
