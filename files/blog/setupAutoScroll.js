@@ -4,8 +4,9 @@ function setupAutoScroll(blog){
         speed=0.025,
         dy=0,
         isAutoScrollStarted=false,
-        timeoutIdAutoScroll
-    onkeydown=e=>{
+        timeoutIdAutoScroll,
+        o={}
+    o.onkeydown=e=>{
         if(!isAutoScrollStarted){
             isAutoScrollStarted=true
             timeoutIdAutoScroll=setTimeout(autoScroll,0)
@@ -105,7 +106,7 @@ function setupAutoScroll(blog){
             return true
         }
     }
-    onkeyup=e=>{
+    o.onkeyup=e=>{
         resetAutoScroll()
     }
     function autoScroll(){

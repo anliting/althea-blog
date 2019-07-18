@@ -28,16 +28,20 @@ async function createMainThread(){
             return
         blog.status=JSON.parse(e.state)
     }
-    onkeydown=e=>{
-        if(document.activeElement==document.body)
-            view.keydown(e)
-    }
     blog.on('location',p=>location=p)
     await blog.load
     setupGetNextOnScrollEvent()
-    setupAutoScroll(blog)
+    let autoScroll=setupAutoScroll(blog)
     doe.head(view.style)
     doe.body(view.div)
+    onkeydown=e=>{
+        if(document.activeElement==document.body)
+            view.keydown(e)
+        autoScroll.onkeydown(e)
+    }
+    onkeyup=e=>{
+        autoScroll.onkeyup(e)
+    }
     view.div.focus()
 }
 async function setupApi(){
