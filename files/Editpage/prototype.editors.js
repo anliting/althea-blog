@@ -1,4 +1,15 @@
 import{doe}from'/lib/core.static.js'
+function newPageContentUi(
+    getPagemodule,plugins,source,pagemoduleId
+){
+    if(pagemoduleId){
+        let pagemodule=getPagemodule(pagemoduleId)
+        source=pagemodule.compile(source)
+    }
+    let n=doe.div({innerHTML:source})
+    plugins.map(f=>f(n))
+    return n
+}
 export default{
     html:{
         come(){
@@ -28,7 +39,7 @@ export default{
             this._nodes.div_preview.innerHTML=''
             doe(
                 this._nodes.div_preview,
-                this.blog.newPageContentUi(
+                newPageContentUi(
                     id=>this.pagemodules[id-1],
                     this._pagePlugins,
                     this.textarea_content.value,

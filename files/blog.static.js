@@ -124,7 +124,7 @@ function setupAutoScroll(blog){
 
 let
     site=new Site,
-    blog=loadBlog(arg.status),
+    blog=new Blog(site,status),
     main=createMainThread();
 if(
     localStorage.althea&&
@@ -132,9 +132,6 @@ if(
 )
     setupApi();
 //setupProgress(main)
-function loadBlog(status){
-    return new Blog(site,status)
-}
 function createMainThread(){
     createThisThread();
     return createBlogThread()

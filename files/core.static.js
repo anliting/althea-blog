@@ -1340,7 +1340,8 @@ Object.defineProperty(Blog.prototype,'status',{get(){
     this.emit('statusChange');
     this._getNext();
 }});
-Blog.newPageContentUi=function(
+
+function newPageContentUi(
     getPagemodule,plugins,source,pagemoduleId
 ){
     if(pagemoduleId){
@@ -1350,8 +1351,7 @@ Blog.newPageContentUi=function(
     let n=doe.div({innerHTML:source});
     plugins.map(f=>f(n));
     return n
-};
-
+}
 var editors = {
     html:{
         come(){
@@ -1381,7 +1381,7 @@ var editors = {
             this._nodes.div_preview.innerHTML='';
             doe(
                 this._nodes.div_preview,
-                this.blog.newPageContentUi(
+                newPageContentUi(
                     id=>this.pagemodules[id-1],
                     this._pagePlugins,
                     this.textarea_content.value,
@@ -1886,7 +1886,6 @@ function load(){
 
 function Editpage(site,environment){
     EventEmmiter.call(this);
-    this.blog=Blog;
     this.id=environment.id_page||0;
     this._site=site;
     this._datalistId=Math.random().toString(36).substring(2);

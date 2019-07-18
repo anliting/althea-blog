@@ -70,15 +70,4 @@ Object.defineProperty(Blog.prototype,'status',{get(){
     this.emit('statusChange')
     this._getNext()
 }})
-Blog.newPageContentUi=function(
-    getPagemodule,plugins,source,pagemoduleId
-){
-    if(pagemoduleId){
-        let pagemodule=getPagemodule(pagemoduleId)
-        source=pagemodule.compile(source)
-    }
-    let n=doe.div({innerHTML:source})
-    plugins.map(f=>f(n))
-    return n
-}
 export default Blog
