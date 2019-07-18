@@ -259,7 +259,7 @@ function div_blog_content(pageView,page){
     for(let s of div.getElementsByTagName('script'))
         if(s.type=='')
             eval(s.innerHTML);
-    page.blog.addPageDiv(div);
+    page.blog._addPageDiv(div);
     return div
 }
 function div_facebooklike(page){
@@ -603,8 +603,8 @@ async function update_to_content(process,pages){
 }
 
 async function _getNext(){
-    this.getting=this.getting||0;
-    this.getting++;
+    this._getting=this._getting||0;
+    this._getting++;
     let
         process={
             status:this._status,
@@ -622,102 +622,106 @@ async function _getNext(){
     });
     await this._loadPagemodules;
     await update_to_content.call(this,process,data.slice(0,4));
-    this.getting--;
+    this._getting--;
 }
 
 function anchor_addTag(tag){
-    let
-        tagsToSelect=(this.status.tagNames||[]).slice();
+    let tagsToSelect=(this.status.tagNames||[]).slice();
     tagsToSelect.push(tag.name);
-    let
-        a=doe.a(tag.name,{
-            className:'addTag',
-            href:this.path.getHrefByTags(tagsToSelect),
-        });
-    a.onclick=e=>{
-        if(
-            e.which!=1||
-            e.ctrlKey||
-            e.shiftKey
-        )
-            return
-        e.preventDefault();
-        e.stopPropagation();
-        this._setStatusEmit({
-            tagNames:tagsToSelect.slice()
-        });
-    };
-    return a
+    return doe.a(tag.name,{
+        className:'addTag',
+        href:this.path.getHrefByTags(tagsToSelect),
+        onclick:e=>{
+            if(
+                e.which!=1||
+                e.ctrlKey||
+                e.shiftKey
+            )
+                return
+            e.preventDefault();
+            e.stopPropagation();
+            this._setStatusEmit({
+                tagNames:tagsToSelect.slice()
+            });
+        }
+    })
 }
 
-async function checkSetupIndex(blog,div){
-    if(!blog.status.tagNames)
-        return
-    let a;
-    {
-        let
-            vals=await Promise.all([
-                blog._site,
-                getPagesByTags(),
-            ]),
-            site=vals[0],
-            pages=vals[1];
-        a=await Promise.all(pages.map(async id=>{
-            let page=await site.getPage(id);
-            let pageversion=await(await page.lastversion).load([
-                'public',
-                'title'
-            ]);
-            return {
-                page,
-                public:pageversion.public,
-                title:pageversion.title,
+function checkSetupIndex(blog,div){
+    let end=()=>{};
+    if(blog.status.tagNames)
+        ;(async()=>{
+            let a;
+            let ended;
+            end=()=>{ended=1;};
+            {
+                let
+                    vals=await Promise.all([
+                        blog._site,
+                        getPagesByTags(),
+                    ]),
+                    site=vals[0],
+                    pages=vals[1];
+                a=await Promise.all(pages.map(async id=>{
+                    let page=await site.getPage(id);
+                    let pageversion=await(await page.lastversion).load([
+                        'public',
+                        'title'
+                    ]);
+                    return {
+                        page,
+                        public:pageversion.public,
+                        title:pageversion.title,
+                    }
+                }));
             }
-        }));
-    }
-    a.sort((a,b)=>a.title.localeCompare(b.title));
-    chunks(a,12).map(a=>{
-        let ul=doe.ul();
-        ul.style.float='left';
-        for(let p of a){
-            let
-                li=doe.li(),
-                a=p.page.a;
-            if(!p.public)
-                a.style.color='black';
-            a.addEventListener('click',e=>{
-                if(
-                    e.which!=1||
-                    e.ctrlKey||
-                    e.shiftKey
-                )
-                    return
-                e.preventDefault();
-                e.stopPropagation();
-                blog._setStatusEmit({
-                    pageId:p.page.id
-                });
-            });
-            doe(ul,doe(li,a));
-        }
-        doe(div,ul);
-    });
-    doe(div,createClearBothDiv());
-    function createClearBothDiv(){
-        return doe.div(n=>{n.style.clear='both';})
-    }
-    async function getPagesByTags(){
-        return (await blog._site).send({
-            function:'blog_getPagesByTags',
-            tags:blog.status.tagNames
-        })
-    }
-    function chunks(a,n){
-        let res=[];
-        for(let i=0;i*n<a.length;i++)
-            res.push(a.slice(i*n,(i+1)*n));
-        return res
-    }
+            if(ended)
+                return
+            a.sort((a,b)=>a.title.localeCompare(b.title));
+            doe(div,chunks(a,12).map(a=>{
+                let ul=doe.ul();
+                ul.style.float='left';
+                for(let p of a){
+                    let
+                        li=doe.li(),
+                        a=p.page.a;
+                    if(!p.public)
+                        a.style.color='black';
+                    a.addEventListener('click',e=>{
+                        if(
+                            e.which!=1||
+                            e.ctrlKey||
+                            e.shiftKey
+                        )
+                            return
+                        e.preventDefault();
+                        e.stopPropagation();
+                        blog._setStatusEmit({
+                            pageId:p.page.id
+                        });
+                    });
+                    doe(ul,doe(li,a));
+                }
+                return ul
+            }),createClearBothDiv());
+            end=()=>{div.innerHTML='';};
+            function createClearBothDiv(){
+                return doe.div(n=>{n.style.clear='both';})
+            }
+            async function getPagesByTags(){
+                return (await blog._site).send({
+                    function:'blog_getPagesByTags',
+                    tags:blog.status.tagNames
+                })
+            }
+            function chunks(a,n){
+                let res=[];
+                for(let i=0;i*n<a.length;i++)
+                    res.push(a.slice(i*n,(i+1)*n));
+                return res
+            }
+        })();
+    return ()=>end()
 }
 
 function createInput(blog,view){
@@ -993,10 +997,10 @@ function createHeader(blog,view){
     }
     function createIndex(){
         return doe.div({className:'index'},n=>{
-            checkSetupIndex(blog,n);
+            let end=checkSetupIndex(blog,n);
             blog.on('_statusChange',()=>{
-                n.innerHTML='';
-                checkSetupIndex(blog,n);
+                end();
+                end=checkSetupIndex(blog,n);
             });
         })
     }
@@ -1304,7 +1308,7 @@ function Blog(site,status){
         site.applyPlugins('blog',this),
         (async()=>{
 (await site.loadPlugins('blog_page')).forEach(p=>
-                this.addPagePlugin(p)
+                this._addPagePlugin(p)
             );
         })(),
         load$1.materialIcon(),
@@ -1333,11 +1337,11 @@ Blog.prototype._style=function(n){
     this._styles.push(n);
     this.emit('_style');
 };
-Blog.prototype.addPageDiv=async function(div){
+Blog.prototype._addPageDiv=async function(div){
     this._pageDivs.push(div);
     await Promise.all(this._pagePlugins.map(p=>p(div)));
 };
-Blog.prototype.addPagePlugin=async function(p){
+Blog.prototype._addPagePlugin=async function(p){
     await Promise.all(this._pageDivs.map(p));
     this._pagePlugins.push(p);
 };

@@ -28,7 +28,7 @@ function Blog(site,status){
         site.applyPlugins('blog',this),
         (async()=>{
             ;(await site.loadPlugins('blog_page')).forEach(p=>
-                this.addPagePlugin(p)
+                this._addPagePlugin(p)
             )
         })(),
         load.materialIcon(),
@@ -57,11 +57,11 @@ Blog.prototype._style=function(n){
     this._styles.push(n)
     this.emit('_style')
 }
-Blog.prototype.addPageDiv=async function(div){
+Blog.prototype._addPageDiv=async function(div){
     this._pageDivs.push(div)
     await Promise.all(this._pagePlugins.map(p=>p(div)))
 }
-Blog.prototype.addPagePlugin=async function(p){
+Blog.prototype._addPagePlugin=async function(p){
     await Promise.all(this._pageDivs.map(p))
     this._pagePlugins.push(p)
 }

@@ -66,7 +66,7 @@ function setupGetNextOnScrollEvent(){
         // fix for chromium/chrome
         top=top||document.body.scrollTop
         top+8*screen.height<document.body.scrollHeight||
-            blog.getting||
+            blog._getting||
             blog._getNext()
     }
 }

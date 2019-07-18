@@ -1,4 +1,4 @@
-import {doe}from '/lib/core.static.js'
+import{doe}from'/lib/core.static.js'
 function use_list_tags__count_suggested(blogView,list,div){
     list.sort((a,b)=>
         a.name.localeCompare(b.name)

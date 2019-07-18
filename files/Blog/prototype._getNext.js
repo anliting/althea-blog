@@ -1,7 +1,7 @@
 import update_to_content from './prototype._getNext/update_to_content.js'
 async function _getNext(){
-    this.getting=this.getting||0
-    this.getting++
+    this._getting=this._getting||0
+    this._getting++
     let
         process={
             status:this._status,
@@ -19,6 +19,6 @@ async function _getNext(){
     })
     await this._loadPagemodules
     await update_to_content.call(this,process,data.slice(0,4))
-    this.getting--
+    this._getting--
 }
 export default _getNext

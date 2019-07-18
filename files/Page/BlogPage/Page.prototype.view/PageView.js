@@ -68,7 +68,7 @@ function div_blog_content(pageView,page){
     for(let s of div.getElementsByTagName('script'))
         if(s.type=='')
             eval(s.innerHTML)
-    page.blog.addPageDiv(div)
+    page.blog._addPageDiv(div)
     return div
 }
 function div_facebooklike(page){

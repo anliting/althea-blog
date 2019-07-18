@@ -1,8 +1,8 @@
-import checkSetupIndex from './createHeader/checkSetupIndex.js'
-import createInput from './createHeader/createInput.js'
-import setupSelectedTagsDiv from './createHeader/setupSelectedTagsDiv.js'
-import createNavigationBar from './createHeader/createNavigationBar.js'
-import {doe}from '/lib/core.static.js'
+import{doe}from                     '/lib/core.static.js'
+import checkSetupIndex from         './createHeader/checkSetupIndex.js'
+import createInput from             './createHeader/createInput.js'
+import setupSelectedTagsDiv from    './createHeader/setupSelectedTagsDiv.js'
+import createNavigationBar from     './createHeader/createNavigationBar.js'
 function createHeader(blog,view){
     let blog_getData=blog._site.send('blog_getData')
     return doe.div(
@@ -68,10 +68,10 @@ function createHeader(blog,view){
     }
     function createIndex(){
         return doe.div({className:'index'},n=>{
-            checkSetupIndex(blog,n)
+            let end=checkSetupIndex(blog,n)
             blog.on('_statusChange',()=>{
-                n.innerHTML=''
-                checkSetupIndex(blog,n)
+                end()
+                end=checkSetupIndex(blog,n)
             })
         })
     }
