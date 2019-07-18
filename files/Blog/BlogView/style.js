@@ -20,4 +20,7 @@ body{
 .a_removepage{
     float:left;
 }
+.blog{
+    outline:none;
+}
 `

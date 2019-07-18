@@ -1192,6 +1192,9 @@ body{
 .a_removepage{
     float:left;
 }
+.blog{
+    outline:none;
+}
 `;
 
 function createContents(blog){
@@ -1211,11 +1214,9 @@ function createFooter(view){
 }
 function BlogView(blog){
     this.blog=blog;
-    this.div=doe.div({className:'blog',tabIndex:-1,onkeydown:e=>{
-        e.preventDefault();
-        e.stopPropagation();
-        this.keydown(e);
-    }});
+    this.div=doe.div({className:'blog',tabIndex:-1,onkeydown:e=>
+        this.keydown(e)
+    });
     install_datalist_tags_suggested(this);
     {
         let s=doe.style();

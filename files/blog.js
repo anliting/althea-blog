@@ -28,8 +28,10 @@ async function createMainThread(){
             return
         blog.status=JSON.parse(e.state)
     }
-    onkeydown=e=>
-        view.keydown(e)
+    onkeydown=e=>{
+        if(document.activeElement==document.body)
+            view.keydown(e)
+    }
     blog.on('location',p=>location=p)
     await blog.load
     setupGetNextOnScrollEvent()
