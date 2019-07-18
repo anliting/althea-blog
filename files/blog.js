@@ -10,7 +10,6 @@ if(
     0<=String(localStorage.althea).split(' ').indexOf('h')
 )
     setupApi()
-//setupProgress(main)
 function createMainThread(){
     createThisThread()
     return createBlogThread()
@@ -27,11 +26,11 @@ async function createThisThread(){
             blog.path.calcPathByStatus(blog.status)
         )
     })
-    addEventListener('popstate',e=>{
+    onpopstate=e=>{
         if(!e.state)
             return
         blog.status=JSON.parse(e.state)
-    })
+    }
     blog.on('location',p=>location=p)
 }
 async function createBlogThread(){
@@ -41,22 +40,9 @@ async function createBlogThread(){
     setupAutoScroll(blog)
     doe.head(view.style)
     doe.body(view.div)
-    document.body.addEventListener('keydown',e=>
+    addEventListener('keydown',e=>
         view.keydown(e)
     )
-}
-async function setupProgress(a){
-    let p=new Progress(a),v=p.view
-    let style=Object.assign(document.createElement('style'),{
-        textContent:Progress.style
-    })
-    doe.head(style)
-    doe.body(v.node)
-    await p.complete
-    await new Promise(rs=>setTimeout(rs,2*p._animationDelay))
-    doe.head(1,style)
-    doe.body(1,v.node)
-    v.free
 }
 async function setupApi(){
     hacker.site=site
@@ -67,7 +53,7 @@ async function setupApi(){
     window.hacker=hacker
 }
 function setupGetNextOnScrollEvent(){
-    addEventListener('scroll',()=>{
+    onscroll=()=>{
         if(!(
             !('pageId' in blog.status)&&
             blog.pages_loaded.length<32&&(
@@ -82,5 +68,5 @@ function setupGetNextOnScrollEvent(){
         top+8*screen.height<document.body.scrollHeight||
             blog.getting||
             blog._getNext()
-    })
+    }
 }

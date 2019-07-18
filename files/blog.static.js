@@ -8,7 +8,7 @@ function setupAutoScroll(blog){
         dy=0,
         isAutoScrollStarted=false,
         timeoutIdAutoScroll;
-    document.body.addEventListener('keydown',e=>{
+    onkeydown=e=>{
         if(!isAutoScrollStarted){
             isAutoScrollStarted=true;
             timeoutIdAutoScroll=setTimeout(autoScroll,0);
@@ -107,10 +107,10 @@ function setupAutoScroll(blog){
                 return false
             return true
         }
-    });
-    document.body.addEventListener('keyup',e=>{
+    };
+    onkeyup=e=>{
         resetAutoScroll();
-    });
+    };
     function autoScroll(){
         scrollBy(0,dy);
         timeoutIdAutoScroll=setTimeout(autoScroll,period);
@@ -131,7 +131,6 @@ if(
     0<=String(localStorage.althea).split(' ').indexOf('h')
 )
     setupApi();
-//setupProgress(main)
 function createMainThread(){
     createThisThread();
     return createBlogThread()
@@ -148,11 +147,11 @@ async function createThisThread(){
             blog.path.calcPathByStatus(blog.status)
         );
     });
-    addEventListener('popstate',e=>{
+    onpopstate=e=>{
         if(!e.state)
             return
         blog.status=JSON.parse(e.state);
-    });
+    };
     blog.on('location',p=>location=p);
 }
 async function createBlogThread(){
@@ -162,7 +161,7 @@ async function createBlogThread(){
     setupAutoScroll(blog);
     doe.head(view.style);
     doe.body(view.div);
-    document.body.addEventListener('keydown',e=>
+    addEventListener('keydown',e=>
         view.keydown(e)
     );
 }
@@ -175,7 +174,7 @@ async function setupApi(){
     window.hacker=hacker;
 }
 function setupGetNextOnScrollEvent(){
-    addEventListener('scroll',()=>{
+    onscroll=()=>{
         if(!(
             !('pageId' in blog.status)&&
             blog.pages_loaded.length<32&&(
@@ -190,5 +189,5 @@ function setupGetNextOnScrollEvent(){
         top+8*screen.height<document.body.scrollHeight||
             blog.getting||
             blog._getNext();
-    });
+    };
 }

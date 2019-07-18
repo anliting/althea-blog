@@ -5,7 +5,7 @@ function setupAutoScroll(blog){
         dy=0,
         isAutoScrollStarted=false,
         timeoutIdAutoScroll
-    document.body.addEventListener('keydown',e=>{
+    onkeydown=e=>{
         if(!isAutoScrollStarted){
             isAutoScrollStarted=true
             timeoutIdAutoScroll=setTimeout(autoScroll,0)
@@ -104,10 +104,10 @@ function setupAutoScroll(blog){
                 return false
             return true
         }
-    })
-    document.body.addEventListener('keyup',e=>{
+    }
+    onkeyup=e=>{
         resetAutoScroll()
-    })
+    }
     function autoScroll(){
         scrollBy(0,dy)
         timeoutIdAutoScroll=setTimeout(autoScroll,period)
