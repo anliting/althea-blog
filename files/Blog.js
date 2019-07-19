@@ -23,6 +23,7 @@ function Blog(site,status){
     // end page plugin
     this._getNext()
     this._styles=[]
+    this._loadPagemodules=loadPagemodules(this)
     this.view=new BlogView(this)
     this.load=Promise.all([
         site.applyPlugins('blog',this),
@@ -40,15 +41,6 @@ Object.defineProperty(Blog.prototype,'_currentUser',{async get(){
     return(await this._site).currentUser
 }})
 Blog.prototype._getNext=_getNext
-Object.defineProperty(Blog.prototype,'_loadPagemodules',{
-    configurable:true,
-    get(){
-        Object.defineProperty(this,'_loadPagemodules',{
-            value:loadPagemodules(this)
-        })
-        return this._loadPagemodules
-    }
-})
 Blog.prototype._setStatusEmit=function(s){
     this.status=s
     this.emit('statusChange')
