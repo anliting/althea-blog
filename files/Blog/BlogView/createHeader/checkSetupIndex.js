@@ -2,7 +2,7 @@ import{doe}from'/lib/core.static.js'
 function checkSetupIndex(blog,div){
     let end=()=>{}
     if(blog.status.tagNames)
-        ;(async()=>{
+        (async()=>{
             let a
             let ended
             end=()=>{ended=1}

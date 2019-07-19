@@ -650,7 +650,7 @@ function anchor_addTag(tag){
 function checkSetupIndex(blog,div){
     let end=()=>{};
     if(blog.status.tagNames)
-        ;(async()=>{
+        (async()=>{
             let a;
             let ended;
             end=()=>{ended=1;};
