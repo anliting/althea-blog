@@ -540,9 +540,8 @@ Page.BlogPage=BlogPage;
 let
     BlogPage$1=   Page.BlogPage;
 async function update_to_content(process,pages){
-    let site=await this._site;
     pages=await Promise.all(pages.map(async p=>{
-        let page=await site.getPage(p);
+        let page=await this._site.getPage(p);
         let res=await(async()=>{
             let vals=await Promise.all([
                 page.load([
@@ -567,6 +566,7 @@ async function update_to_content(process,pages){
                 pageVersion:vals[1],
             }
         })();
+        await this._loadPagemodules;
         page=new BlogPage$1(
             this,
             res.page.id,
@@ -586,7 +586,7 @@ async function update_to_content(process,pages){
         page.tags=pv.tags.sort((a,b)=>a.localeCompare(b));
         return page
     }));
-    let title=(await site.send('blog_getData')).title;
+    let title=await this._title;
     if(!process.continue)
         return
     pages.map(page=>{
@@ -620,7 +620,6 @@ async function _getNext(){
         tags_selected:  process.status.tagNames||[],
         pages_loaded:   this.pages_loaded,
     });
-    await this._loadPagemodules;
     await update_to_content.call(this,process,data.slice(0,4));
     this._getting--;
 }
@@ -1305,6 +1304,9 @@ function Blog(site,status){
     this._styles=[];
     this._loadPagemodules=loadPagemodules(this);
     this.view=new BlogView(this);
+    this._title=(async()=>
+        (await this._site.send('blog_getData')).title
+    )();
     this.load=Promise.all([
         site.applyPlugins('blog',this),
         (async()=>{

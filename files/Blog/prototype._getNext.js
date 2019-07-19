@@ -17,7 +17,6 @@ async function _getNext(){
         tags_selected:  process.status.tagNames||[],
         pages_loaded:   this.pages_loaded,
     })
-    await this._loadPagemodules
     await update_to_content.call(this,process,data.slice(0,4))
     this._getting--
 }

@@ -2,9 +2,8 @@ import Page from '../../Page.js'
 let
     BlogPage=   Page.BlogPage
 async function update_to_content(process,pages){
-    let site=await this._site
     pages=await Promise.all(pages.map(async p=>{
-        let page=await site.getPage(p)
+        let page=await this._site.getPage(p)
         let res=await(async()=>{
             let vals=await Promise.all([
                 page.load([
@@ -29,6 +28,7 @@ async function update_to_content(process,pages){
                 pageVersion:vals[1],
             }
         })()
+        await this._loadPagemodules
         page=new BlogPage(
             this,
             res.page.id,
@@ -48,7 +48,7 @@ async function update_to_content(process,pages){
         page.tags=pv.tags.sort((a,b)=>a.localeCompare(b))
         return page
     }))
-    let title=(await site.send('blog_getData')).title
+    let title=await this._title
     if(!process.continue)
         return
     pages.map(page=>{

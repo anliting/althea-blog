@@ -25,6 +25,9 @@ function Blog(site,status){
     this._styles=[]
     this._loadPagemodules=loadPagemodules(this)
     this.view=new BlogView(this)
+    this._title=(async()=>
+        (await this._site.send('blog_getData')).title
+    )()
     this.load=Promise.all([
         site.applyPlugins('blog',this),
         (async()=>{
