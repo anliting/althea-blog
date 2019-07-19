@@ -1,6 +1,14 @@
 import entities from 'entities'
 import url from 'url'
+let plugin
 async function calcContent(althea,env,lastversion_page){
+    if(!plugin)
+        plugin=(async()=>
+            [].concat(...await Promise.all([
+                althea.getPlugin('blog'),
+                althea.getPlugin('blog_page'),
+            ]))
+        )()
     let data=JSON.parse(await althea.getData())
     if(!('title' in data))
         data.title='undefined'
@@ -43,6 +51,11 @@ ${data.og?og(env,data,title,url_request):''}
 <link rel=icon href=images/icon.png>
 <link rel=modulepreload href='/lib/core.static.js'>
 <link rel=modulepreload href='/plugins/blog/core.static.js'>
+${
+    (await plugin).map(p=>
+        `<link rel=modulepreload href='${p}'>`
+    ).join('')
+}
 <body>
 ${env.althea.loadModule(
     //'plugins/blog/blog.js',
