@@ -21,7 +21,7 @@ export default async althea=>{
         let path=e.analyze.request.parsedUrl.pathname.split('/')
         let res=path[1]=='tags'&&2<path.length
         if(res)
-            e.tags_selected=path.slice(2)
+            e.tag=path.slice(2).map(decodeURIComponent)
         return res
     },r=>blog(althea,db,r))
     althea.addPagemodule(async r=>{

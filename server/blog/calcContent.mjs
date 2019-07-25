@@ -63,7 +63,7 @@ ${env.althea.loadModule(
     {
         status:{
             pageId:         env.id_page,
-            tagNames:       env.tags_selected,
+            tagNames:       env.tag,
         }
     },
     {

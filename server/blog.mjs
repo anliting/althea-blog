@@ -13,9 +13,9 @@ export default (althea,db,env)=>{
 async function get(althea,db,env){
     let pv
     // Get page and pageversion if it is specified.
-    if(env.id_page)
+    if(env.page)
         pv=await db.getLastversionOfPage(
-            await db.getPage(env.id_page)
+            await db.getPage(env.page)
         )
     env.headers['content-type']='text/html;charset=utf-8'
     return{
