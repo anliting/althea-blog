@@ -64,6 +64,7 @@ Blog.prototype._addPagePlugin=async function(p){
 Object.defineProperty(Blog.prototype,'status',{get(){
     return this._status
 },set(val){
+    this.emit('_beforeStatusChange')
     this._status=val
     this.pages={}
     this.pages_loaded=[]

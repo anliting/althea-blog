@@ -1,24 +1,11 @@
 import Page from'../Page.js'
 let BlogPage=Page.BlogPage
-async function _getNext(){
-    if(this._getting)
-        return
-    this._getting=1
-    let process={
-        status:this._status,
-        continue:1
-    }
-    let end=()=>{
-        this.off('_statusChange',end)
-        process.continue=0
-        this._getting=0
-    }
-    this.on('_statusChange',end)
+async function getData(status){
     let data=await this._site.send({
         function:       'blog_getSuggestedPages',
-        page:           process.status.pageId||0,
-        pageversion:    process.status.pageversionId||0,
-        tags_selected:  process.status.tagNames||[],
+        page:           status.pageId||0,
+        pageversion:    status.pageversionId||0,
+        tags_selected:  status.tagNames||[],
         pages_loaded:   this.pages_loaded,
     })
     let pages=data.slice(0,4)
@@ -69,19 +56,50 @@ async function _getNext(){
         return page
     }))
     let title=await this._title
-    if(!process.continue)
-        return
-    pages.map(page=>{
-        this.emit('pageLoad',page)
-    })
-    if(process.status.pageId){
-        document.title=
-            this.pages[process.status.pageId].title+
-            ' - '+
-            title
-    }else{
-        document.title=title
+    return[title,pages]
+}
+function getNext(onEnd){
+    let end,ended
+    return{
+        end(){
+            end()
+            ended=1
+        },
+        ended:Promise.race([
+            new Promise(rs=>end=rs),
+            (async()=>{
+                let[title,pages]=await getData.call(this,this._status)
+                if(ended)
+                    return
+                pages.map(page=>{
+                    this.emit('pageLoad',page)
+                })
+                if(this._status.pageId){
+                    document.title=
+                        this.pages[this._status.pageId].title+
+                        ' - '+
+                        title
+                }else{
+                    document.title=title
+                }
+            })(),
+        ])
     }
-    end()
+}
+function _getNext(){
+    if(this._getting)
+        return
+    this._getting=1
+    let
+        task=getNext.call(this),
+        beforeStatusChange=()=>{
+            task.end()
+        }
+    this.on('_beforeStatusChange',beforeStatusChange)
+    ;(async()=>{
+        await task.ended
+        this.off('_beforeStatusChange',beforeStatusChange)
+        this._getting=0
+    })()
 }
 export default _getNext
