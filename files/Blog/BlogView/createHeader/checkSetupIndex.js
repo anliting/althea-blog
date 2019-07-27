@@ -7,15 +7,9 @@ function checkSetupIndex(blog,div){
             let ended
             end=()=>{ended=1}
             {
-                let
-                    vals=await Promise.all([
-                        blog._site,
-                        getPagesByTags(),
-                    ]),
-                    site=vals[0],
-                    pages=vals[1]
+                let pages=await getPagesByTags()
                 a=await Promise.all(pages.map(async id=>{
-                    let page=await site.getPage(id)
+                    let page=await blog._site.getPage(id)
                     let pageversion=await(await page.lastversion).load([
                         'public',
                         'title'
@@ -61,7 +55,7 @@ function checkSetupIndex(blog,div){
                 return doe.div(n=>{n.style.clear='both'})
             }
             async function getPagesByTags(){
-                return(await blog._site).send({
+                return blog._site.send({
                     function:'blog_getPagesByTags',
                     tags:blog.status.tagNames
                 })

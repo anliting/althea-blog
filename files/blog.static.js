@@ -152,10 +152,10 @@ async function createMainThread(){
         blog.status=JSON.parse(e.state);
     };
     blog.on('location',p=>location=p);
+    doe.head(view.style);
     await blog.load;
     setupGetNextOnScrollEvent();
     let autoScroll=setupAutoScroll(blog);
-    doe.head(view.style);
     doe.body(view.div);
     onkeydown=e=>{
         if(document.activeElement==document.body)
@@ -189,7 +189,6 @@ function setupGetNextOnScrollEvent(){
         // fix for chromium/chrome
         top=top||document.body.scrollTop;
         top+8*screen.height<document.body.scrollHeight||
-            blog._getting||
             blog._getNext();
     };
 }

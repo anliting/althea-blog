@@ -25,6 +25,7 @@ function Blog(site,status){
     this._styles=[]
     this._loadPagemodules=loadPagemodules(this)
     this.view=new BlogView(this)
+    this._getting=0
     this._title=(async()=>
         (await this._site.send('blog_getData')).title
     )()
@@ -41,7 +42,7 @@ function Blog(site,status){
 Object.setPrototypeOf(Blog.prototype,EventEmmiter.prototype)
 Blog.prototype._anchor_addTag=_anchor_addTag
 Object.defineProperty(Blog.prototype,'_currentUser',{async get(){
-    return(await this._site).currentUser
+    return this._site.currentUser
 }})
 Blog.prototype._getNext=_getNext
 Blog.prototype._setStatusEmit=function(s){

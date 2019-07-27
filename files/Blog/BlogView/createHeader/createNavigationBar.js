@@ -1,6 +1,6 @@
-import event from './createNavigationBar/event.js'
-import userA from './createNavigationBar/userA.js'
-import {doe}from '/lib/core.static.js'
+import event from'./createNavigationBar/event.js'
+import userA from'./createNavigationBar/userA.js'
+import{doe}from'/lib/core.static.js'
 function createNavigationBar(view){
     let
         blog=view.blog,
@@ -33,7 +33,7 @@ function createNavigationBar(view){
         a.onclick=async e=>{
             e.preventDefault()
             e.stopPropagation()
-            ;(await blog._site).showLoginForm
+            blog._site.showLoginForm
         }
         return a
     }

@@ -47,7 +47,7 @@ function logoutA(blog){
     a.href='javascript:'
     a.onclick=async e=>{
         e.preventDefault()
-        ;(await blog._site).logout
+        blog._site.logout
     }
     return a
 }

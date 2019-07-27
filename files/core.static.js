@@ -537,9 +537,28 @@ Object.defineProperty(Page.prototype,'lastversion',{async get(){
 }});
 Page.BlogPage=BlogPage;
 
-let
-    BlogPage$1=   Page.BlogPage;
-async function update_to_content(process,pages){
+let BlogPage$1=Page.BlogPage;
+async function _getNext(){
+    if(this._getting)
+        return
+    this._getting=1;
+    let
+        process={
+            status:this._status,
+            continue:1
+        };
+    this.once('_statusChange',()=>{
+        process.continue=0;
+        this._getting=0;
+    });
+    let data=await this._site.send({
+        function:       'blog_getSuggestedPages',
+        page:           process.status.pageId||0,
+        pageversion:    process.status.pageversionId||0,
+        tags_selected:  process.status.tagNames||[],
+        pages_loaded:   this.pages_loaded,
+    });
+    let pages=data.slice(0,4);
     pages=await Promise.all(pages.map(async p=>{
         let page=await this._site.getPage(p);
         let res=await(async()=>{
@@ -600,28 +619,7 @@ async function update_to_content(process,pages){
     }else{
         document.title=title;
     }
-}
-
-async function _getNext(){
-    this._getting=this._getting||0;
-    this._getting++;
-    let
-        process={
-            status:this._status,
-            continue:1
-        };
-    this.once('_statusChange',()=>
-        process.continue=0
-    );
-    let data=await this._site.send({
-        function:       'blog_getSuggestedPages',
-        page:           process.status.pageId||0,
-        pageversion:    process.status.pageversionId||0,
-        tags_selected:  process.status.tagNames||[],
-        pages_loaded:   this.pages_loaded,
-    });
-    await update_to_content.call(this,process,data.slice(0,4));
-    this._getting--;
+    this._getting=0;
 }
 
 function anchor_addTag(tag){
@@ -654,15 +652,9 @@ function checkSetupIndex(blog,div){
             let ended;
             end=()=>{ended=1;};
             {
-                let
-                    vals=await Promise.all([
-                        blog._site,
-                        getPagesByTags(),
-                    ]),
-                    site=vals[0],
-                    pages=vals[1];
+                let pages=await getPagesByTags();
                 a=await Promise.all(pages.map(async id=>{
-                    let page=await site.getPage(id);
+                    let page=await blog._site.getPage(id);
                     let pageversion=await(await page.lastversion).load([
                         'public',
                         'title'
@@ -708,7 +700,7 @@ function checkSetupIndex(blog,div){
                 return doe.div(n=>{n.style.clear='both';})
             }
             async function getPagesByTags(){
-                return (await blog._site).send({
+                return blog._site.send({
                     function:'blog_getPagesByTags',
                     tags:blog.status.tagNames
                 })
@@ -855,8 +847,8 @@ function logoutA(blog){
     let a=doe.a('Logout');
     a.href='javascript:';
     a.onclick=async e=>{
-        e.preventDefault()
-        ;(await blog._site).logout;
+        e.preventDefault();
+        blog._site.logout;
     };
     return a
 }
@@ -892,8 +884,8 @@ function createNavigationBar(view){
         let a=doe.a('Login',{href:'javascript:'});
         a.onclick=async e=>{
             e.preventDefault();
-            e.stopPropagation()
-            ;(await blog._site).showLoginForm;
+            e.stopPropagation();
+            blog._site.showLoginForm;
         };
         return a
     }
@@ -1304,6 +1296,7 @@ function Blog(site,status){
     this._styles=[];
     this._loadPagemodules=loadPagemodules(this);
     this.view=new BlogView(this);
+    this._getting=0;
     this._title=(async()=>
         (await this._site.send('blog_getData')).title
     )();
@@ -1320,7 +1313,7 @@ function Blog(site,status){
 Object.setPrototypeOf(Blog.prototype,EventEmmiter.prototype);
 Blog.prototype._anchor_addTag=anchor_addTag;
 Object.defineProperty(Blog.prototype,'_currentUser',{async get(){
-    return (await this._site).currentUser
+    return this._site.currentUser
 }});
 Blog.prototype._getNext=_getNext;
 Blog.prototype._setStatusEmit=function(s){
