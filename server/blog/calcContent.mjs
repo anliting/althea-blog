@@ -75,9 +75,9 @@ ${env.althea.loadModule(
 }
 function og(env,data,title,url_request){
     let
-        ogUrl=env.environmentvariables.trustedOrigin+url_request.pathname,
+        ogUrl=env.althea.config.trustOrigin[0]+url_request.pathname,
         ogImage=
-            env.environmentvariables.trustedOrigin+
+            env.althea.config.trustOrigin[0]+
             '/opengraph/banner0.png',
         ogDescription=data.description
     return`
