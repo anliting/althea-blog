@@ -542,15 +542,16 @@ async function _getNext(){
     if(this._getting)
         return
     this._getting=1;
-    let
-        process={
-            status:this._status,
-            continue:1
-        };
-    this.once('_statusChange',()=>{
+    let process={
+        status:this._status,
+        continue:1
+    };
+    let end=()=>{
+        this.off('_statusChange',end);
         process.continue=0;
         this._getting=0;
-    });
+    };
+    this.on('_statusChange',end);
     let data=await this._site.send({
         function:       'blog_getSuggestedPages',
         page:           process.status.pageId||0,
@@ -619,7 +620,7 @@ async function _getNext(){
     }else{
         document.title=title;
     }
-    this._getting=0;
+    end();
 }
 
 function anchor_addTag(tag){
