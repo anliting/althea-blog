@@ -25,8 +25,11 @@ export default async althea=>{
         return res
     },r=>blog(althea,db,r))
     althea.addPagemodule(async r=>{
-        let path=r.analyze.request.parsedUrl.pathname.split('/')
-        let res=await checkIfIsPageRequest(db,r,path)
+        let res=await checkIfIsPageRequest(
+            db,r,r.analyze.request.parsedUrl.pathname.split('/').map(
+                decodeURIComponent
+            )
+        )
         switch(res.status){
             case 1:
                 return
