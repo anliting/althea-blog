@@ -4,5 +4,5 @@ import e2 from './edges/2.mjs'
 export default{
     0:e0,
     1:e1,
-    //2:e2,
+    2:e2,
 }

@@ -4,13 +4,11 @@ function getPagesByTags(cu,tags){
         select id
         from blog_page
         where
-            !isremoved &&
             ${!cu.isadmin?'ispublic':'1'} &&
             id_lastversion in (
                 select id
                 from blog_pageversion
                 where
-                    !isremoved &&
                     ${!cu.isadmin?'ispublic':'1'} &&
                     id in (${taggedPageversions(tags)})
                 /* for materialization */

@@ -11,7 +11,6 @@ function insertPageversion(
         insert into blog_pageversion set ?
     `,{
         ispublic,
-        isremoved:0,
         id_page,
         id_user_author,
         id_pagemodule,

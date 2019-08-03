@@ -5,15 +5,7 @@ export default function(){
             count(*) as count
         from blog_tag
         where id_pageversion in (
-            select blog_pageversion.id
-            from
-                    blog_page
-                join
-                    blog_pageversion
-                on
-                    blog_page.id_lastversion=blog_pageversion.id
-            where
-                !blog_pageversion.isremoved
+            select id_lastversion from blog_page
             /* for materialization */
             order by rand()
         )

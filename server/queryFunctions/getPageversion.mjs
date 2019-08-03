@@ -5,7 +5,6 @@ export default async(db,opt,env)=>{
     type.isArray(type.isStringValue)(opt.columns)||0()
     let pageversion=await db.getPageversion(opt.id)
     pageversion&&
-    !pageversion.data.isremoved&&
     (env.currentUser.isadmin||pageversion.data.ispublic)||0()
     let res={}
     if(0<=opt.columns.indexOf('public'))
@@ -20,8 +19,6 @@ export default async(db,opt,env)=>{
         res.id_pagemodule=pageversion.data.id_pagemodule
     if(0<=opt.columns.indexOf('id_user_author'))
         res.id_user_author=pageversion.data.id_user_author
-    if(0<=opt.columns.indexOf('isremoved'))
-        res.isremoved=pageversion.data.isremoved
     if(0<=opt.columns.indexOf('tags'))
         res.tags=pageversion.data.tags
     if(0<=opt.columns.indexOf('timestamp_insert'))

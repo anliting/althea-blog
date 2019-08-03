@@ -2,15 +2,7 @@ export default async function(){
     let cn=await this.connection
     await cn.query(`
         create temporary table t
-        select blog_pageversion.id
-        from
-                blog_page
-            join
-                blog_pageversion
-            on
-                blog_page.id_lastversion=blog_pageversion.id
-        where
-            !blog_pageversion.isremoved
+        select id_lastversion from blog_page
     `)
     let a=await cn.query(`
         select tagname

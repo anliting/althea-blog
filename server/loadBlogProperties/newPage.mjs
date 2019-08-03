@@ -4,7 +4,6 @@ function insertPage(db,ispublic,id_user_author){
         insert into blog_page
         set ?
     `,{
-        isremoved:0,
         ispublic,
         id_user_author,
         id_lastversion:0,

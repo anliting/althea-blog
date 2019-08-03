@@ -5,7 +5,6 @@ export default async(db,opt,env)=>{
     type.isArray(type.isStringValue)(opt.columns)||0()
     let page=await db.getPage(opt.id)
     page&&
-    !page.data.isremoved&&
     (page.data.ispublic||env.currentUser.isadmin)||0()
     let res={}
     if(0<=opt.columns.indexOf('author'))
