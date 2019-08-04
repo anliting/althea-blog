@@ -1,7 +1,5 @@
-import calcPageversionQueryByTags from
-    './sql/calcPageversionQueryByTags.mjs'
-import whereQuery_pageversions_permitted from
-    './sql/whereQuery_pageversions_permitted.mjs'
+import calcPageQueryByTags from
+    './sql/calcPageQueryByTags.mjs'
 import whereQuery_pages_permitted from
     './sql/whereQuery_pages_permitted.mjs'
 function selectPages(currentUser,tags_selected,pages_loaded,pageId){
@@ -20,20 +18,10 @@ function selectPages(currentUser,tags_selected,pages_loaded,pageId){
                 select id_page
                 from blog_pageversion
                 where
-                    ${whereQuery_pageversions_permitted(currentUser)}&&
                     id in (
                         select id_lastversion
                         from blog_page
-                    ) ${
-                        tags_selected.length?
-                            `&& id in (
-                                ${calcPageversionQueryByTags(
-                                    tags_selected
-                                )}
-                            )`
-                        :
-                            ''
-                    }
+                    )
             )${
                 pages_loaded.length?
                     '&& `id` not in ('+pages_loaded.join(',')+')'
@@ -42,6 +30,15 @@ function selectPages(currentUser,tags_selected,pages_loaded,pageId){
             }${
                 pageId?
                     '&& `id`='+this.pool.escape(pageId)+' '
+                :
+                    ''
+            }${
+                tags_selected.length?
+                    `&& id in (
+                        ${calcPageQueryByTags(
+                            tags_selected
+                        )}
+                    )`
                 :
                     ''
             }

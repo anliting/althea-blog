@@ -24,7 +24,7 @@ function update(editpage,data){
             option.selected='selected'
         doe(editpage._nodes.select_id_pagemodule,option)
     })
-    editpage.id&&data.lastversion_page.tags.map(e=>{
+    editpage.id&&data.page.tags.map(e=>{
         editpage.setOfTags.addTag(e)
     })
     editpage.id&&data.page.pagenames.map(e=>{

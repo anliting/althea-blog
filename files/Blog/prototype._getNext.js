@@ -20,6 +20,7 @@ async function getData(status){
                     'author',
                     'timestamp_insert',
                     'timestamp_lastmodified',
+                    'tags',
                 ]),
                 (async()=>
                     (await page.lastversion).load([
@@ -51,8 +52,7 @@ async function getData(status){
         page.authorId=              res.page.author
         page.timestamp_insert=      res.page.timestamp_insert
         page.datetime_lastmodified= res.page.timestamp_lastmodified
-        let pv=await res.pageVersion.load('tags')
-        page.tags=pv.tags.sort((a,b)=>a.localeCompare(b))
+        page.tags=res.page.tags.sort((a,b)=>a.localeCompare(b))
         return page
     }))
     let title=await this._title

@@ -4,7 +4,6 @@ export default function(
     id_pagemodule,
     title,
     content,
-    tags,
     pagenames,
     id_page
 ){
@@ -17,7 +16,6 @@ export default function(
         id_pagemodule,
         title,
         content,
-        tags
     ).then(pageversion=>{
         res=pageversion
         return updatePage(this,pageversion.id,ispublic,id_page)

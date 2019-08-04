@@ -27,10 +27,17 @@ export default async(db,opt,env)=>{
             opt.id_pagemodule,
             opt.title,
             opt.content,
-            opt.tags,
             opt.pagenames,
             opt.id_page
         )
+        await db.transactionDo(async cn=>{
+            await cn.query(`
+                delete from blog_tag where ?
+            `,{pageId:opt.id_page})
+            await Promise.all(opt.tags.map(e=>
+                db.putTag(cn,opt.id_page,e)
+            ))
+        })
         return opt.id_page
     }
 }

@@ -558,6 +558,7 @@ async function getData(status){
                     'author',
                     'timestamp_insert',
                     'timestamp_lastmodified',
+                    'tags',
                 ]),
                 (async()=>
                     (await page.lastversion).load([
@@ -589,8 +590,7 @@ async function getData(status){
         page.authorId=              res.page.author;
         page.timestamp_insert=      res.page.timestamp_insert;
         page.datetime_lastmodified= res.page.timestamp_lastmodified;
-        let pv=await res.pageVersion.load('tags');
-        page.tags=pv.tags.sort((a,b)=>a.localeCompare(b));
+        page.tags=res.page.tags.sort((a,b)=>a.localeCompare(b));
         return page
     }));
     let title=await this._title;
@@ -1745,7 +1745,7 @@ function update(editpage,data){
             option.selected='selected';
         doe(editpage._nodes.select_id_pagemodule,option);
     });
-    editpage.id&&data.lastversion_page.tags.map(e=>{
+    editpage.id&&data.page.tags.map(e=>{
         editpage.setOfTags.addTag(e);
     });
     editpage.id&&data.page.pagenames.map(e=>{
@@ -1787,6 +1787,7 @@ async function getData$1(editpage){
                 'timestamp_lastmodified',
                 'author',
                 'pagenames',
+                'tags',
             ]),
             pageversion.load([
                 'content',
@@ -1794,7 +1795,6 @@ async function getData$1(editpage){
                 'id_pagemodule',
                 'id_user_author',
                 'public',
-                'tags',
                 'timestamp_insert',
                 'title',
             ]),
@@ -1808,6 +1808,7 @@ async function getData$1(editpage){
             timestamp_insert:page.timestamp_insert,
             timestamp_lastmodified:page.timestamp_lastmodified,
             pagenames:page.pagenames,
+            tags:page.tags,
         };
         res.lastversion_page={
             content:pageversion.content,
@@ -1816,7 +1817,6 @@ async function getData$1(editpage){
             id_pagemodule:pageversion.id_pagemodule,
             id_user_author:pageversion.id_user_author,
             ispublic:pageversion.public,
-            tags:pageversion.tags,
             timestamp_insert:pageversion.timestamp_insert,
             title:pageversion.title,
         };

@@ -3,6 +3,7 @@ export default async function(id){
     let[
         page,
         pagenames,
+        tags,
     ]=await Promise.all([
         this.query0(`
             select *
@@ -22,11 +23,19 @@ export default async function(id){
             rows.map(row=>
                 row.pagename
             )
-        )
+        ),
+        this.query0(`
+            select tagname
+            from blog_tag
+            where ?
+        `,{pageId:id}).then(rows=>
+            rows.map(row=>row.tagname)
+        ),
     ])
     if(!page)
         return
     page.data.pagenames=pagenames
     page.comments=await page.getComments()
+    page.data.tags=tags
     return page
 }

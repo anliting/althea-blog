@@ -1,7 +1,7 @@
 import mysql from 'mysql2'
-function calcPageversionQueryByTags(tags){
+function calcPageQueryByTags(tags){
 /*
-Generates a query that select pageversions by selected tags.
+Generates a query that select pages by selected tags.
 */
     if(tags.length===0)
         throw ''
@@ -10,7 +10,7 @@ Generates a query that select pageversions by selected tags.
         if(0<=i-1)
             output+='join '
         output+='('+
-            'select distinct `id_pageversion` as `id'+i+'`'+
+            'select distinct `pageId` as `id'+i+'`'+
             'from `blog_tag`'+
             'where `tagname`='+mysql.escape(t)+
         ') as t'+i+' '
@@ -22,4 +22,4 @@ Generates a query that select pageversions by selected tags.
         from (${output})
     `
 }
-export default calcPageversionQueryByTags
+export default calcPageQueryByTags

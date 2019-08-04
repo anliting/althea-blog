@@ -17,6 +17,7 @@ async function getData(editpage){
                 'timestamp_lastmodified',
                 'author',
                 'pagenames',
+                'tags',
             ]),
             pageversion.load([
                 'content',
@@ -24,7 +25,6 @@ async function getData(editpage){
                 'id_pagemodule',
                 'id_user_author',
                 'public',
-                'tags',
                 'timestamp_insert',
                 'title',
             ]),
@@ -38,6 +38,7 @@ async function getData(editpage){
             timestamp_insert:page.timestamp_insert,
             timestamp_lastmodified:page.timestamp_lastmodified,
             pagenames:page.pagenames,
+            tags:page.tags,
         }
         res.lastversion_page={
             content:pageversion.content,
@@ -46,7 +47,6 @@ async function getData(editpage){
             id_pagemodule:pageversion.id_pagemodule,
             id_user_author:pageversion.id_user_author,
             ispublic:pageversion.public,
-            tags:pageversion.tags,
             timestamp_insert:pageversion.timestamp_insert,
             title:pageversion.title,
         }

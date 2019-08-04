@@ -18,22 +18,13 @@ function insertPageversion(
         content,
     }).then(a=>a[0].insertId)
 }
-function insertTag(db,id_pageversion,tagname){
-    return db.query(`
-        insert into blog_tag set ?
-    `,{
-        id_pageversion,
-        tagname,
-    })
-}
 export default function(
     ispublic,
     id_page,
     id_user_author,
     id_pagemodule,
     title,
-    content,
-    tags
+    content
 ){
     return insertPageversion(
         this,
@@ -45,8 +36,6 @@ export default function(
         content
     ).then(res=>{
         let id=res
-        return Promise.all(
-            tags.map(e=>insertTag(this,id,e))
-        ).then(()=>({id}))
+        return{id}
     })
 }

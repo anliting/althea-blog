@@ -19,8 +19,6 @@ export default async(db,opt,env)=>{
         res.id_pagemodule=pageversion.data.id_pagemodule
     if(0<=opt.columns.indexOf('id_user_author'))
         res.id_user_author=pageversion.data.id_user_author
-    if(0<=opt.columns.indexOf('tags'))
-        res.tags=pageversion.data.tags
     if(0<=opt.columns.indexOf('timestamp_insert'))
         res.timestamp_insert=pageversion.data.timestamp_insert
     return res

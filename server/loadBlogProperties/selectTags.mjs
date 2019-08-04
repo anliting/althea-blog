@@ -1,9 +1,7 @@
-import whereQuery_pageversions_permitted from
-    './sql/whereQuery_pageversions_permitted.mjs'
 import whereQuery_pages_permitted from
     './sql/whereQuery_pages_permitted.mjs'
-import calcPageversionQueryByTags from
-    './sql/calcPageversionQueryByTags.mjs'
+import calcPageQueryByTags from
+    './sql/calcPageQueryByTags.mjs'
 function selectTags(cu,tags){
     return this.query0(`
         select
@@ -11,25 +9,18 @@ function selectTags(cu,tags){
             count(*) as count
         from blog_tag
         where
-            id_pageversion in (
-                select max(id)
-                from blog_pageversion
-                where
-                    ${whereQuery_pageversions_permitted(cu)}&&(
-                        id_page in (
-                            select id from blog_page where
-                                ${whereQuery_pages_permitted(cu)}
-                        )
-                    ) ${
-                        tags.length?
-                            `&& id in (
-                                ${calcPageversionQueryByTags(tags)}
-                            )`
-                        :
-                            ''
-                    }
-                group by id_page
+            pageId in (
+                select id from blog_page where
+                    ${whereQuery_pages_permitted(cu)}
             )
+            ${
+                tags.length?
+                    `&& pageId in (
+                        ${calcPageQueryByTags(tags)}
+                    )`
+                :
+                    ''
+            }
         group by tagname
     `)
 }

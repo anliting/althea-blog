@@ -1,24 +1,16 @@
 import mysql from 'mysql2'
 function getPagesByTags(cu,tags){
-    return this.query(`
+    return this.query0(`
         select id
         from blog_page
         where
             ${!cu.isadmin?'ispublic':'1'} &&
-            id_lastversion in (
-                select id
-                from blog_pageversion
-                where
-                    ${!cu.isadmin?'ispublic':'1'} &&
-                    id in (${taggedPageversions(tags)})
-                /* for materialization */
-                order by rand()
-            )
-    `).then(a=>a[0]).then(rows=>rows.map(row=>row.id))
+            id in (${taggedPage(tags)})
+    `).then(rows=>rows.map(row=>row.id))
 }
-function taggedPageversions(tags){
+function taggedPage(tags){
     return`
-        select t0.id_pageversion
+        select t0.pageId
         from
             blog_tag as t0 ${tags.length==1?'':`
                 join (${
@@ -27,9 +19,9 @@ function taggedPageversions(tags){
                     ).join(',')
                 }) on ${
                     tags.slice(1).map((s,i)=>
-                        `t0.id_pageversion=t${
+                        `t0.pageId=t${
                             i+1
-                        }.id_pageversion`
+                        }.pageId`
                     ).join('&&')
                 }
             `}

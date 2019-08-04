@@ -27,5 +27,7 @@ export default async(db,opt,env)=>{
         res.page_derived_from=[]
     if(0<=opt.columns.indexOf('page_derived_to'))
         res.page_derived_to=[]
+    if(0<=opt.columns.indexOf('tags'))
+        res.tags=page.data.tags
     return res
 }

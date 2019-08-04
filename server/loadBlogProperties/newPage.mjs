@@ -28,9 +28,9 @@ export default async function(
             id_pagemodule,
             title,
             content,
-            tags
         )).id,id),
         this.setPagenamesForPageById(pagenames,id),
+        ...tags.map(e=>this.putTag(this,id,e)),
     ])
     return{id}
 }

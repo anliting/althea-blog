@@ -30,6 +30,8 @@ import newPageversionToPage from
     './loadBlogProperties/newPageversionToPage.mjs'
 import putComment from
     './loadBlogProperties/putComment.mjs'
+import putTag from
+    './loadBlogProperties/putTag.mjs'
 import selectPagemoduleDefinitions from
     './loadBlogProperties/selectPagemoduleDefinitions.mjs'
 import selectPagemoduleInfo from
@@ -59,6 +61,7 @@ export default db=>Object.assign(db,{
     newPageversion,
     newPageversionToPage,
     putComment,
+    putTag,
     selectPagemoduleDefinitions,
     selectPagemoduleInfo,
     selectPagemodules,
