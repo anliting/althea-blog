@@ -596,48 +596,52 @@ async function getData(status){
     let title=await this._title;
     return [title,pages]
 }
-function getNext(onEnd){
-    let end,ended;
+function getNext(){
+    let interrupted;
     return {
-        end(){
-            end();
-            ended=1;
+        interrupt(){
+            interrupted=1;
         },
-        ended:Promise.race([
-            new Promise(rs=>end=rs),
-            (async()=>{
-                let[title,pages]=await getData.call(this,this._status);
-                if(ended)
-                    return
-                pages.map(page=>{
-                    this.emit('pageLoad',page);
-                });
-                if(this._status.pageId){
-                    document.title=
-                        this.pages[this._status.pageId].title+
-                        ' - '+
-                        title;
-                }else{
-                    document.title=title;
-                }
-            })(),
-        ])
+        promise:(async()=>{
+            let[title,pages]=await getData.call(this,this._status);
+            if(interrupted)
+                return
+            pages.map(page=>{
+                this.emit('pageLoad',page);
+            });
+            if(this._status.pageId){
+                document.title=
+                    this.pages[this._status.pageId].title+
+                    ' - '+
+                    title;
+            }else{
+                document.title=title;
+            }
+        })(),
     }
 }
-function _getNext(){
+function getNextIfNotGetting(){
     if(this._getting)
         return
     this._getting=1;
     let
         task=getNext.call(this),
-        beforeStatusChange=()=>{
-            task.end();
-        };
-    this.on('_beforeStatusChange',beforeStatusChange)
-    ;(async()=>{
-        await task.ended;
+        beforeStatusChange,
+        onEnd;
+    onEnd=()=>{
         this.off('_beforeStatusChange',beforeStatusChange);
         this._getting=0;
+        onEnd=0;
+    };
+    this.on('_beforeStatusChange',beforeStatusChange=()=>{
+        task.interrupt();
+        if(onEnd)
+            onEnd();
+    })
+    ;(async()=>{
+        await task.promise;
+        if(onEnd)
+            onEnd();
     })();
 }
 
@@ -1334,7 +1338,7 @@ Blog.prototype._anchor_addTag=anchor_addTag;
 Object.defineProperty(Blog.prototype,'_currentUser',{async get(){
     return this._site.currentUser
 }});
-Blog.prototype._getNext=_getNext;
+Blog.prototype._getNext=getNextIfNotGetting;
 Blog.prototype._setStatusEmit=function(s){
     this.status=s;
     this.emit('statusChange');
