@@ -22,14 +22,14 @@ import getPagesByTags from
     './loadBlogProperties/getPagesByTags.mjs'
 import getLastversionOfPage from
     './loadBlogProperties/getLastversionOfPage.mjs'
-import newComment from
-    './loadBlogProperties/newComment.mjs'
 import newPage from
     './loadBlogProperties/newPage.mjs'
 import newPageversion from
     './loadBlogProperties/newPageversion.mjs'
 import newPageversionToPage from
     './loadBlogProperties/newPageversionToPage.mjs'
+import putComment from
+    './loadBlogProperties/putComment.mjs'
 import selectPagemoduleDefinitions from
     './loadBlogProperties/selectPagemoduleDefinitions.mjs'
 import selectPagemoduleInfo from
@@ -55,10 +55,10 @@ export default db=>Object.assign(db,{
     getPageversion,
     getPagesByTags,
     getLastversionOfPage,
-    newComment,
     newPage,
     newPageversion,
     newPageversionToPage,
+    putComment,
     selectPagemoduleDefinitions,
     selectPagemoduleInfo,
     selectPagemodules,

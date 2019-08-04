@@ -15,7 +15,7 @@ import blog_getPage from            './queryFunctions/getPage.mjs'
 import blog_getPagemoduleInfo from  './queryFunctions/getPagemoduleInfo.mjs'
 import blog_getPagesByTags from     './queryFunctions/getPagesByTags.mjs'
 import blog_getPageversion from     './queryFunctions/getPageversion.mjs'
-import blog_newComment from         './queryFunctions/newComment.mjs'
+import blog_putComment from         './queryFunctions/putComment.mjs'
 import blog_setData from            './queryFunctions/setData.mjs'
 export default{
     blog_cutComment,
@@ -34,6 +34,6 @@ export default{
     blog_getPagemoduleInfo,
     blog_getPagesByTags,
     blog_getPageversion,
-    blog_newComment,
+    blog_putComment,
     blog_setData,
 }
