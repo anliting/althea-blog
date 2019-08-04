@@ -1,4 +1,4 @@
-function insertPageversion(
+async function insertPageversion(
     db,
     ispublic,
     id_page,
@@ -7,7 +7,7 @@ function insertPageversion(
     title,
     content
 ){
-    return db.query(`
+    return(await db.query0(`
         insert into blog_pageversion set ?
     `,{
         ispublic,
@@ -16,9 +16,9 @@ function insertPageversion(
         id_pagemodule,
         title,
         content,
-    }).then(a=>a[0].insertId)
+    })).insertId
 }
-export default function(
+export default async function(
     ispublic,
     id_page,
     id_user_author,
@@ -26,7 +26,7 @@ export default function(
     title,
     content
 ){
-    return insertPageversion(
+    return{id:await insertPageversion(
         this,
         ispublic,
         id_page,
@@ -34,8 +34,5 @@ export default function(
         id_pagemodule,
         title,
         content
-    ).then(res=>{
-        let id=res
-        return{id}
-    })
+    )}
 }
