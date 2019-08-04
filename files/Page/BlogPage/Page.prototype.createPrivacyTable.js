@@ -52,7 +52,7 @@ function createPrivacyTable(pageView){
             })
             function remove(){
                 page.blog._site.send({
-                    function:'blog_removePage',
+                    function:'blog_cutPage',
                     page:page.id
                 })
             }

@@ -184,7 +184,7 @@ var commentDiv = (page,comment)=>{
             e.stopPropagation();
             let site=await page.blog._site;
             await site.send({
-                function:'blog_deleteComment',
+                function:'blog_cutComment',
                 id
             });
             page.blog._setStatusEmit(page.blog.status);
@@ -420,7 +420,7 @@ function createPrivacyTable(pageView){
             })
             function remove(){
                 page.blog._site.send({
-                    function:'blog_removePage',
+                    function:'blog_cutPage',
                     page:page.id
                 });
             }

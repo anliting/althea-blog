@@ -1,4 +1,5 @@
-import blog_deleteComment from      './queryFunctions/deleteComment.mjs'
+import blog_cutComment from         './queryFunctions/cutComment.mjs'
+import blog_cutPage from            './queryFunctions/cutPage.mjs'
 import blog_editpage from           './queryFunctions/editpage.mjs'
 import blog_getComment from         './queryFunctions/getComment.mjs'
 import blog_getComments from        './queryFunctions/getComments.mjs'
@@ -15,10 +16,10 @@ import blog_getPagemoduleInfo from  './queryFunctions/getPagemoduleInfo.mjs'
 import blog_getPagesByTags from     './queryFunctions/getPagesByTags.mjs'
 import blog_getPageversion from     './queryFunctions/getPageversion.mjs'
 import blog_newComment from         './queryFunctions/newComment.mjs'
-import blog_removePage from         './queryFunctions/removePage.mjs'
 import blog_setData from            './queryFunctions/setData.mjs'
 export default{
-    blog_deleteComment,
+    blog_cutComment,
+    blog_cutPage,
     blog_editpage,
     blog_getComment,
     blog_getComments,
@@ -34,6 +35,5 @@ export default{
     blog_getPagesByTags,
     blog_getPageversion,
     blog_newComment,
-    blog_removePage,
     blog_setData,
 }

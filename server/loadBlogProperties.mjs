@@ -1,5 +1,7 @@
-import deleteComment from
-    './loadBlogProperties/deleteComment.mjs'
+import cutComment from
+    './loadBlogProperties/cutComment.mjs'
+import cutPage from
+    './loadBlogProperties/cutPage.mjs'
 import getComment from
     './loadBlogProperties/getComment.mjs'
 import getComments from
@@ -40,10 +42,9 @@ import selectTags from
     './loadBlogProperties/selectTags.mjs'
 import setPagenamesForPageById from
     './loadBlogProperties/setPagenamesForPageById.mjs'
-import removePage from
-    './loadBlogProperties/removePage.mjs'
 export default db=>Object.assign(db,{
-    deleteComment,
+    cutComment,
+    cutPage,
     getComment,
     getComments,
     getDefinitionByPagemodule,
@@ -64,5 +65,4 @@ export default db=>Object.assign(db,{
     selectPages,
     selectTags,
     setPagenamesForPageById,
-    removePage,
 })

@@ -1,7 +1,7 @@
 export default async(db,opt,env)=>{
     opt instanceof Object&&
-    typeof opt.page=='number'&&
+    typeof opt.id=='number'&&
     env.currentUser.isadmin||0()
-    await db.removePage(opt.page)
-    return null
+    await db.deleteComment(opt.id)
+    return 0
 }
