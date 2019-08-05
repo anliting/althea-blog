@@ -680,7 +680,7 @@ function checkSetupIndex(blog,div){
                     let
                         page=await blog._site.getPage(id),
                         pageversion;
-                    await Proimse.all([
+                    await Promise.all([
                         page.load([
                             'public',
                         ]),
