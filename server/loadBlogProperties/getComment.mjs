@@ -1,6 +1,6 @@
 import Comment from './Comment.mjs'
 export default async function(id){
-    let row=await this.query0(`
+    let row=(await this.query0(`
         select
             timestamp_insert,
             id_page,
@@ -8,7 +8,7 @@ export default async function(id){
             content
         from blog_comment
         where ?
-    `,{id}).then(a=>a[0])
+    `,{id}))[0]
     if(row==undefined)
         throw RangeError()
     return new Comment(

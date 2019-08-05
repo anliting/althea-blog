@@ -24,7 +24,6 @@ async function getData(editpage){
                 'id_page',
                 'id_pagemodule',
                 'id_user_author',
-                'public',
                 'timestamp_insert',
                 'title',
             ]),
@@ -46,7 +45,6 @@ async function getData(editpage){
             id_page:pageversion.id_page,
             id_pagemodule:pageversion.id_pagemodule,
             id_user_author:pageversion.id_user_author,
-            ispublic:pageversion.public,
             timestamp_insert:pageversion.timestamp_insert,
             title:pageversion.title,
         }

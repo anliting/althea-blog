@@ -21,10 +21,10 @@ async function getData(status){
                     'timestamp_insert',
                     'timestamp_lastmodified',
                     'tags',
+                    'public',
                 ]),
                 (async()=>
                     (await page.lastversion).load([
-                        'public',
                         'title',
                         'content',
                         'id_pagemodule',
@@ -40,7 +40,7 @@ async function getData(status){
         page=new BlogPage(
             this,
             res.page.id,
-            res.pageVersion.public,
+            res.page.public,
             res.pageVersion.title,
             res.pageVersion.id_pagemodule
         )

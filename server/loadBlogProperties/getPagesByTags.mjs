@@ -1,12 +1,12 @@
 import mysql from 'mysql2'
-function getPagesByTags(cu,tags){
-    return this.query0(`
+async function getPagesByTags(cu,tags){
+    return(await this.query0(`
         select id
         from blog_page
         where
             ${!cu.isadmin?'ispublic':'1'} &&
             id in (${taggedPage(tags)})
-    `).then(rows=>rows.map(row=>row.id))
+    `)).map(row=>row.id)
 }
 function taggedPage(tags){
     return`

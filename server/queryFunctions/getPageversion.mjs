@@ -7,8 +7,6 @@ export default async(db,opt,env)=>{
     pageversion&&
     (env.currentUser.isadmin||pageversion.data.ispublic)||0()
     let res={}
-    if(0<=opt.columns.indexOf('public'))
-        res.public=pageversion.data.ispublic
     if(0<=opt.columns.indexOf('title'))
         res.title=pageversion.data.title
     if(0<=opt.columns.indexOf('content'))

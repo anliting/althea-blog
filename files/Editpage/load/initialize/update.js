@@ -5,16 +5,8 @@ function update(editpage,data){
         await e.definitions
         editpage.pagemodules.push(e)
     })
-    /*document.getElementById(
-        'input_ispublic_'+(
-            editpage.id&&data.lastversion_page.ispublic?
-                'true'
-            :
-                'false'
-        )
-    ).checked='checked'*/
     editpage._nodes.select_privacy.value=
-        editpage.id&&data.lastversion_page.ispublic?3:1
+        editpage.id&&data.page.ispublic?3:1
     data.pagemodules.sort((a,b)=>
         a.priority-b.priority
     )

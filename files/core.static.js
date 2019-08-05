@@ -559,10 +559,10 @@ async function getData(status){
                     'timestamp_insert',
                     'timestamp_lastmodified',
                     'tags',
+                    'public',
                 ]),
                 (async()=>
                     (await page.lastversion).load([
-                        'public',
                         'title',
                         'content',
                         'id_pagemodule',
@@ -578,7 +578,7 @@ async function getData(status){
         page=new BlogPage$1(
             this,
             res.page.id,
-            res.pageVersion.public,
+            res.page.public,
             res.pageVersion.title,
             res.pageVersion.id_pagemodule
         );
@@ -677,14 +677,23 @@ function checkSetupIndex(blog,div){
             {
                 let pages=await getPagesByTags();
                 a=await Promise.all(pages.map(async id=>{
-                    let page=await blog._site.getPage(id);
-                    let pageversion=await(await page.lastversion).load([
-                        'public',
-                        'title'
+                    let
+                        page=await blog._site.getPage(id),
+                        pageversion;
+                    await Proimse.all([
+                        page.load([
+                            'public',
+                        ]),
+                        (async()=>{
+                            pageversion=await page.lastversion;
+                            await pageversion.load([
+                                'title'
+                            ]);
+                        })()
                     ]);
                     return {
                         page,
-                        public:pageversion.public,
+                        public:page.public,
                         title:pageversion.title,
                     }
                 }));
@@ -1726,16 +1735,8 @@ function update(editpage,data){
         await e.definitions;
         editpage.pagemodules.push(e);
     });
-    /*document.getElementById(
-        'input_ispublic_'+(
-            editpage.id&&data.lastversion_page.ispublic?
-                'true'
-            :
-                'false'
-        )
-    ).checked='checked'*/
     editpage._nodes.select_privacy.value=
-        editpage.id&&data.lastversion_page.ispublic?3:1;
+        editpage.id&&data.page.ispublic?3:1;
     data.pagemodules.sort((a,b)=>
         a.priority-b.priority
     );
@@ -1794,7 +1795,6 @@ async function getData$1(editpage){
                 'id_page',
                 'id_pagemodule',
                 'id_user_author',
-                'public',
                 'timestamp_insert',
                 'title',
             ]),
@@ -1816,7 +1816,6 @@ async function getData$1(editpage){
             id_page:pageversion.id_page,
             id_pagemodule:pageversion.id_pagemodule,
             id_user_author:pageversion.id_user_author,
-            ispublic:pageversion.public,
             timestamp_insert:pageversion.timestamp_insert,
             title:pageversion.title,
         };

@@ -1,16 +1,15 @@
-export default function(pagenames,id_page){
-    return this.query(`
+export default async function(pagenames,id_page){
+    await this.query(`
         delete from blog_pagename where ?
     `,{
         id_page,
-    }).then(()=>
-        Promise.all(pagenames.map(pagename=>
-            this.query(`
-                insert into blog_pagename set ?
-            `,{
-                id_page,
-                pagename,
-            })
-        ))
-    )
+    })
+    return Promise.all(pagenames.map(pagename=>
+        this.query(`
+            insert into blog_pagename set ?
+        `,{
+            id_page,
+            pagename,
+        })
+    ))
 }

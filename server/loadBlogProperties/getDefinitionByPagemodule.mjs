@@ -1,13 +1,12 @@
 export default async function(id){
-    let rows=await this.query0(`
+    return(await this.query0(`
         select
             level,
             name,
             content
         from blog_definition
         where ?
-    `,{id_pagemodule:id})
-    return rows.map(row=>({
+    `,{id_pagemodule:id})).map(row=>({
         level:      row.level,
         name:       row.name,
         content:    row.content,

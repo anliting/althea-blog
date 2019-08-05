@@ -10,10 +10,10 @@ export default function(id){
             delete from blog_pagename where ?
         `,{id_page:id}),
         cn.query(`
-            delete from blog_tag where ?
-        `,{pageId:id}),
-        cn.query(`
             delete from blog_pageversion where ?
         `,{id_page:id}),
+        cn.query(`
+            delete from blog_tag where ?
+        `,{pageId:id}),
     ]))
 }

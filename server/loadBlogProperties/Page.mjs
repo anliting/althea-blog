@@ -3,13 +3,13 @@ function Page(db,data){
     this.id=data.id
     this.data=data
 }
-Page.prototype.getComments=function(){
-    return this.db.query0(`
+Page.prototype.getComments=async function(){
+    return(await this.db.query0(`
         select id
         from blog_comment
         where ?
     `,{
         id_page:this.id
-    }).then(rows=>rows.map(row=>row.id))
+    })).map(row=>row.id)
 }
 export default Page

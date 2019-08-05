@@ -1,6 +1,6 @@
 import setLastVersionOfPage from './newPage/setLastVersionOfPage.mjs'
-function insertPage(db,ispublic,id_user_author){
-    return db.query0(`
+async function insertPage(db,ispublic,id_user_author){
+    return(await db.query0(`
         insert into blog_page
         set ?
     `,{
@@ -8,7 +8,7 @@ function insertPage(db,ispublic,id_user_author){
         id_user_author,
         id_lastversion:0,
         preferredPagename:'',
-    }).then(a=>a.insertId)
+    })).insertId
 }
 export default async function(
     ispublic,
