@@ -496,9 +496,8 @@ Object.setPrototypeOf(Page.prototype,AltheaObject.prototype);
 Page.prototype._loader='blog_getPage';
 Object.defineProperty(Page.prototype,'a',{get(){
     return doe.a({href:this.id},async a=>{
-        let pv=await this.lastversion;
-        await pv.load('title');
-        a.textContent=pv.title||'Untitled';
+        await this.load('title');
+        a.textContent=this.title||'Untitled';
     })
 }});
 Page.BlogPage=BlogPage;
