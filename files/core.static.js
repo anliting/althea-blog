@@ -273,34 +273,6 @@ function div_facebooklike(page){
     div.setAttribute('data-share','true');
     return div
 }
-/*
-    // derived from
-    let str_pages_derived_from='Derived from: '
-    isfirst=1
-    page.page_derived_from.map(q=>{
-        if(!isfirst)
-            str_pages_derived_from+=', '
-        str_pages_derived_from+='<a href='+q.id+'>'
-            +html.encodeText(q.title)
-            +'</a>'
-        isfirst=0
-    })
-    str_pages_derived_from+='<br>'
-    // end derived from
-    // derived to
-    let str_pages_derived_to='Derived to: '
-    isfirst=1
-    page.page_derived_to.map(q=>{
-        if(!isfirst)
-            str_pages_derived_to+=', '
-        str_pages_derived_to+='<a href="'+q.id+'">'
-            +html.encodeText(q.title)
-            +'</a>'
-        isfirst=0
-    })
-    str_pages_derived_to+='<br>'
-    // end derived to
-*/
 
 var view = {get(){
     return new PageView(this)
@@ -446,8 +418,6 @@ function createPrivacyTable(pageView){
             });
         }
         return td
-/*+(p.page_derived_from.length!=0?str_pages_derived_from:'')
-+(p.page_derived_to.length!=0?str_pages_derived_to:'')*/
     }
 }
 
@@ -553,8 +523,6 @@ async function getData(status){
             let vals=await Promise.all([
                 page.load([
                     'preferredPagename',
-                    'page_derived_from',
-                    'page_derived_to',
                     'author',
                     'timestamp_insert',
                     'timestamp_lastmodified',
@@ -584,8 +552,6 @@ async function getData(status){
         );
         this.pages[page.id]=page;
         page.preferredPagename=     res.page.preferredPagename;
-        page.page_derived_from=     res.page.page_derived_from;
-        page.page_derived_to=       res.page.page_derived_to;
         page.content=               res.pageVersion.content;
         page.authorId=              res.page.author;
         page.timestamp_insert=      res.page.timestamp_insert;

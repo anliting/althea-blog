@@ -78,8 +78,6 @@ function createPrivacyTable(pageView){
             })
         }
         return td
-/*+(p.page_derived_from.length!=0?str_pages_derived_from:'')
-+(p.page_derived_to.length!=0?str_pages_derived_to:'')*/
     }
 }
 export default createPrivacyTable

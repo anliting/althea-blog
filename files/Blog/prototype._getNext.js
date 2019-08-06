@@ -15,8 +15,6 @@ async function getData(status){
             let vals=await Promise.all([
                 page.load([
                     'preferredPagename',
-                    'page_derived_from',
-                    'page_derived_to',
                     'author',
                     'timestamp_insert',
                     'timestamp_lastmodified',
@@ -46,8 +44,6 @@ async function getData(status){
         )
         this.pages[page.id]=page
         page.preferredPagename=     res.page.preferredPagename
-        page.page_derived_from=     res.page.page_derived_from
-        page.page_derived_to=       res.page.page_derived_to
         page.content=               res.pageVersion.content
         page.authorId=              res.page.author
         page.timestamp_insert=      res.page.timestamp_insert

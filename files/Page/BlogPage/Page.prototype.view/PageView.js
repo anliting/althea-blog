@@ -83,31 +83,3 @@ function div_facebooklike(page){
     return div
 }
 export default PageView
-/*
-    // derived from
-    let str_pages_derived_from='Derived from: '
-    isfirst=1
-    page.page_derived_from.map(q=>{
-        if(!isfirst)
-            str_pages_derived_from+=', '
-        str_pages_derived_from+='<a href='+q.id+'>'
-            +html.encodeText(q.title)
-            +'</a>'
-        isfirst=0
-    })
-    str_pages_derived_from+='<br>'
-    // end derived from
-    // derived to
-    let str_pages_derived_to='Derived to: '
-    isfirst=1
-    page.page_derived_to.map(q=>{
-        if(!isfirst)
-            str_pages_derived_to+=', '
-        str_pages_derived_to+='<a href="'+q.id+'">'
-            +html.encodeText(q.title)
-            +'</a>'
-        isfirst=0
-    })
-    str_pages_derived_to+='<br>'
-    // end derived to
-*/

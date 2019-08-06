@@ -1,4 +1,3 @@
-import Pageversion from './Pageversion.mjs'
 export default async function(id){
     let res=(await this.query0(`
         select *
@@ -7,5 +6,5 @@ export default async function(id){
     `,{id}))[0]
     if(!res)
         return
-    return new Pageversion(res)
+    return{data:res}
 }

@@ -23,11 +23,11 @@ export default async(db,opt,env)=>{
         res.pagenames=page.data.pagenames
     if(0<=opt.columns.indexOf('comments'))
         res.comments=page.comments
-    if(0<=opt.columns.indexOf('page_derived_from'))
-        res.page_derived_from=[]
-    if(0<=opt.columns.indexOf('page_derived_to'))
-        res.page_derived_to=[]
     if(0<=opt.columns.indexOf('tags'))
         res.tags=page.data.tags
+    let pv=await db.getPageversion(page.data.id_lastversion)
+    res.id_pagemodule=pv.id_pagemodule
+    res.title=pv.title
+    res.content=pv.content
     return res
 }
