@@ -1,52 +1,36 @@
-import setup from './initialize/setup.js'
-import update from './initialize/update.js'
-import {browser}from '/lib/core.static.js'
+import setup from       './initialize/setup.js'
+import update from      './initialize/update.js'
+import{browser}from     '/lib/core.static.js'
 async function getData(editpage){
     let res={}
     if(editpage.id){
         let
             site=await editpage._site,
-            page=await site.getPage(editpage.id),
-            pageversion=await page.lastversion
-        await Promise.all([
-            page.load([
-                'public',
-                'lastversionId',
-                'preferredPagename',
-                'timestamp_insert',
-                'timestamp_lastmodified',
-                'author',
-                'pagenames',
-                'tags',
-            ]),
-            pageversion.load([
-                'content',
-                'id_page',
-                'id_pagemodule',
-                'id_user_author',
-                'timestamp_insert',
-                'title',
-            ]),
+            page=await site.getPage(editpage.id)
+        await page.load([
+            'public',
+            'preferredPagename',
+            'timestamp_insert',
+            'timestamp_lastmodified',
+            'author',
+            'pagenames',
+            'tags',
+            'content',
+            'id_pagemodule',
+            'title',
         ])
         res.page={
-            id:page.id,
-            id_user_author:page.author,
-            ispublic:page.public,
-            id_lastversion:page.lastversionId,
-            preferredPagename:page.preferredPagename,
-            timestamp_insert:page.timestamp_insert,
-            timestamp_lastmodified:page.timestamp_lastmodified,
-            pagenames:page.pagenames,
-            tags:page.tags,
-        }
-        res.lastversion_page={
-            content:pageversion.content,
-            id:pageversion.id,
-            id_page:pageversion.id_page,
-            id_pagemodule:pageversion.id_pagemodule,
-            id_user_author:pageversion.id_user_author,
-            timestamp_insert:pageversion.timestamp_insert,
-            title:pageversion.title,
+            id:                     page.id,
+            id_user_author:         page.author,
+            ispublic:               page.public,
+            preferredPagename:      page.preferredPagename,
+            timestamp_insert:       page.timestamp_insert,
+            timestamp_lastmodified: page.timestamp_lastmodified,
+            pagenames:              page.pagenames,
+            tags:                   page.tags,
+            content:                page.content,
+            id_pagemodule:          page.id_pagemodule,
+            title:                  page.title,
         }
     }
     return res

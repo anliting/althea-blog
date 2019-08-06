@@ -1,5 +1,4 @@
 import Pagemodule from'./Pagemodule.js'
-import Pageversion from'./Pageversion.js'
 import Page from'./Page.js'
 import Comment from'./Comment.js'
 import{Site as RawSite}from'/lib/core.static.js'
@@ -17,7 +16,6 @@ Site.prototype.getComment=async function(id){
 Site.prototype.getPage=async function(id){
     return new Page({
         send:this.send.bind(this),
-        getPageversion:this.getPageversion.bind(this),
     },id)
 }
 Site.prototype.getPagemodule=async function(id){
@@ -29,13 +27,6 @@ Site.prototype.getPagemodule=async function(id){
                     function:'blog_getDefinitionByPagemodule',
                     id,
                 })
-        },id)
-    )
-}
-Site.prototype.getPageversion=async function(id){
-    return this._pageversions[id]||(this._pageversions[id]=
-        new Pageversion({
-            send:this.send.bind(this),
         },id)
     )
 }

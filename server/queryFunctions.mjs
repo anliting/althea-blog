@@ -13,7 +13,6 @@ import blog_getTagsWithCount from   './queryFunctions/getTagsWithCount.mjs'
 import blog_getPage from            './queryFunctions/getPage.mjs'
 import blog_getPagemoduleInfo from  './queryFunctions/getPagemoduleInfo.mjs'
 import blog_getPagesByTags from     './queryFunctions/getPagesByTags.mjs'
-import blog_getPageversion from     './queryFunctions/getPageversion.mjs'
 import blog_putComment from         './queryFunctions/putComment.mjs'
 import blog_putPage from            './queryFunctions/putPage.mjs'
 import blog_setData from            './queryFunctions/setData.mjs'
@@ -33,7 +32,6 @@ export default{
     blog_getPage,
     blog_getPagemoduleInfo,
     blog_getPagesByTags,
-    blog_getPageversion,
     blog_putComment,
     blog_putPage,
     blog_setData,

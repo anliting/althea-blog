@@ -11,44 +11,32 @@ async function getData(status){
     let pages=data.slice(0,4)
     pages=await Promise.all(pages.map(async p=>{
         let page=await this._site.getPage(p)
-        let res=await(async()=>{
-            let vals=await Promise.all([
-                page.load([
-                    'preferredPagename',
-                    'author',
-                    'timestamp_insert',
-                    'timestamp_lastmodified',
-                    'tags',
-                    'public',
-                ]),
-                (async()=>
-                    (await page.lastversion).load([
-                        'title',
-                        'content',
-                        'id_pagemodule',
-                    ])
-                )(),
-            ])
-            return{
-                page:vals[0],
-                pageVersion:vals[1],
-            }
-        })()
+        let res=await page.load([
+            'preferredPagename',
+            'author',
+            'timestamp_insert',
+            'timestamp_lastmodified',
+            'tags',
+            'public',
+            'title',
+            'content',
+            'id_pagemodule',
+        ])
         await this._loadPagemodules
         page=new BlogPage(
             this,
-            res.page.id,
-            res.page.public,
-            res.pageVersion.title,
-            res.pageVersion.id_pagemodule
+            res.id,
+            res.public,
+            res.title,
+            res.id_pagemodule
         )
         this.pages[page.id]=page
-        page.preferredPagename=     res.page.preferredPagename
-        page.content=               res.pageVersion.content
-        page.authorId=              res.page.author
-        page.timestamp_insert=      res.page.timestamp_insert
-        page.datetime_lastmodified= res.page.timestamp_lastmodified
-        page.tags=res.page.tags.sort((a,b)=>a.localeCompare(b))
+        page.preferredPagename=     res.preferredPagename
+        page.content=               res.content
+        page.authorId=              res.author
+        page.timestamp_insert=      res.timestamp_insert
+        page.datetime_lastmodified= res.timestamp_lastmodified
+        page.tags=                  res.tags.sort((a,b)=>a.localeCompare(b))
         return page
     }))
     let title=await this._title

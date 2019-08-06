@@ -12,7 +12,7 @@ function update(editpage,data){
     )
     data.pagemodules.map(e=>{
         let option=doe.option(e.name,{value:e.id})
-        if(editpage.id&&e.id==data.lastversion_page.id_pagemodule)
+        if(editpage.id&&e.id==data.page.id_pagemodule)
             option.selected='selected'
         doe(editpage._nodes.select_id_pagemodule,option)
     })
@@ -27,9 +27,9 @@ function update(editpage,data){
     })
     if(editpage.id){
         editpage._nodes.input_title.value=
-            data.lastversion_page.title
+            data.page.title
         textarea_content.value=
-            data.lastversion_page.content
+            data.page.content
     }
     editpage._nodes.input_newtag.disabled=false
     editpage._nodes.input_newname.disabled=false

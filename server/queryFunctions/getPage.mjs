@@ -26,8 +26,8 @@ export default async(db,opt,env)=>{
     if(0<=opt.columns.indexOf('tags'))
         res.tags=page.data.tags
     let pv=await db.getPageversion(page.data.id_lastversion)
-    res.id_pagemodule=pv.id_pagemodule
-    res.title=pv.title
-    res.content=pv.content
+    res.id_pagemodule=pv.data.id_pagemodule
+    res.title=pv.data.title
+    res.content=pv.data.content
     return res
 }

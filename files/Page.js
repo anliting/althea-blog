@@ -1,5 +1,5 @@
-import BlogPage from './Page/BlogPage.js'
-import{doe,AltheaObject}from '/lib/core.static.js'
+import BlogPage from            './Page/BlogPage.js'
+import{doe,AltheaObject}from    '/lib/core.static.js'
 function Page(){
     AltheaObject.apply(this,arguments)
 }
@@ -11,10 +11,6 @@ Object.defineProperty(Page.prototype,'a',{get(){
         await pv.load('title')
         a.textContent=pv.title||'Untitled'
     })
-}})
-Object.defineProperty(Page.prototype,'lastversion',{async get(){
-    await this.load('lastversionId')
-    return this._io.getPageversion(this.lastversionId)
 }})
 Page.BlogPage=BlogPage
 export default Page

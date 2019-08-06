@@ -501,10 +501,6 @@ Object.defineProperty(Page.prototype,'a',{get(){
         a.textContent=pv.title||'Untitled';
     })
 }});
-Object.defineProperty(Page.prototype,'lastversion',{async get(){
-    await this.load('lastversionId');
-    return this._io.getPageversion(this.lastversionId)
-}});
 Page.BlogPage=BlogPage;
 
 let BlogPage$1=Page.BlogPage;
@@ -519,44 +515,32 @@ async function getData(status){
     let pages=data.slice(0,4);
     pages=await Promise.all(pages.map(async p=>{
         let page=await this._site.getPage(p);
-        let res=await(async()=>{
-            let vals=await Promise.all([
-                page.load([
-                    'preferredPagename',
-                    'author',
-                    'timestamp_insert',
-                    'timestamp_lastmodified',
-                    'tags',
-                    'public',
-                ]),
-                (async()=>
-                    (await page.lastversion).load([
-                        'title',
-                        'content',
-                        'id_pagemodule',
-                    ])
-                )(),
-            ]);
-            return {
-                page:vals[0],
-                pageVersion:vals[1],
-            }
-        })();
+        let res=await page.load([
+            'preferredPagename',
+            'author',
+            'timestamp_insert',
+            'timestamp_lastmodified',
+            'tags',
+            'public',
+            'title',
+            'content',
+            'id_pagemodule',
+        ]);
         await this._loadPagemodules;
         page=new BlogPage$1(
             this,
-            res.page.id,
-            res.page.public,
-            res.pageVersion.title,
-            res.pageVersion.id_pagemodule
+            res.id,
+            res.public,
+            res.title,
+            res.id_pagemodule
         );
         this.pages[page.id]=page;
-        page.preferredPagename=     res.page.preferredPagename;
-        page.content=               res.pageVersion.content;
-        page.authorId=              res.page.author;
-        page.timestamp_insert=      res.page.timestamp_insert;
-        page.datetime_lastmodified= res.page.timestamp_lastmodified;
-        page.tags=res.page.tags.sort((a,b)=>a.localeCompare(b));
+        page.preferredPagename=     res.preferredPagename;
+        page.content=               res.content;
+        page.authorId=              res.author;
+        page.timestamp_insert=      res.timestamp_insert;
+        page.datetime_lastmodified= res.timestamp_lastmodified;
+        page.tags=                  res.tags.sort((a,b)=>a.localeCompare(b));
         return page
     }));
     let title=await this._title;
@@ -643,24 +627,15 @@ function checkSetupIndex(blog,div){
             {
                 let pages=await getPagesByTags();
                 a=await Promise.all(pages.map(async id=>{
-                    let
-                        page=await blog._site.getPage(id),
-                        pageversion;
-                    await Promise.all([
-                        page.load([
-                            'public',
-                        ]),
-                        (async()=>{
-                            pageversion=await page.lastversion;
-                            await pageversion.load([
-                                'title'
-                            ]);
-                        })()
+                    let page=await blog._site.getPage(id);
+                    await page.load([
+                        'public',
+                        'title',
                     ]);
                     return {
                         page,
                         public:page.public,
-                        title:pageversion.title,
+                        title:page.title,
                     }
                 }));
             }
@@ -1717,7 +1692,7 @@ function update(editpage,data){
     );
     data.pagemodules.map(e=>{
         let option=doe.option(e.name,{value:e.id});
-        if(editpage.id&&e.id==data.lastversion_page.id_pagemodule)
+        if(editpage.id&&e.id==data.page.id_pagemodule)
             option.selected='selected';
         doe(editpage._nodes.select_id_pagemodule,option);
     });
@@ -1732,9 +1707,9 @@ function update(editpage,data){
     });
     if(editpage.id){
         editpage._nodes.input_title.value=
-            data.lastversion_page.title;
+            data.page.title;
         textarea_content.value=
-            data.lastversion_page.content;
+            data.page.content;
     }
     editpage._nodes.input_newtag.disabled=false;
     editpage._nodes.input_newname.disabled=false;
@@ -1752,47 +1727,31 @@ async function getData$1(editpage){
     if(editpage.id){
         let
             site=await editpage._site,
-            page=await site.getPage(editpage.id),
-            pageversion=await page.lastversion;
-        await Promise.all([
-            page.load([
-                'public',
-                'lastversionId',
-                'preferredPagename',
-                'timestamp_insert',
-                'timestamp_lastmodified',
-                'author',
-                'pagenames',
-                'tags',
-            ]),
-            pageversion.load([
-                'content',
-                'id_page',
-                'id_pagemodule',
-                'id_user_author',
-                'timestamp_insert',
-                'title',
-            ]),
+            page=await site.getPage(editpage.id);
+        await page.load([
+            'public',
+            'preferredPagename',
+            'timestamp_insert',
+            'timestamp_lastmodified',
+            'author',
+            'pagenames',
+            'tags',
+            'content',
+            'id_pagemodule',
+            'title',
         ]);
         res.page={
-            id:page.id,
-            id_user_author:page.author,
-            ispublic:page.public,
-            id_lastversion:page.lastversionId,
-            preferredPagename:page.preferredPagename,
-            timestamp_insert:page.timestamp_insert,
-            timestamp_lastmodified:page.timestamp_lastmodified,
-            pagenames:page.pagenames,
-            tags:page.tags,
-        };
-        res.lastversion_page={
-            content:pageversion.content,
-            id:pageversion.id,
-            id_page:pageversion.id_page,
-            id_pagemodule:pageversion.id_pagemodule,
-            id_user_author:pageversion.id_user_author,
-            timestamp_insert:pageversion.timestamp_insert,
-            title:pageversion.title,
+            id:                     page.id,
+            id_user_author:         page.author,
+            ispublic:               page.public,
+            preferredPagename:      page.preferredPagename,
+            timestamp_insert:       page.timestamp_insert,
+            timestamp_lastmodified: page.timestamp_lastmodified,
+            pagenames:              page.pagenames,
+            tags:                   page.tags,
+            content:                page.content,
+            id_pagemodule:          page.id_pagemodule,
+            title:                  page.title,
         };
     }
     return res
@@ -1959,12 +1918,6 @@ Pagemodule.prototype.compile=function(s){
     }
 };
 
-function Pageversion(){
-    AltheaObject.apply(this,arguments);
-}
-Object.setPrototypeOf(Pageversion.prototype,AltheaObject.prototype);
-Pageversion.prototype._loader='blog_getPageversion';
-
 function Comment(){
     AltheaObject.apply(this,arguments);
 }
@@ -1985,7 +1938,6 @@ Site.prototype.getComment=async function(id){
 Site.prototype.getPage=async function(id){
     return new Page({
         send:this.send.bind(this),
-        getPageversion:this.getPageversion.bind(this),
     },id)
 };
 Site.prototype.getPagemodule=async function(id){
@@ -1997,13 +1949,6 @@ Site.prototype.getPagemodule=async function(id){
                     function:'blog_getDefinitionByPagemodule',
                     id,
                 })
-        },id)
-    )
-};
-Site.prototype.getPageversion=async function(id){
-    return this._pageversions[id]||(this._pageversions[id]=
-        new Pageversion({
-            send:this.send.bind(this),
         },id)
     )
 };

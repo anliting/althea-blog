@@ -9,24 +9,15 @@ function checkSetupIndex(blog,div){
             {
                 let pages=await getPagesByTags()
                 a=await Promise.all(pages.map(async id=>{
-                    let
-                        page=await blog._site.getPage(id),
-                        pageversion
-                    await Promise.all([
-                        page.load([
-                            'public',
-                        ]),
-                        (async()=>{
-                            pageversion=await page.lastversion
-                            await pageversion.load([
-                                'title'
-                            ])
-                        })()
+                    let page=await blog._site.getPage(id)
+                    await page.load([
+                        'public',
+                        'title',
                     ])
                     return{
                         page,
                         public:page.public,
-                        title:pageversion.title,
+                        title:page.title,
                     }
                 }))
             }
