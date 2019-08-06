@@ -36,6 +36,9 @@ export default async db=>{
         await cn.query(`
             drop table blog_pageversion
         `)
+        await cn.query(`
+            alter table blog_page drop column id_lastversion
+        `)
     })
     return 5
 }

@@ -5,7 +5,7 @@ export default async(db,opt,env)=>{
     typeof opt.id_page=='number'&&
     validPageData(env,opt.data)&&
     cu.isadmin||0()
-    await db.newPageversionToPage(
+    await db.setPage(
         opt.data.ispublic,
         cu.id,
         opt.data.id_pagemodule,

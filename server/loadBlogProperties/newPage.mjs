@@ -1,13 +1,16 @@
-import setLastVersionOfPage from './newPage/setLastVersionOfPage.mjs'
-async function insertPage(db,ispublic,id_user_author){
+async function insertPage(
+    db,ispublic,id_user_author,pagemodule,title,content
+){
     return(await db.query0(`
         insert into blog_page
         set ?
     `,{
         ispublic,
         id_user_author,
-        id_lastversion:0,
         preferredPagename:'',
+        pagemodule,
+        title,
+        content,
     })).insertId
 }
 export default async function(
@@ -19,16 +22,15 @@ export default async function(
     tags,
     pagenames
 ){
-    let id=await insertPage(this,ispublic,id_user_author)
+    let id=await insertPage(
+        this,
+        ispublic,
+        id_user_author,
+        id_pagemodule,
+        title,
+        content
+    )
     await Promise.all([
-        setLastVersionOfPage(this,(await this.newPageversion(
-            ispublic,
-            id,
-            id_user_author,
-            id_pagemodule,
-            title,
-            content,
-        )).id,id),
         this.setPagenamesForPageById(pagenames,id),
         ...tags.map(e=>this.putTag(this,id,e)),
     ])

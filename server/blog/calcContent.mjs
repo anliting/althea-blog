@@ -1,7 +1,7 @@
 import entities from 'entities'
 import url from 'url'
 let plugin
-async function calcContent(althea,env,lastversion_page){
+async function calcContent(althea,env,page){
     if(!plugin)
         plugin=(async()=>
             [].concat(...await Promise.all([
@@ -27,7 +27,7 @@ async function calcContent(althea,env,lastversion_page){
         url_request=url.parse(env.request.url,true)
     keys=Object.keys(url_request.query)
     title=
-        (lastversion_page&&lastversion_page.data.title+' - '||'')+
+        (page&&page.data.title+' - '||'')+
         data.title
     metaDescription=data.description
     list=url_request.pathname.split('/')

@@ -9,7 +9,6 @@ async function selectPages(currentUser,tags_selected,pages_loaded,pageId){
             timestamp_insert,
             timestamp_lastmodified,
             preferredPagename,
-            id_lastversion,
             id_user_author
         from blog_page
         where
