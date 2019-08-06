@@ -1,9 +1,9 @@
-import Page from './Page.mjs'
-export default async function(id){
+async function getPage(id){
     let[
         page,
         pagenames,
         tags,
+        comments,
     ]=await Promise.all([
         (async()=>{
             let rows=await this.query0(`
@@ -13,9 +13,7 @@ export default async function(id){
             `,{id})
             if(rows.length===0)
                 return
-            let p=new Page(this,rows[0])
-            p.comments=await p.getComments()
-            return p
+            return rows[0]
         })(),
         (async()=>
             (await this.query0(`
@@ -34,10 +32,22 @@ export default async function(id){
                 where ?
             `,{pageId:id})).map(row=>row.tagname)
         )(),
+        (async()=>
+            (await this.query0(`
+                select id
+                from blog_comment
+                where ?
+            `,{
+                id_page:id,
+            })).map(row=>row.id)
+        )(),
     ])
     if(!page)
-        return
-    page.data.pagenames=pagenames
-    page.data.tags=tags
+        throw getPage.badId
+    page.pagenames=pagenames
+    page.tags=tags
+    page.comments=comments
     return page
 }
+getPage.badId=Symbol()
+export default getPage

@@ -1,3 +1,3 @@
 export default function(page){
-    return this.getPageversion(page.data.id_lastversion)
+    return this.getPageversion(page.id_lastversion)
 }
