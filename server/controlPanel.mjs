@@ -16,6 +16,12 @@ ${env.althea.loadModule(
 `
 }
 async function get(db,env){
+    let ua=env.library.userAgent
+    if(!ua.leOr(
+        ua.version.esModuleBase,
+        ua.parse(env.request.headers['user-agent'])
+    ))
+        return ua.notSupport(ua.version.esModuleBase)
     env.headers['content-type']='text/html;charset=utf-8'
     return{
         status:200,
