@@ -1,4 +1,4 @@
-import rollup from 'rollup'
+import{rollup}from 'rollup'
 let
     skip=[
         '/lib/core.static.js',
@@ -6,7 +6,7 @@ let
         'https://gitcdn.link/cdn/anliting/simple.js/09b9cd311f438c07fd1ac0ead044aed97158faf3/src/simple.static.js',
     ]
 async function link(input,file){
-    let bundle=await rollup.rollup({
+    let bundle=await rollup({
         input,
         external:s=>skip.includes(s),
     })

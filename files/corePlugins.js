@@ -20,7 +20,7 @@ function tableofcontents(e){
         v,
         a
     v=e
-    a=e.parentNode.getElementsByClassName('tablethis')
+    a=[...e.parentNode.getElementsByClassName('tablethis')]
     for(let i=0;i<a.length;i++){
         let p=a[i]
         p.id='h'+id_page+'_'+i
