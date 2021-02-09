@@ -16,10 +16,10 @@ async function get(althea,db,env){
         p=await db.getPage(env.page)
     let ua=env.library.userAgent
     if(!ua.leOr(
-        ua.version.esModuleBase,
+        ua.version.esModuleDynamic,
         ua.parse(env.request.headers['user-agent'])
     ))
-        return ua.notSupport(ua.version.esModuleBase)
+        return ua.notSupport(ua.version.esModuleDynamic)
     env.headers['content-type']='text/html;charset=utf-8'
     return{
         status:200,
